@@ -1,41 +1,46 @@
-# Website
+# WSO2 Integrator Docs Site
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+Docusaurus site for WSO2 Integrator documentation.
 
-## Installation
+For full contribution workflow (including AI agent guidance), see the repository root README:
+
+- `../README.md`
+
+## Prerequisites
+
+- Node.js `>= 20`
+- npm `>= 10`
+
+## Install
 
 ```bash
-yarn
+npm install
 ```
 
 ## Local Development
 
 ```bash
-yarn start
+npm run start
 ```
-
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
 ## Build
 
 ```bash
-yarn build
+npm run build
 ```
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
-
-## Deployment
-
-Using SSH:
+## Serve Built Site
 
 ```bash
-USE_SSH=true yarn deploy
+npm run serve
 ```
 
-Not using SSH:
+## Type Check
 
 ```bash
-GIT_USER=<Your GitHub username> yarn deploy
+npm run typecheck
 ```
 
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+## Notes
+
+- Local development uses `npm run start` (not `npm run dev`).
