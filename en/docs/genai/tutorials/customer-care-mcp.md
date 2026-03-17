@@ -12,7 +12,7 @@ In this tutorial, you build a customer care agent that uses MCP to bridge the ga
 
 ## Prerequisites
 
-- [WSO2 Integrator WSO2 Integrator IDE installed](/docs/get-started/install)
+- [WSO2 Integrator VS Code extension installed](/docs/get-started/install)
 - An OpenAI API key (or another supported LLM provider)
 - Familiarity with the [MCP overview](/docs/genai/mcp/overview)
 

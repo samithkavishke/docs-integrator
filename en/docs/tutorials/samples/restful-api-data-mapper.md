@@ -8,10 +8,10 @@ description: "Sample project: Build a RESTful API with the visual data mapper fo
 
 Build a RESTful API that aggregates data from multiple backend services and uses the WSO2 Integrator visual data mapper to transform request and response payloads. This sample project demonstrates how to call external APIs, map fields between different schemas visually, and return a unified response -- all without writing transformation code by hand.
 
-## What you'll learn
+## What You'll Learn
 
 - Creating a RESTful API service that aggregates multiple backends
-- Using the visual data mapper in the WSO2 Integrator IDE
+- Using the visual data mapper in the WSO2 Integrator VS Code extension
 - Mapping fields between source and target schemas with drag-and-drop
 - Applying expressions and functions within the data mapper for computed fields
 - Handling optional and nested fields in transformations
@@ -19,12 +19,12 @@ Build a RESTful API that aggregates data from multiple backend services and uses
 
 ## Prerequisites
 
-- WSO2 Integrator IDE installed
+- WSO2 Integrator VS Code extension installed
 - The sample includes mock backend services, so no external accounts are needed
 
 **Time estimate:** 10-15 minutes to clone and run; 30-45 minutes for full code walkthrough
 
-## Clone and run
+## Clone and Run
 
 ```bash
 # Clone the samples repository
@@ -49,7 +49,7 @@ curl "http://localhost:9090/customers?name=John"
 curl http://localhost:9090/customers/C001/orders
 ```
 
-## Project structure
+## Project Structure
 
 ```
 restful-api-data-mapper/
@@ -67,7 +67,7 @@ restful-api-data-mapper/
     └── api_test.bal
 ```
 
-## Code walkthrough
+## Code Walkthrough
 
 ### Defining Source and Target Types
 
@@ -180,13 +180,13 @@ type OrderTotal record {|
 
 ### Data Mapper Transformations
 
-The transformation files contain the mapping functions. In the WSO2 Integrator IDE, these can be created and edited using the visual data mapper by clicking the **Map** icon above each function.
+The transformation files contain the mapping functions. In the VS Code extension, these can be created and edited using the visual data mapper by clicking the **Map** icon above each function.
 
 **Customer transformation** (`transformations/customer_transform.bal`):
 
 ```ballerina
 // This function was generated using the visual data mapper.
-// Open this file in VS Code and select the "Map" CodeLens to edit visually.
+// Open this file in VS Code and click the "Map" CodeLens to edit visually.
 
 function transformCustomer(BackendCustomer backend) returns CustomerProfile => {
     id: backend.customer_id,
@@ -358,14 +358,14 @@ service /api/customers on new http:Listener(9091) {
 
 ### Key Points
 
-- **Visual data mapper**: The transformation functions can be edited using the drag-and-drop data mapper in the WSO2 Integrator IDE. Select the **Map** CodeLens above any transformation function to open the visual editor.
+- **Visual data mapper**: The transformation functions can be edited using the drag-and-drop data mapper in the VS Code extension. Click the **Map** CodeLens above any transformation function to open the visual editor.
 - **Computed fields**: Transformations can include expressions such as string concatenation (`first_name + " " + last_name`), substring extraction, and status code mapping.
 - **Data aggregation**: The API gateway calls multiple backend services, aggregates the results, and applies transformations before returning a unified response.
 - **Self-contained sample**: Mock backend services are included, so you can run and test the entire flow locally without external dependencies.
 
-## What's next
+## What's Next
 
 - [Data Service with bal persist](data-service-persist.md) -- Build a full CRUD data service
 - [Event-Driven Microservices](event-driven-microservices.md) -- Build microservices with Kafka
 - [Visual Data Mapper Guide](../../develop/transform/data-mapper.md) -- Learn more about the data mapper
-- [Connector catalog](../../connectors/ai-llms) -- Explore all available connectors
+- [Connectors Reference](../../connectors/index.md) -- Explore all available connectors

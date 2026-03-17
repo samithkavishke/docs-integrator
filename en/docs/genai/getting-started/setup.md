@@ -10,13 +10,13 @@ Before building AI integrations, you need the WSO2 Integrator development enviro
 
 ## Prerequisites
 
-- [WSO2 Integrator WSO2 Integrator IDE installed](/docs/get-started/install)
+- [WSO2 Integrator VS Code extension installed](/docs/get-started/install)
 - An LLM provider API key (OpenAI, Anthropic, Google, or Azure)
 - Ballerina Swan Lake installed (bundled with WSO2 Integrator)
 
 ## Step 1: Create a New Integration Project
 
-Open VS Code with the WSO2 Integrator IDE and create a new project.
+Open VS Code with the WSO2 Integrator extension and create a new project.
 
 ```bash
 bal new my_ai_project

@@ -16,7 +16,7 @@ Generate a fully typed Ballerina connector from any OpenAPI (Swagger) specificat
 
 ## Prerequisites
 
-- WSO2 Integrator WSO2 Integrator IDE installed
+- WSO2 Integrator VS Code extension installed
 - An OpenAPI specification file (`.yaml` or `.json`) or a URL to one
 - Ballerina Swan Lake installed
 

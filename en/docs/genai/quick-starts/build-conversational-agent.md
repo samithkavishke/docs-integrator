@@ -12,7 +12,7 @@ This quick start walks you through the core agent pattern in WSO2 Integrator: de
 
 ## Prerequisites
 
-- [WSO2 Integrator WSO2 Integrator IDE installed](/docs/get-started/install)
+- [WSO2 Integrator VS Code extension installed](/docs/get-started/install)
 - An API key for an LLM provider (OpenAI, Anthropic, Google, or Azure)
 
 ## What You'll Build

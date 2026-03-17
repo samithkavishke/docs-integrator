@@ -8,11 +8,11 @@ description: "End-to-end walkthrough: Build a centralized email notification ser
 
 Build a centralized email notification service that other integrations can call to send templated, event-driven emails. This tutorial covers SMTP configuration, HTML email templates, retry logic, and handling bounce-backs.
 
-## What you'll build
+## What You'll Build
 
 A notification API that accepts event payloads (order confirmations, password resets, system alerts) and sends formatted HTML emails through SMTP. The service supports multiple templates, variable substitution, and delivery tracking.
 
-## What you'll learn
+## What You'll Learn
 
 - Configuring the Ballerina email connector for SMTP
 - Building reusable HTML email templates
@@ -22,7 +22,7 @@ A notification API that accepts event payloads (order confirmations, password re
 
 ## Prerequisites
 
-- WSO2 Integrator IDE installed
+- WSO2 Integrator VS Code extension installed
 - An SMTP server (Gmail, SendGrid, Amazon SES, or a local SMTP server)
 - SMTP credentials (host, port, username, password)
 
@@ -44,7 +44,7 @@ A notification API that accepts event payloads (order confirmations, password re
                                                └────────────┘
 ```
 
-## Step 1: Create the project
+## Step 1: Create the Project
 
 ```bash
 bal new notification_service
@@ -118,9 +118,9 @@ final map<EmailTemplate> templates = {
             <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                 <h2 style="color: #2c3e50;">Password Reset</h2>
                 <p>Hi {{userName}},</p>
-                <p>Select the link below to reset your password. This link expires in {{expiryMinutes}} minutes.</p>
+                <p>Click the link below to reset your password. This link expires in {{expiryMinutes}} minutes.</p>
                 <a href="{{resetLink}}" style="background-color: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;">Reset Password</a>
-                <p style="color: #7f8c8d; font-size: 12px;">If you did not request this, ignore this email.</p>
+                <p style="color: #7f8c8d; font-size: 12px;">If you did not request this, please ignore this email.</p>
             </body>
             </html>`,
         plainTextBody: "Hi {{userName}}, Reset your password here: {{resetLink}}. Expires in {{expiryMinutes}} minutes."
@@ -307,14 +307,14 @@ curl -X POST http://localhost:8090/notifications/send \
 curl http://localhost:8090/notifications/templates
 ```
 
-## Extend it
+## Extend It
 
 - **Add async sending with queues** -- Use Kafka or RabbitMQ to decouple sending from the API response
 - **Add delivery webhooks** -- Track bounce-backs and delivery confirmations
 - **Add rate limiting** -- Prevent exceeding SMTP provider limits
 - **Add attachment support** -- Allow file attachments in notification requests
 
-## What's next
+## What's Next
 
 - [Communication Connectors](../../connectors/communication.md) -- Email, SMS, and Slack connectors
 - [Error Handling](../../develop/build/error-handling.md) -- Robust error handling patterns

@@ -12,7 +12,7 @@ Automations are ideal for data synchronization, report generation, and routine m
 
 ## Prerequisites
 
-- [WSO2 Integrator IDE installed](install.md)
+- [WSO2 Integrator extension installed](install.md)
 
 ## Step 1: Create the Project
 

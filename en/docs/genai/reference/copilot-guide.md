@@ -16,13 +16,13 @@ Ballerina Copilot assists you while writing code (the "AI Split Rule" places it 
 
 ### Prerequisites
 
-- WSO2 Integrator IDE installed in VS Code
+- WSO2 Integrator extension installed in VS Code
 - An active WSO2 account with Copilot access
 - Internet connection for AI model access
 
 ### Activation
 
-1. Open VS Code with the WSO2 Integrator IDE
+1. Open VS Code with the WSO2 Integrator extension
 2. Click the Copilot icon in the bottom status bar
 3. Sign in with your WSO2 account
 4. Accept the terms of service

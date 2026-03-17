@@ -12,7 +12,7 @@ Generate and send a daily email digest summarizing activity across your GitHub r
 
 ## Prerequisites
 
-- WSO2 Integrator IDE installed
+- WSO2 Integrator VS Code extension installed
 - GitHub personal access token with `repo` scope
 - SMTP email credentials (Gmail, Outlook, or any SMTP server)
 - One or more GitHub repositories to monitor
@@ -50,9 +50,9 @@ toAddresses = ["team@example.com"]
 subject = "Daily GitHub Activity Summary"
 ```
 
-## Code walkthrough
+## Code Walkthrough
 
-### Project structure
+### Project Structure
 
 ```
 github-to-email-summary/
@@ -244,15 +244,15 @@ function generateAndSendSummary() returns error? {
 - **Multi-repo support**: Configure multiple repositories in the `repos` array to get a consolidated summary.
 - **HTML formatting**: The email body is built as HTML for clear, readable summaries in any email client.
 
-## Customization notes
+## Customization Notes
 
 - **Change the schedule**: Modify the frequency parameter to run hourly (`3600`) or weekly (`604800`) instead of daily.
 - **Add Slack notifications**: Replace or supplement email delivery with a Slack webhook using the `ballerinax/slack` connector.
 - **Filter event types**: Modify `fetchRepoSummary` to focus on specific event types, such as only security-related issues or release tags.
 - **Include release notes**: Extend the GitHub client to also fetch recent releases and include release notes in the digest.
 
-## What's next
+## What's Next
 
 - [Google Sheets to Salesforce Contacts](google-sheets-salesforce.md) -- Sync spreadsheet rows to CRM contacts
 - [HubSpot to Google Contacts](hubspot-google-contacts.md) -- Sync CRM contacts across platforms
-- [Connector catalog](../../connectors/ai-llms) -- Explore all available connectors
+- [Connectors Reference](../../connectors/index.md) -- Explore all available connectors

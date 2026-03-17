@@ -12,7 +12,7 @@ Retrieval-Augmented Generation (RAG) lets you combine the reasoning power of LLM
 
 ## Prerequisites
 
-- [WSO2 Integrator WSO2 Integrator IDE installed](/docs/get-started/install)
+- [WSO2 Integrator VS Code extension installed](/docs/get-started/install)
 - An API key for an LLM provider (OpenAI, Anthropic, or Google)
 - A vector database instance (this guide uses ChromaDB; [Docker setup](#chromadb-docker-setup) included)
 

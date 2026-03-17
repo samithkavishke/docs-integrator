@@ -12,7 +12,7 @@ Process EDI (Electronic Data Interchange) 850 purchase order files from an FTP s
 
 ## Prerequisites
 
-- WSO2 Integrator IDE installed
+- WSO2 Integrator VS Code extension installed
 - FTP or SFTP server with a directory containing EDI 850 files
 - Salesforce developer account with a connected app and OAuth 2.0 credentials
 - Familiarity with the EDI X12 850 (Purchase Order) format
@@ -53,9 +53,9 @@ refreshToken = "<SF_REFRESH_TOKEN>"
 baseUrl = "https://your-instance.salesforce.com"
 ```
 
-## Code walkthrough
+## Code Walkthrough
 
-### Project structure
+### Project Structure
 
 ```
 ftp-edi-to-salesforce-opportunity/
@@ -325,15 +325,15 @@ function lookupPricebookEntry(string productCode) returns string?|error {
 - **File lifecycle**: After processing, files are moved from the inbound directory to a processed directory to prevent reprocessing.
 - **Account resolution**: The buyer name from the EDI file is used to look up or create a Salesforce Account.
 
-## Customization notes
+## Customization Notes
 
 - **Support SFTP**: Switch from FTP to SFTP by updating the listener and client configuration to use secure connections.
 - **Handle EDI 855 responses**: Extend the integration to generate EDI 855 (Purchase Order Acknowledgment) files and upload them back to the FTP server.
 - **Add validation**: Implement EDI document validation to check for mandatory segments and reject malformed files.
 - **Error file directory**: Move files that fail parsing to a separate error directory instead of leaving them in the inbound folder.
 
-## What's next
+## What's Next
 
 - [Shopify to Outlook Welcome Email](shopify-outlook-email.md) -- Send welcome emails for new customers
 - [MySQL to Salesforce Products](mysql-salesforce-products.md) -- Sync product catalogs from a database
-- [Connector catalog](../../connectors/ai-llms) -- Explore all available connectors
+- [Connectors Reference](../../connectors/index.md) -- Explore all available connectors

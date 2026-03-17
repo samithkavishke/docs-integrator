@@ -128,7 +128,7 @@ Complete API documentation for all Ballerina standard library modules and extend
 
 ### In VS Code
 
-The WSO2 Integrator WSO2 Integrator IDE provides inline API documentation:
+The WSO2 Integrator VS Code extension provides inline API documentation:
 
 - Hover over a module import to see the module description
 - Use `Ctrl+Click` (or `Cmd+Click` on macOS) on a function or type to navigate to its definition
@@ -138,4 +138,4 @@ The WSO2 Integrator WSO2 Integrator IDE provides inline API documentation:
 
 - [Standard Library Functions](/reference/language/stdlib.md) -- Functions by category
 - [Protocols Reference](/reference/protocols.md) -- Supported protocols and modules
-- [Connector catalog](../../connectors/ai-llms) -- Connector guides and configuration
+- [Connectors Index](/connectors/index.md) -- Connector guides and configuration

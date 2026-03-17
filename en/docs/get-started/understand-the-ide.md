@@ -6,7 +6,7 @@ description: Walkthrough of the VS Code visual designer and development tools.
 
 # Understand the IDE
 
-A quick tour of the WSO2 Integrator WSO2 Integrator IDE and its key features.
+A quick tour of the WSO2 Integrator VS Code extension and its key features.
 
 ## Visual Designer
 

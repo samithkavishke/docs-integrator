@@ -12,7 +12,7 @@ Synchronize contacts from HubSpot CRM to Google Contacts automatically. When a n
 
 ## Prerequisites
 
-- WSO2 Integrator IDE installed
+- WSO2 Integrator VS Code extension installed
 - HubSpot account with API access and a private app access token
 - Google Cloud project with the People API enabled and OAuth 2.0 credentials configured
 - A Google Contacts contact group (optional, for organizing synced contacts)
@@ -48,9 +48,9 @@ refreshToken = "<GOOGLE_REFRESH_TOKEN>"
 contactGroupId = "<CONTACT_GROUP_RESOURCE_NAME>"
 ```
 
-## Code walkthrough
+## Code Walkthrough
 
-### Project structure
+### Project Structure
 
 ```
 hubspot-to-google-contacts/
@@ -281,15 +281,15 @@ function syncContacts() returns error? {
 - **Create or update**: The integration tracks which HubSpot contacts have already been synced by maintaining a mapping of HubSpot VID to Google resource name.
 - **Contact group support**: Synced contacts can optionally be placed in a designated Google Contacts group for easy organization.
 
-## Customization notes
+## Customization Notes
 
 - **Bi-directional sync**: Extend the integration to also poll Google Contacts for changes and push them back to HubSpot.
 - **Field mapping**: Add additional fields like address, website, or custom HubSpot properties by extending the type definitions and transform function.
 - **Webhook trigger**: Replace polling with HubSpot webhooks for near-real-time sync when contacts are created or updated.
 - **Deduplication**: Before creating a new Google contact, search by email address to prevent duplicates from contacts that were added outside this integration.
 
-## What's next
+## What's Next
 
 - [Shopify to Outlook Welcome Email](shopify-outlook-email.md) -- Send welcome emails on new customer signups
 - [Google Sheets to Salesforce Contacts](google-sheets-salesforce.md) -- Sync spreadsheet rows to CRM
-- [Connector catalog](../../connectors/ai-llms) -- Explore all available connectors
+- [Connectors Reference](../../connectors/index.md) -- Explore all available connectors

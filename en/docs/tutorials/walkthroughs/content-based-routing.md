@@ -8,11 +8,11 @@ description: "End-to-end walkthrough: Build a content-based message routing serv
 
 Build a message routing service that inspects incoming requests and forwards them to the appropriate backend system based on the message content. This is one of the most common integration patterns and forms the backbone of many enterprise architectures.
 
-## What you'll build
+## What You'll Build
 
 An order processing API that receives orders and routes them to different fulfillment services based on the order type (physical goods, digital downloads, or subscriptions). Each backend handles its specific domain while the router acts as a single entry point.
 
-## What you'll learn
+## What You'll Learn
 
 - Inspecting JSON payloads to make routing decisions
 - Calling different backend services conditionally
@@ -22,7 +22,7 @@ An order processing API that receives orders and routes them to different fulfil
 
 ## Prerequisites
 
-- WSO2 Integrator IDE installed
+- WSO2 Integrator VS Code extension installed
 - Basic familiarity with Ballerina syntax
 - Three mock backend services (we will create these as part of the tutorial)
 
@@ -47,7 +47,7 @@ An order processing API that receives orders and routes them to different fulfil
                         └──────────────────┘
 ```
 
-## Step 1: Create the project
+## Step 1: Create the Project
 
 Open VS Code and create a new integration project:
 
@@ -221,7 +221,7 @@ resource function post route(Order order) returns FulfillmentResponse|http:BadRe
             'error = result
         );
         return <http:ServiceUnavailable>{
-            body: {message: "Fulfillment service temporarily unavailable. retry."}
+            body: {message: "Fulfillment service temporarily unavailable. Please retry."}
         };
     }
 
@@ -229,7 +229,7 @@ resource function post route(Order order) returns FulfillmentResponse|http:BadRe
 }
 ```
 
-## Step 6: Test it
+## Step 6: Test It
 
 Run the project:
 
@@ -274,14 +274,14 @@ curl -X POST http://localhost:8090/orders/route \
   }'
 ```
 
-## Extend it
+## Extend It
 
 - **Add routing rules from configuration** -- Load routing rules from a database or config file instead of hard-coding
 - **Add message enrichment** -- Enrich the order with customer data before routing
 - **Add audit logging** -- Log all routing decisions to a database for compliance
 - **Add header-based routing** -- Route based on HTTP headers in addition to payload content
 
-## What's next
+## What's Next
 
 - [Content-Based Router Pattern](../patterns/content-based-router.md) -- The underlying EIP pattern
 - [Data Transformation Pipeline](data-transformation-pipeline.md) -- Transform data between systems

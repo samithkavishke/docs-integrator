@@ -59,10 +59,10 @@ Ballerina runs on the Java Virtual Machine (JVM). A compatible JDK is bundled wi
 | Component | Minimum Version | Recommended Version | Notes |
 |-----------|----------------|-------------------|-------|
 | Visual Studio Code | 1.80.0 | Latest stable | — |
-| WSO2 Integrator IDE | 1.0.0 | Latest | Install from VS Code Marketplace |
-| Ballerina Extension | 4.0.0 | Latest | Installed as dependency of WSO2 Integrator IDE |
+| WSO2 Integrator Extension | 1.0.0 | Latest | Install from VS Code Marketplace |
+| Ballerina Extension | 4.0.0 | Latest | Installed as dependency of WSO2 Integrator extension |
 
-### WSO2 Integrator IDE System Requirements
+### VS Code Extension System Requirements
 
 | Requirement | Specification |
 |-------------|--------------|

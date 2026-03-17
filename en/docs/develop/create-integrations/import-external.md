@@ -1,12 +1,12 @@
 ---
-sidebar_position: 5
+sidebar_position: 4
 title: Import External Integrations
-description: Import integration projects from WSO2 MI, OpenAPI specifications, AsyncAPI documents, and other external sources.
+description: Import integrations from OpenAPI specifications, AsyncAPI documents, WSO2 MI projects, and other external sources.
 ---
 
 # Import External Integrations
 
-Bring existing integrations into WSO2 Integrator from external sources. Import from OpenAPI specifications, AsyncAPI documents, Protocol Buffer definitions, database schemas, or migrate from WSO2 Micro Integrator (MI) projects.
+Bring existing integrations into WSO2 Integrator from external sources. Import from OpenAPI specifications, AsyncAPI documents, Protocol Buffer definitions, database schemas, or migrate from WSO2 MI projects.
 
 ## Import from OpenAPI Specification
 
@@ -116,9 +116,9 @@ The importer introspects the schema and generates:
 - A CRUD HTTP service with endpoints for each selected table
 - Connection configuration in `Config.toml`
 
-## Migrate from WSO2 Micro Integrator
+## Migrate from WSO2 MI
 
-If you have existing WSO2 MI integration projects (Synapse XML), you can migrate them to WSO2 Integrator:
+If you have existing WSO2 MI projects (Synapse XML) that you want to bring into WSO2 Integrator, you can use the built-in migration wizard. For MI-specific documentation, see [mi.docs.wso2.com](https://mi.docs.wso2.com).
 
 1. Open the Command Palette.
 2. Select **WSO2 Integrator: Migrate from MI**.
@@ -167,5 +167,5 @@ bal pull wso2/healthcare_integration
 
 ## What's Next
 
-- [Integration Artifacts](/docs/develop/integration-artifacts/overview) -- Understand the artifact types in your imported project
-- [Design Logic](/docs/develop/design-logic/overview) -- Build the integration logic for your imported stubs
+- [Integration Artifacts](/docs/develop/integration-artifacts) -- Understand the artifact types in your imported project
+- [Design Logic](/docs/develop/design-logic) -- Build the integration logic for your imported stubs

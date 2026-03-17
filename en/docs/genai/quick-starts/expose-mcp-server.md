@@ -12,7 +12,7 @@ The Model Context Protocol is an open standard that lets AI assistants interact 
 
 ## Prerequisites
 
-- [WSO2 Integrator WSO2 Integrator IDE installed](/docs/get-started/install)
+- [WSO2 Integrator VS Code extension installed](/docs/get-started/install)
 - An existing integration or API you want to expose (this guide creates a simple one)
 
 ## What You'll Build

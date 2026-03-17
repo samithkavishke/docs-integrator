@@ -8,11 +8,11 @@ description: "End-to-end walkthrough: Build a Change Data Capture (CDC) service 
 
 Build a service that captures inserts, updates, and deletes from a database and propagates those changes to downstream systems in near real time. Change Data Capture (CDC) is essential for keeping multiple systems in sync without tight coupling.
 
-## What you'll build
+## What You'll Build
 
 A CDC pipeline that monitors a MySQL orders table for changes and pushes those changes to both an Elasticsearch search index and a Kafka topic for downstream consumers. The service uses polling-based CDC with timestamp tracking.
 
-## What you'll learn
+## What You'll Learn
 
 - Polling-based Change Data Capture with Ballerina
 - Tracking change cursors using timestamps
@@ -22,7 +22,7 @@ A CDC pipeline that monitors a MySQL orders table for changes and pushes those c
 
 ## Prerequisites
 
-- WSO2 Integrator IDE installed
+- WSO2 Integrator VS Code extension installed
 - MySQL 8.0+ with a sample database
 - Apache Kafka (optional, for event streaming)
 - Basic understanding of SQL and database triggers
@@ -43,7 +43,7 @@ A CDC pipeline that monitors a MySQL orders table for changes and pushes those c
 └──────────────┘    └───────────────────┘    └──────────────┘
 ```
 
-## Step 1: Create the project
+## Step 1: Create the Project
 
 ```bash
 bal new cdc_service
@@ -257,7 +257,7 @@ function publishToKafka(ChangeEvent event) returns error? {
 }
 ```
 
-## Step 6: Wire the CDC loop
+## Step 6: Wire the CDC Loop
 
 ```ballerina
 // main.bal
@@ -327,7 +327,7 @@ service /cdc on new http:Listener(8090) {
 }
 ```
 
-## Step 7: Test the CDC service
+## Step 7: Test the CDC Service
 
 Run the service:
 
@@ -360,14 +360,14 @@ Update a record and verify propagation:
 UPDATE orders SET status = 'shipped' WHERE id = 1;
 ```
 
-## Extend it
+## Extend It
 
 - **Use database log-based CDC** -- Replace polling with MySQL binlog for lower latency
 - **Add schema evolution handling** -- Detect and handle column additions gracefully
 - **Add exactly-once delivery** -- Use Kafka transactions for exactly-once semantics
 - **Add a dead letter table** -- Store failed change events for manual reprocessing
 
-## What's next
+## What's Next
 
 - [Event Handlers](../../develop/build/event-handlers.md) -- Event-driven development patterns
 - [Databases Connectors](../../connectors/databases.md) -- Database connector reference

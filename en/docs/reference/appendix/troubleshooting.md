@@ -298,7 +298,7 @@ artifactId = "mysql-connector-java"
 version = "8.0.33"
 ```
 
-## WSO2 Integrator IDE Issues
+## VS Code Extension Issues
 
 ### Language Server Not Starting
 

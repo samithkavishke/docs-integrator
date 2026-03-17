@@ -12,16 +12,16 @@ Event integrations are ideal for reactive workflows triggered by messages from K
 
 ## Prerequisites
 
-- [WSO2 Integrator IDE installed](install.md).
-- A running RabbitMQ instance. (To use Docker, run `docker run -d -p 5672:5672 -p 15672:15672 rabbitmq:management`).
+- [WSO2 Integrator extension installed](install.md)
+- A running RabbitMQ instance (or use Docker: `docker run -d -p 5672:5672 -p 15672:15672 rabbitmq:management`)
 
-## Step 1: Create the project
+## Step 1: Create the Project
 
-1. Open the WSO2 Integrator IDE.
-2. Select **Create New Integration**.
-3. Enter the integration name (for example, `OrderProcessor`).
+1. Open the WSO2 Integrator sidebar in VS Code.
+2. Click **Create New Integration**.
+3. Enter the integration name (e.g., `OrderProcessor`).
 
-## Step 2: Add an event integration artifact
+## Step 2: Add an Event Integration Artifact
 
 1. In the design view, add a **RabbitMQ** event integration artifact.
 2. Configure the connection:
@@ -31,7 +31,7 @@ Event integrations are ideal for reactive workflows triggered by messages from K
    - **Username:** `guest`
    - **Password:** `guest`
 
-## Step 3: Add message processing logic
+## Step 3: Add Message Processing Logic
 
 Add an `onMessage` handler to process incoming messages:
 
@@ -52,14 +52,14 @@ service on orderListener {
 }
 ```
 
-## Step 4: Run and test
+## Step 4: Run and Test
 
-1. Select **Run** in the toolbar.
+1. Click **Run** in the toolbar.
 2. The service starts listening for messages on the `Orders` queue.
 3. Publish a test message to RabbitMQ using the management UI at `http://localhost:15672` or a client.
 4. Check the terminal output for the logged message.
 
-## Supported event sources
+## Supported Event Sources
 
 | Broker | Ballerina Package |
 |---|---|
@@ -74,4 +74,4 @@ service on orderListener {
 
 - [Quick Start: File Integration](quick-start-file.md) -- Process files from FTP or local directories
 - [Quick Start: Integration as API](quick-start-api.md) -- Build an HTTP service
-- [Kafka](../develop/integration-artifacts/event/kafka.md) -- Advanced event-driven patterns
+- [Event Handlers](/docs/develop/integration-artifacts/event-handlers) -- Advanced event-driven patterns

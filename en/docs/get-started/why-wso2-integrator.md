@@ -32,4 +32,4 @@ Run locally during development. Deploy to Docker, Kubernetes, AWS, Azure, GCP, o
 ## What's Next
 
 - [Key Concepts](key-concepts.md) — Learn the product vocabulary
-- [Install WSO2 Integrator IDE](install.md) — Get set up in 5 minutes
+- [Install VS Code Extension](install.md) — Get set up in 5 minutes

@@ -1,7 +1,7 @@
 ---
 sidebar_position: 4
 title: Install WSO2 Integrator
-description: Step-by-step installation of the WSO2 Integrator WSO2 Integrator IDE and Ballerina distribution.
+description: Step-by-step installation of the WSO2 Integrator VS Code extension and Ballerina distribution.
 ---
 
 # Install WSO2 Integrator
@@ -12,7 +12,7 @@ Get your development environment ready in under 5 minutes.
 
 Download and install VS Code from [code.visualstudio.com/download](https://code.visualstudio.com/download).
 
-## Step 2: Install the WSO2 Integrator IDE
+## Step 2: Install the WSO2 Integrator Extension
 
 1. Open VS Code.
 2. Open the Extensions view:

@@ -161,7 +161,7 @@ const sections: SectionCard[] = [
 /* ------------------------------------------------------------------ */
 const quickLinks = [
   {label: 'Quick Start: REST API', to: '/docs/get-started/quick-start-api'},
-  {label: 'Connectors Catalog', to: '/docs/connectors/ai-llms'},
+  {label: 'Connectors Catalog', to: '/docs/connectors'},
   {label: 'Build an AI Agent', to: '/docs/get-started/quick-start-ai-agent'},
   {label: 'Deploy to Kubernetes', to: '/docs/deploy-operate/deploy/docker-kubernetes'},
 ];

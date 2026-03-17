@@ -12,7 +12,7 @@ In this tutorial, you build a legal Q&A system that brings together two powerful
 
 ## Prerequisites
 
-- [WSO2 Integrator WSO2 Integrator IDE installed](/docs/get-started/install)
+- [WSO2 Integrator VS Code extension installed](/docs/get-started/install)
 - An OpenAI API key (for embeddings and chat completion)
 - PostgreSQL with the pgvector extension installed
 - Familiarity with [RAG Architecture](/docs/genai/rag/architecture-overview) and [MCP Overview](/docs/genai/mcp/overview)

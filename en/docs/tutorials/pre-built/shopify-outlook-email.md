@@ -12,7 +12,7 @@ Send a personalized welcome email via Microsoft Outlook whenever a new customer 
 
 ## Prerequisites
 
-- WSO2 Integrator IDE installed
+- WSO2 Integrator VS Code extension installed
 - Shopify store with admin API access and webhook configuration rights
 - Microsoft Azure app registration with Mail.Send permissions (Microsoft Graph API)
 - An Outlook or Microsoft 365 mailbox to send from
@@ -53,9 +53,9 @@ senderEmail = "welcome@yourcompany.com"
 subject = "Welcome to Our Store!"
 ```
 
-## Code walkthrough
+## Code Walkthrough
 
-### Project structure
+### Project Structure
 
 ```
 shopify-to-outlook-email/
@@ -264,15 +264,15 @@ function sendWelcomeEmail(ShopifyCustomer customer) returns error? {
 - **HTML email**: The welcome email is built as branded HTML with the customer's name and location personalized.
 - **Microsoft Graph API**: Emails are sent through the Microsoft Graph API, supporting any Outlook or Microsoft 365 mailbox.
 
-## Customization notes
+## Customization Notes
 
 - **Customize the email template**: Modify `buildWelcomeEmailHtml` to match your brand's design, add product images, or include a discount code.
 - **Add a delay**: Introduce a short delay (e.g., 5 minutes) before sending the welcome email to avoid overwhelming new customers with immediate messages.
 - **Conditional emails**: Check `accepts_marketing` to send different content to customers who opted in versus those who did not.
 - **Attach a coupon**: Generate a unique discount code via the Shopify Admin API and include it in the welcome email.
 
-## What's next
+## What's Next
 
 - [HubSpot to Google Contacts](hubspot-google-contacts.md) -- Sync CRM contacts to Google Contacts
 - [Salesforce to Twilio SMS](salesforce-twilio-sms.md) -- Send SMS on Salesforce events
-- [Connector catalog](../../connectors/ai-llms) -- Explore all available connectors
+- [Connectors Reference](../../connectors/index.md) -- Explore all available connectors

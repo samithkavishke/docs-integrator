@@ -8,7 +8,7 @@ description: "Sample project: Build event-driven microservices with Kafka — or
 
 Build a set of loosely coupled microservices that communicate through Apache Kafka events. This sample project implements three services -- an Order Service that accepts HTTP orders, an Inventory Service that reserves stock, and a Notification Service that sends order confirmations -- all coordinated through Kafka topics.
 
-## What you'll learn
+## What You'll Learn
 
 - Designing event-driven architectures with Kafka topics as communication channels
 - Building Ballerina HTTP services that produce Kafka events
@@ -18,13 +18,13 @@ Build a set of loosely coupled microservices that communicate through Apache Kaf
 
 ## Prerequisites
 
-- WSO2 Integrator IDE installed
+- WSO2 Integrator VS Code extension installed
 - Apache Kafka cluster running locally or remotely (Docker Compose config included)
 - SMTP email credentials for the notification service (optional, logs notifications by default)
 
 **Time estimate:** 15-20 minutes to clone and run; 45-60 minutes for full code walkthrough
 
-## Clone and run
+## Clone and Run
 
 ```bash
 # Clone the samples repository
@@ -61,7 +61,7 @@ curl -X POST http://localhost:9090/orders \
 curl http://localhost:9090/orders/ORD-001
 ```
 
-## Project structure
+## Project Structure
 
 ```
 event-driven-microservices/
@@ -77,7 +77,7 @@ event-driven-microservices/
     └── integration_test.bal
 ```
 
-## Code walkthrough
+## Code Walkthrough
 
 ### Shared Data Types
 
@@ -381,9 +381,9 @@ function sendFailureNotification(InventoryReservedEvent event) returns error? {
 - **At-least-once delivery**: Manual Kafka offset commits ensure that events are not lost, even if a service crashes mid-processing.
 - **Graceful degradation**: The Notification Service works with or without SMTP configured, falling back to log-based notifications.
 
-## What's next
+## What's Next
 
 - [Data Service with bal persist](data-service-persist.md) -- Build a full CRUD data service
 - [RESTful API with Data Mapper](restful-api-data-mapper.md) -- Use the visual data mapper for transformations
 - [Kafka Event Processing Pipeline](../kafka-event-pipeline.md) -- End-to-end Kafka walkthrough
-- [Connector catalog](../../connectors/ai-llms) -- Explore all available connectors
+- [Connectors Reference](../../connectors/index.md) -- Explore all available connectors

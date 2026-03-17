@@ -6,11 +6,11 @@ description: Set breakpoints, watch variables, and step through Ballerina code i
 
 # Editor Debugging
 
-Debug your integrations step-by-step in VS Code using the WSO2 Integrator IDE. Set breakpoints on any line, inspect variables and payloads in real time, and step through data transformations to understand exactly how your integration processes data.
+Debug your integrations step-by-step in VS Code using the WSO2 Integrator extension. Set breakpoints on any line, inspect variables and payloads in real time, and step through data transformations to understand exactly how your integration processes data.
 
 ## Setting Up the Debugger
 
-The WSO2 Integrator WSO2 Integrator IDE includes built-in debugging support. No additional configuration is required for basic debugging.
+The WSO2 Integrator VS Code extension includes built-in debugging support. No additional configuration is required for basic debugging.
 
 ### From Source Code View
 
@@ -277,7 +277,7 @@ true
 | Breakpoints not hit | Verify the correct file is running; check for compilation errors |
 | Debugger won't start | Ensure no other process is using the service port |
 | Variables show "unavailable" | Step to a line where the variable is in scope |
-| Slow startup | Close unused WSO2 Integrator IDEs during debug sessions |
+| Slow startup | Close unused VS Code extensions during debug sessions |
 | Cannot inspect external library code | Step Into only works for your project code, not imported modules |
 
 ## Best Practices

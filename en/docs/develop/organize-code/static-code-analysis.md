@@ -267,7 +267,7 @@ fi
 
 ## IDE Integration
 
-The WSO2 Integrator WSO2 Integrator IDE shows scan results inline as you type.
+The WSO2 Integrator VS Code extension shows scan results inline as you type.
 
 <!-- TODO: Screenshot of inline scan warnings in VS Code -->
 

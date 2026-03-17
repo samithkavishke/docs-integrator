@@ -12,7 +12,7 @@ Automatically create or update Salesforce contacts whenever a new row is added t
 
 ## Prerequisites
 
-- WSO2 Integrator IDE installed
+- WSO2 Integrator VS Code extension installed
 - Google Cloud project with the Google Sheets API enabled and OAuth 2.0 credentials configured
 - Salesforce developer account with a connected app and OAuth 2.0 credentials
 - A Google Sheets spreadsheet with columns for contact fields (e.g., First Name, Last Name, Email, Phone)
@@ -51,9 +51,9 @@ refreshToken = "<SF_REFRESH_TOKEN>"
 baseUrl = "https://your-instance.salesforce.com"
 ```
 
-## Code walkthrough
+## Code Walkthrough
 
-### Project structure
+### Project Structure
 
 ```
 google-sheets-to-salesforce-contacts/
@@ -165,15 +165,15 @@ function transform(SheetContactRow row) returns SalesforceContact => {
 - **Incremental processing**: A `processedRowCount` tracker ensures only newly added rows are synced, avoiding duplicate contact creation.
 - **Data transformation**: The `transform` function maps spreadsheet column names to Salesforce field names.
 
-## Customization notes
+## Customization Notes
 
 - **Change the polling interval**: Modify the frequency parameter in `task:scheduleJobRecurByFrequency` (value is in seconds).
 - **Map additional fields**: Extend the `SheetContactRow` and `SalesforceContact` records to include fields like address, title, or department.
 - **Upsert instead of create**: Replace `sfClient->create` with `sfClient->upsert` using an external ID field to avoid duplicate contacts when the same email is added again.
 - **Add error notifications**: Integrate with Slack or email to send alerts when a sync operation fails.
 
-## What's next
+## What's Next
 
 - [Gmail to Salesforce Leads](gmail-salesforce-leads.md) -- Parse incoming emails and create leads with AI
 - [MySQL to Salesforce Products](mysql-salesforce-products.md) -- Sync database records to Salesforce
-- [Connector catalog](../../connectors/ai-llms) -- Explore all available connectors
+- [Connectors Reference](../../connectors/index.md) -- Explore all available connectors

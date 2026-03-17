@@ -3,7 +3,7 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
-  title: 'Documentation',
+  title: 'WSO2 Integrator Documentation',
   tagline: 'Build integrations with low-code simplicity and pro-code power',
   favicon: 'img/favicon.svg',
 
@@ -69,7 +69,7 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: '',
+      title: 'WSO2 Integrator',
       logo: {
         alt: 'WSO2 Integrator Logo',
         src: 'img/logo.svg',
@@ -77,44 +77,37 @@ const config: Config = {
       },
       items: [
         {
-          type: 'docSidebar',
-          sidebarId: 'getStartedSidebar',
+          to: '/docs/get-started',
           label: 'Get Started',
           position: 'left',
         },
         {
-          type: 'docSidebar',
-          sidebarId: 'developSidebar',
+          to: '/docs/develop',
           label: 'Develop',
           position: 'left',
         },
         {
-          type: 'docSidebar',
-          sidebarId: 'connectorsSidebar',
+          to: '/docs/connectors',
           label: 'Connectors',
           position: 'left',
         },
         {
-          type: 'docSidebar',
-          sidebarId: 'genaiSidebar',
+          to: '/docs/genai',
           label: 'GenAI',
           position: 'left',
         },
         {
-          type: 'docSidebar',
-          sidebarId: 'tutorialsSidebar',
+          to: '/docs/tutorials',
           label: 'Tutorials',
           position: 'left',
         },
         {
-          type: 'docSidebar',
-          sidebarId: 'deployOperateSidebar',
+          to: '/docs/deploy-operate',
           label: 'Deploy & Operate',
           position: 'left',
         },
         {
-          type: 'docSidebar',
-          sidebarId: 'referenceSidebar',
+          to: '/docs/reference',
           label: 'Reference',
           position: 'left',
         },
@@ -139,10 +132,11 @@ const config: Config = {
         {
           title: 'Develop',
           items: [
-            {label: 'Integration Artifacts', to: '/docs/develop/integration-artifacts/overview'},
+            {label: 'Integration Artifacts', to: '/docs/develop/integration-artifacts'},
             {label: 'Transform', to: '/docs/develop/transform/data-mapper'},
-            {label: 'Connectors', to: '/docs/connectors/ai-llms'},
-            {label: 'GenAI', to: '/docs/genai/getting-started/setup'},
+            {label: 'Test', to: '/docs/develop/test/try-it'},
+            {label: 'Connectors', to: '/docs/connectors'},
+            {label: 'GenAI', to: '/docs/genai'},
           ],
         },
         {
@@ -157,6 +151,7 @@ const config: Config = {
         {
           title: 'Community',
           items: [
+            {label: 'WSO2 MI Documentation', href: 'https://mi.docs.wso2.com'},
             {label: 'Ballerina Central', href: 'https://central.ballerina.io'},
             {label: 'Community Forums', href: 'https://discord.com/invite/wso2'},
             {label: 'Stack Overflow', href: 'https://stackoverflow.com/questions/tagged/wso2'},

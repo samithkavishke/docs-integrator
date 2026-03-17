@@ -84,10 +84,10 @@ The development environment needs internet access for:
 - Downloading the Ballerina distribution and updates
 - Pulling packages from [Ballerina Central](https://central.ballerina.io)
 - Pulling connector dependencies
-- WSO2 Integrator IDE marketplace access
+- VS Code extension marketplace access
 
 If you're behind a corporate proxy, configure proxy settings in VS Code and in your terminal environment.
 
 ## What's Next
 
-- [Install WSO2 Integrator](install.md) -- Install the WSO2 Integrator IDE and set up Ballerina
+- [Install WSO2 Integrator](install.md) -- Install the VS Code extension and set up Ballerina

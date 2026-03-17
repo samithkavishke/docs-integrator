@@ -14,7 +14,7 @@ WSO2 Integrator is a Ballerina-powered integration platform that combines low-co
 
 The platform follows a three-layer architecture:
 
-1. **Design time** — WSO2 Integrator IDE with visual designer, code editor, and AI assistance
+1. **Design time** — VS Code extension with visual designer, code editor, and AI assistance
 2. **Runtime** — Ballerina-powered execution engine with built-in networking, concurrency, and type safety
 3. **Deployment** — Deploy anywhere: Docker, Kubernetes, cloud providers, or WSO2 Devant (iPaaS)
 
@@ -40,4 +40,4 @@ Under the hood, every integration is a Ballerina program. This means:
 
 - [Why WSO2 Integrator](why-wso2-integrator.md) — How it compares to alternatives
 - [Key Concepts](key-concepts.md) — Learn the vocabulary
-- [Install WSO2 Integrator IDE](install.md) — Get set up
+- [Install VS Code Extension](install.md) — Get set up

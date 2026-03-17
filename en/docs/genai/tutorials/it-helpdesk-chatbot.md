@@ -12,7 +12,7 @@ In this tutorial, you build an IT support chatbot with persistent memory so that
 
 ## Prerequisites
 
-- [WSO2 Integrator WSO2 Integrator IDE installed](/docs/get-started/install)
+- [WSO2 Integrator VS Code extension installed](/docs/get-started/install)
 - An OpenAI API key (or another supported LLM provider)
 - Redis server running locally or remotely
 - Familiarity with [Memory Configuration](/docs/genai/agents/memory-configuration)

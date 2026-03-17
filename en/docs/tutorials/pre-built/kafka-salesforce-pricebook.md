@@ -12,7 +12,7 @@ Stream pricing update events from a Kafka topic and synchronize them with Salesf
 
 ## Prerequisites
 
-- WSO2 Integrator IDE installed
+- WSO2 Integrator VS Code extension installed
 - Apache Kafka cluster (local or managed) with a pricing topic
 - Salesforce developer account with a connected app and OAuth 2.0 credentials
 - A Salesforce price book (Standard or custom) and associated products
@@ -50,9 +50,9 @@ baseUrl = "https://your-instance.salesforce.com"
 pricebookId = "<PRICEBOOK2_ID>"
 ```
 
-## Code walkthrough
+## Code Walkthrough
 
-### Project structure
+### Project Structure
 
 ```
 kafka-to-salesforce-pricebook/
@@ -205,15 +205,15 @@ function processPricingEvent(PricingEvent event) returns error? {
 - **Product lookup**: Each pricing event references a product by its code, which is resolved to a Salesforce Product2 ID before upserting the price book entry.
 - **Discount calculation**: The integration supports both standard and discount pricing, applying percentage discounts before writing the final price.
 
-## Customization notes
+## Customization Notes
 
 - **Batch processing**: Accumulate multiple Kafka records and use the Salesforce composite API to upsert them in a single call for better performance.
 - **Multi-currency support**: Include the `CurrencyIsoCode` field in the `SalesforcePricebookEntry` and the Kafka event to support multi-currency price books.
 - **Dead letter queue**: Send failed events to a separate Kafka topic (dead letter queue) instead of blocking the consumer.
 - **Schema validation**: Add Avro or JSON Schema validation using the Kafka Schema Registry connector to ensure incoming events conform to the expected format.
 
-## What's next
+## What's Next
 
 - [MySQL to Salesforce Products](mysql-salesforce-products.md) -- Sync product catalogs from a database
 - [Salesforce to Twilio SMS](salesforce-twilio-sms.md) -- Send SMS on Salesforce events
-- [Connector catalog](../../connectors/ai-llms) -- Explore all available connectors
+- [Connectors Reference](../../connectors/index.md) -- Explore all available connectors

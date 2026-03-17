@@ -12,7 +12,7 @@ In this tutorial, you build a complete RAG pipeline: ingest documents, chunk and
 
 ## Prerequisites
 
-- [WSO2 Integrator WSO2 Integrator IDE installed](/docs/get-started/install)
+- [WSO2 Integrator VS Code extension installed](/docs/get-started/install)
 - An OpenAI API key (for embeddings and chat completion)
 - A vector database (Pinecone, Weaviate, or ChromaDB)
 

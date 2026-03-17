@@ -8,7 +8,7 @@ description: "Show me a complete, real example. End-to-end walkthroughs, pattern
 
 End-to-end walkthroughs that combine multiple features into real scenarios. Unlike [Develop](/docs/develop) (which covers single topics), tutorials show how everything connects.
 
-## End-to-end walkthroughs
+## End-to-End Walkthroughs
 
 Guided journeys from empty project to working integration. 30–45 minutes each.
 
@@ -20,7 +20,7 @@ Guided journeys from empty project to working integration. 30–45 minutes each.
 - [Multi-System Data Reconciliation](data-reconciliation.md)
 - [Healthcare HL7/FHIR Integration](healthcare-hl7-fhir.md)
 
-## Integration patterns
+## Integration Patterns
 
 Reusable architectural patterns with problem/solution/implementation.
 
@@ -33,7 +33,7 @@ Reusable architectural patterns with problem/solution/implementation.
 - [RAG Pipeline Pattern](patterns/rag-pipeline.md)
 - [Agent-Tool Orchestration](patterns/agent-tool-orchestration.md)
 
-## Sample projects
+## Sample Projects
 
 Clone-and-run projects on GitHub.
 
@@ -42,10 +42,10 @@ Clone-and-run projects on GitHub.
 - [E-Commerce Order Service](samples/ecommerce-order-service.md)
 - [AI Personal Assistant](samples/ai-personal-assistant.md)
 
-## Migration guides
+## Migration Guides
 
 Moving from another integration platform? Start here.
 
-- [Coming from WSO2 MI](migration/from-wso2-mi.md)
+- [Coming from WSO2 MI](migration/from-wso2-mi.md) -- For existing MI users adopting WSO2 Integrator ([MI docs →](https://mi.docs.wso2.com))
 - [Coming from MuleSoft](migration/from-mulesoft.md)
 - [Coming from Boomi](migration/from-boomi.md)

@@ -104,8 +104,8 @@ service /api on new http:Listener(8090) {
 5. **Test** using the built-in Try-It tool and unit tests.
 6. **Deploy** using Docker, Kubernetes, or as a standalone JAR.
 
-## What's next
+## What's Next
 
-- [Coming from WSO2 MI](from-wso2-mi.md) -- If migrating from WSO2 Micro Integrator
+- [Coming from WSO2 MI](from-wso2-mi.md) -- For existing WSO2 MI users
 - [Coming from MuleSoft](from-mulesoft.md) -- MuleSoft migration guide
 - [Migration Tools](/docs/develop/tools/migration-tools) -- Automated migration tool reference

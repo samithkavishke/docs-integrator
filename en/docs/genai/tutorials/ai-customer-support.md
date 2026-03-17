@@ -12,7 +12,7 @@ In this tutorial, you build a fully functional AI customer support agent that co
 
 ## Prerequisites
 
-- [WSO2 Integrator WSO2 Integrator IDE installed](/docs/get-started/install)
+- [WSO2 Integrator VS Code extension installed](/docs/get-started/install)
 - An OpenAI API key (or another supported LLM provider)
 - A running database (MySQL, PostgreSQL, or H2 for development)
 

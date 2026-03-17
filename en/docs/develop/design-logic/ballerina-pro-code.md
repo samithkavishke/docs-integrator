@@ -23,7 +23,7 @@ While the visual flow designer handles most integration patterns, pro-code is th
 
 ### VS Code with the Ballerina Extension
 
-1. Install the [WSO2 Integrator WSO2 Integrator IDE](https://marketplace.visualstudio.com/items?itemName=WSO2.wso2-integrator).
+1. Install the [WSO2 Integrator VS Code extension](https://marketplace.visualstudio.com/items?itemName=WSO2.wso2-integrator).
 2. Open your integration project folder.
 3. Switch to **Code** mode using the editor toolbar toggle.
 4. The extension provides syntax highlighting, code completion, error diagnostics, and inline documentation.

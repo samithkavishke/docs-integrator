@@ -22,7 +22,7 @@ Understand the product, its architecture, and why it exists.
 
 Get your development environment ready in under 5 minutes.
 
-- [Install WSO2 Integrator IDE](install.md) — Prerequisites and installation
+- [Install VS Code Extension](install.md) — Prerequisites and installation
 - [Create Your First Project](first-project.md) — Generate a project and understand the structure
 - [Understand the IDE](understand-the-ide.md) — Visual designer walkthrough
 

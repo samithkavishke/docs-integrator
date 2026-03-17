@@ -8,11 +8,11 @@ description: "End-to-end walkthrough: Build a multi-stage data transformation pi
 
 Build a multi-stage pipeline that ingests data from one system, transforms it through several stages, and loads it into a target system. This tutorial demonstrates how to chain transformations, handle schema mismatches, and validate data at each stage.
 
-## What you'll build
+## What You'll Build
 
 An employee onboarding pipeline that takes HR system data, transforms it into the formats required by the payroll system, the IT provisioning system, and the company directory -- all from a single input event.
 
-## What you'll learn
+## What You'll Learn
 
 - Multi-stage data transformation using Ballerina data mapping
 - Type-safe schema conversion between systems
@@ -22,7 +22,7 @@ An employee onboarding pipeline that takes HR system data, transforms it into th
 
 ## Prerequisites
 
-- WSO2 Integrator IDE installed
+- WSO2 Integrator VS Code extension installed
 - Basic familiarity with Ballerina record types
 - Understanding of JSON data structures
 
@@ -44,7 +44,7 @@ An employee onboarding pipeline that takes HR system data, transforms it into th
                               └──────────┘      └───────────┘     └───────────┘
 ```
 
-## Step 1: Create the project
+## Step 1: Create the Project
 
 ```bash
 bal new onboarding_pipeline
@@ -319,7 +319,7 @@ service /onboarding on new http:Listener(8090) {
 }
 ```
 
-## Step 7: Test the pipeline
+## Step 7: Test the Pipeline
 
 Run the project:
 
@@ -364,14 +364,14 @@ curl -X POST http://localhost:8090/onboarding/employees \
   }'
 ```
 
-## Extend it
+## Extend It
 
 - **Add a dead letter queue** -- Store failed transformations for manual review
 - **Add idempotency** -- Prevent duplicate processing of the same employee
 - **Add async processing** -- Use Kafka to decouple the pipeline stages
 - **Add data masking** -- Mask sensitive fields like salary before logging
 
-## What's next
+## What's Next
 
 - [Data Mapper](../../develop/transform/data-mapper.md) -- Visual data mapping tool
 - [AI-Assisted Mapping](../../develop/transform/ai-assisted-mapping.md) -- Use AI to generate transformations

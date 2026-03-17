@@ -12,7 +12,7 @@ In this tutorial, you build a conversational interface over an analytics databas
 
 ## Prerequisites
 
-- [WSO2 Integrator WSO2 Integrator IDE installed](/docs/get-started/install)
+- [WSO2 Integrator VS Code extension installed](/docs/get-started/install)
 - An OpenAI API key
 - A database with sample analytics data (orders, customers, products)
 

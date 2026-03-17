@@ -12,7 +12,7 @@ In this tutorial, you build a Model Context Protocol (MCP) server that connects 
 
 ## Prerequisites
 
-- [WSO2 Integrator WSO2 Integrator IDE installed](/docs/get-started/install)
+- [WSO2 Integrator VS Code extension installed](/docs/get-started/install)
 - A database with sample enterprise data (MySQL or PostgreSQL)
 - An MCP-compatible client (Claude Desktop, or your own agent)
 

@@ -12,7 +12,7 @@ In this tutorial, you build a customer support system that uses multiple special
 
 ## Prerequisites
 
-- [WSO2 Integrator WSO2 Integrator IDE installed](/docs/get-started/install)
+- [WSO2 Integrator VS Code extension installed](/docs/get-started/install)
 - An OpenAI API key
 - Familiarity with [Agent Architecture & Concepts](/docs/genai/agents/architecture-concepts)
 

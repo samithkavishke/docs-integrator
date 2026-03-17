@@ -12,7 +12,7 @@ File integrations are ideal for batch uploads, scheduled file processing, and ET
 
 ## Prerequisites
 
-- [WSO2 Integrator IDE installed](install.md)
+- [WSO2 Integrator extension installed](install.md)
 
 ## Step 1: Create the Project
 
@@ -73,4 +73,4 @@ service on dirListener {
 
 - [Quick Start: Automation](quick-start-automation.md) -- Build scheduled jobs
 - [Quick Start: Integration as API](quick-start-api.md) -- Build an HTTP service
-- [FTP/SFTP](../develop/integration-artifacts/file/ftp-sftp.md) -- Advanced file processing patterns
+- [File Handlers](/docs/develop/integration-artifacts/file-handlers) -- Advanced file processing patterns

@@ -12,7 +12,7 @@ In this tutorial, you build an end-to-end HR knowledge base agent powered by ret
 
 ## Prerequisites
 
-- [WSO2 Integrator WSO2 Integrator IDE installed](/docs/get-started/install)
+- [WSO2 Integrator VS Code extension installed](/docs/get-started/install)
 - An OpenAI API key (for embeddings and chat completion)
 - PostgreSQL with the pgvector extension installed (or ChromaDB as an alternative)
 

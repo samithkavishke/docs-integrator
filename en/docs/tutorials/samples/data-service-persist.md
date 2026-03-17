@@ -8,7 +8,7 @@ description: "Sample project: Build a full CRUD data service using bal persist w
 
 Build a complete CRUD (Create, Read, Update, Delete) data service using the `bal persist` tooling with a MySQL backend. This sample project demonstrates how to define data models, auto-generate the persistence layer, and expose a RESTful API -- all with minimal boilerplate code.
 
-## What you'll learn
+## What You'll Learn
 
 - Defining data models using `bal persist` model definitions
 - Auto-generating the persistence client and database schema
@@ -19,13 +19,13 @@ Build a complete CRUD (Create, Read, Update, Delete) data service using the `bal
 
 ## Prerequisites
 
-- WSO2 Integrator IDE installed
+- WSO2 Integrator VS Code extension installed
 - MySQL 8.0 or later (local or remote)
 - `bal persist` tool (bundled with the Ballerina distribution)
 
 **Time estimate:** 10-15 minutes to clone and run; 30-45 minutes for full code walkthrough
 
-## Clone and run
+## Clone and Run
 
 ```bash
 # Clone the samples repository
@@ -75,7 +75,7 @@ curl -X PUT http://localhost:9090/products/1 \
 curl -X DELETE http://localhost:9090/products/1
 ```
 
-## Project structure
+## Project Structure
 
 ```
 data-service-persist/
@@ -95,7 +95,7 @@ data-service-persist/
     └── service_test.bal
 ```
 
-## Code walkthrough
+## Code Walkthrough
 
 ### Defining the Data Model
 
@@ -334,9 +334,9 @@ resource function get [int productId]/reviews() returns Review[]|error {
 - **Schema migrations**: Running `bal persist push` applies schema changes to the database, keeping the model and database in sync.
 - **Separation of concerns**: The API types in `types.bal` are separate from the persistence types, allowing the public API shape to evolve independently from the database schema.
 
-## What's next
+## What's Next
 
 - [Event-Driven Microservices](event-driven-microservices.md) -- Build microservices with Kafka
 - [RESTful API with Data Mapper](restful-api-data-mapper.md) -- Use the visual data mapper for transformations
 - [Data Transformation](../../develop/transform/data-mapper.md) -- Learn about data mapping features
-- [Connector catalog](../../connectors/ai-llms) -- Explore all available connectors
+- [Connectors Reference](../../connectors/index.md) -- Explore all available connectors
