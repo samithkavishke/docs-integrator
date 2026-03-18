@@ -24,6 +24,7 @@ const sidebars: SidebarsConfig = {
           type: 'category',
           label: 'What is WSO2 Integrator?',
           items: [
+            'get-started/overview',
             'get-started/why-wso2-integrator',
             'get-started/key-concepts',
           ],

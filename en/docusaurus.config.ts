@@ -131,7 +131,7 @@ const config: Config = {
         {
           title: 'Get Started',
           items: [
-            {label: 'Overview', to: '/docs/get-started/why-wso2-integrator'},
+            {label: 'Overview', to: '/docs/get-started/overview'},
             {label: 'Install', to: '/docs/get-started/install'},
             {label: 'Quick Starts', to: '/docs/get-started/quick-start-api'},
           ],
