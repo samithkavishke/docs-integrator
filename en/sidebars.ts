@@ -76,7 +76,7 @@ const sidebars: SidebarsConfig = {
           type: 'category',
           label: 'Project Views',
           items: [
-            {type: 'doc', id: 'develop/project-views/workspace-view', label: 'Project View'},
+            'develop/project-views/project-view',
             'develop/project-views/integration-view',
             'develop/project-views/library-view',
           ],

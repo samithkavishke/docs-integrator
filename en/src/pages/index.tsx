@@ -94,7 +94,7 @@ const sections: SectionCard[] = [
   {
     title: 'Get Started',
     description: 'Install, set up, and build your first integration in under 10 minutes.',
-    link: '/docs/get-started',
+    link: '/docs/get-started/overview',
     icon: <IconGetStarted />,
     iconBg: '#ECFDF5',
     iconBgDark: 'rgba(5, 150, 105, 0.15)',
@@ -103,7 +103,7 @@ const sections: SectionCard[] = [
   {
     title: 'Develop',
     description: 'Build services, transform data, and test integrations on your machine.',
-    link: '/docs/develop',
+    link: '/docs/develop/create-integrations/create-new-integration',
     icon: <IconDevelop />,
     iconBg: '#EFF6FF',
     iconBgDark: 'rgba(37, 99, 235, 0.15)',
@@ -112,7 +112,7 @@ const sections: SectionCard[] = [
   {
     title: 'Connectors',
     description: 'Browse 200+ pre-built connectors for SaaS, databases, messaging, and AI.',
-    link: '/docs/connectors',
+    link: '/docs/connectors/ai-llms',
     icon: <IconConnectors />,
     iconBg: '#F0EDFF',
     iconBgDark: 'rgba(124, 58, 237, 0.15)',
@@ -121,7 +121,7 @@ const sections: SectionCard[] = [
   {
     title: 'GenAI',
     description: 'Build AI-powered integrations with agents, RAG, and MCP servers.',
-    link: '/docs/genai',
+    link: '/docs/genai/getting-started/setup',
     icon: <IconGenAI />,
     iconBg: '#FDF4FF',
     iconBgDark: 'rgba(168, 85, 247, 0.15)',
@@ -130,7 +130,7 @@ const sections: SectionCard[] = [
   {
     title: 'Tutorials',
     description: 'End-to-end walkthroughs, integration patterns, and sample projects.',
-    link: '/docs/tutorials',
+    link: '/docs/tutorials/salesforce-db-sync',
     icon: <IconTutorials />,
     iconBg: '#FFF8EB',
     iconBgDark: 'rgba(217, 119, 6, 0.15)',
@@ -139,7 +139,7 @@ const sections: SectionCard[] = [
   {
     title: 'Deploy & Operate',
     description: 'Docker, Kubernetes, CI/CD, observability, and production security.',
-    link: '/docs/deploy-operate',
+    link: '/docs/deploy-operate/deploy/local',
     icon: <IconDeploy />,
     iconBg: '#ECFEFF',
     iconBgDark: 'rgba(8, 145, 178, 0.15)',
@@ -148,7 +148,7 @@ const sections: SectionCard[] = [
   {
     title: 'Reference',
     description: 'Language reference, configuration keys, CLI commands, and error codes.',
-    link: '/docs/reference',
+    link: '/docs/reference/language/syntax',
     icon: <IconReference />,
     iconBg: '#F1F5F9',
     iconBgDark: 'rgba(100, 116, 139, 0.15)',

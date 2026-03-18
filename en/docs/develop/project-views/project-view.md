@@ -1,10 +1,10 @@
 ---
 sidebar_position: 1
-title: Workspace View
+title: Project View
 description: Manage multi-package integration workspaces in WSO2 Integrator.
 ---
 
-# Workspace View
+# Project View
 
 The Workspace View lets you organize multiple integration packages into a single workspace, enabling cross-project navigation, dependency management, and visual organization.
 
