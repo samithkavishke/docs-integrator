@@ -96,11 +96,12 @@ const sidebars: SidebarsConfig = {
                 'develop/integration-artifacts/service/graphql-service',
                 'develop/integration-artifacts/service/tcp-service',
                 'develop/integration-artifacts/service/websocket-service',
+                'develop/integration-artifacts/service/websub-service',
                 'develop/integration-artifacts/service/grpc-service',
               ],
             },
             {
-              type: 'category', label: 'Event Handlers',
+              type: 'category', label: 'Event Integration',
               collapsed: true,
               items: [
                 'develop/integration-artifacts/event/kafka',
@@ -118,7 +119,7 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
-              type: 'category', label: 'File Handlers',
+              type: 'category', label: 'File Integration',
               collapsed: true,
               items: [
                 'develop/integration-artifacts/file/ftp-sftp',
@@ -136,6 +137,23 @@ const sidebars: SidebarsConfig = {
                 'develop/integration-artifacts/supporting/data-mapper',
               ],
             },
+          ],
+        },
+        // 6.4 Build Integrations
+        {
+          type: 'category',
+          label: 'Build Integrations',
+          items: [
+            'develop/build/services',
+            'develop/build/event-handlers',
+            'develop/build/file-processing',
+            'develop/build/automations',
+            'develop/build/ai-agents',
+            'develop/build/rag-applications',
+            'develop/build/control-flow',
+            'develop/build/error-handling',
+            'develop/build/configuration-management',
+            'develop/build/ballerina-pro-code',
           ],
         },
         // 6.4 Design Integration Logic
@@ -156,7 +174,7 @@ const sidebars: SidebarsConfig = {
             'develop/design-logic/java-interoperability',
           ],
         },
-        // 6.5 Transform
+        // 6.5 Transform (per blueprint)
         {
           type: 'category',
           label: 'Transform',
@@ -231,7 +249,7 @@ const sidebars: SidebarsConfig = {
               type: 'category', label: 'Data Persistence',
               collapsed: true,
               items: [
-                'develop/tools/data-persistence/oveview',
+                'develop/tools/data-persistence/overview',
                 'develop/tools/data-persistence/data-model-definition',
                 'develop/tools/data-persistence/client-api',
                 'develop/tools/data-persistence/supported-stores',
@@ -1725,6 +1743,7 @@ const sidebars: SidebarsConfig = {
   // "How do I build AI agents, RAG, or MCP?"
   // ─────────────────────────────────────────────
   genaiSidebar: [
+        'genai/overview',
         // Getting Started
         {
           type: 'category',
@@ -2073,6 +2092,7 @@ const sidebars: SidebarsConfig = {
             'deploy-operate/observe/elastic',
             'deploy-operate/observe/opensearch',
             'deploy-operate/observe/moesif',
+            'deploy-operate/observe/custom-metrics',
             'deploy-operate/observe/third-party',
           ],
         },
