@@ -4,6 +4,9 @@ title: JSON Processing
 description: Parse, construct, transform, and validate JSON data.
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # JSON Processing
 
 Work with JSON data -- the most common format in modern integrations. Ballerina treats `json` as a built-in union type (`()|boolean|int|float|decimal|string|json[]|map<json>`) with first-class language support for construction, access, and transformation.
@@ -11,6 +14,20 @@ Work with JSON data -- the most common format in modern integrations. Ballerina 
 ## Creating JSON Values
 
 Construct JSON directly using Ballerina literals. The `json` type accepts null, booleans, numbers, strings, arrays, and maps.
+
+<Tabs>
+<TabItem value="ui" label="Visual Designer" default>
+
+1. **Add a Variable step** — In the flow designer, click **+** and select **Variable**. Set the type to `json` and enter a JSON literal as the expression.
+
+2. **Build nested structures** — Add additional **Variable** steps for nested JSON objects and arrays. Each variable appears as a separate **Declare Variable** step in the flow.
+
+   ![Flow designer showing Declare Variable steps for JSON literal construction including nested objects and arrays](/img/develop/transform/json/json-creating-flow.png)
+
+3. **Configure the expression** — Click a variable node to view and edit the JSON expression in the side panel.
+
+</TabItem>
+<TabItem value="code" label="Ballerina Code">
 
 ```ballerina
 import ballerina/io;
@@ -44,9 +61,26 @@ public function main() {
 }
 ```
 
+</TabItem>
+</Tabs>
+
 ## Accessing JSON Values
 
 Access JSON fields with field access or index notation. Since `json` is dynamically shaped, most access operations return `json` and may require type narrowing.
+
+<Tabs>
+<TabItem value="ui" label="Visual Designer" default>
+
+1. **Add Variable steps for field access** — In the flow designer, click **+** and select **Variable**. Set the type to `json` and enter a field access expression such as `check payload.order.id`.
+
+2. **Use optional access** — For keys that may not exist, use `?.` syntax in the expression (for example, `check payload.order?.notes`) to return `()` instead of an error.
+
+3. **Narrow to a specific type** — Set the variable type to `string`, `int`, or another concrete type and use `check` in the expression to perform type narrowing.
+
+   ![Flow designer showing Declare Variable steps for JSON field access, optional access, and type narrowing](/img/develop/transform/json/json-accessing-flow.png)
+
+</TabItem>
+<TabItem value="code" label="Ballerina Code">
 
 ```ballerina
 public function main() returns error? {
@@ -75,9 +109,24 @@ public function main() returns error? {
 }
 ```
 
+</TabItem>
+</Tabs>
+
 ## Parsing JSON from Strings
 
 Parse external JSON payloads received as strings, bytes, or streams using `value:fromJsonString()` or the `ballerina/data.jsondata` module.
+
+<Tabs>
+<TabItem value="ui" label="Visual Designer" default>
+
+1. **Add a Variable step** — In the flow designer, click **+** and select **Variable**. Set the type to `json` and enter `check raw.fromJsonString()` as the expression.
+
+2. **Extract typed values** — Add additional **Variable** steps with concrete types (for example, `string`) and use `check` expressions to extract values from the parsed JSON.
+
+   ![Flow designer showing Declare Variable steps for parsing a JSON string and extracting typed values](/img/develop/transform/json/json-parsing-flow.png)
+
+</TabItem>
+<TabItem value="code" label="Ballerina Code">
 
 ```ballerina
 import ballerina/io;
@@ -92,9 +141,26 @@ public function main() returns error? {
 }
 ```
 
+</TabItem>
+</Tabs>
+
 ## Type-Safe JSON with `ballerina/data.jsondata`
 
 The `ballerina/data.jsondata` module provides type-safe conversion from JSON to Ballerina records. Define a record type matching your expected structure and parse directly into it.
+
+<Tabs>
+<TabItem value="ui" label="Visual Designer" default>
+
+1. **Define the target record type** — Navigate to **Types** in the sidebar and click **+** to add a new type. Select the **Import** tab in the right-hand panel, then paste the `Product` record definition. For details on creating types, see [Types](../integration-artifacts/supporting/types.md).
+
+   ![New Type panel showing the Import tab with the Product record definition](/img/develop/transform/json/json-types-panel.png)
+
+2. **Add a Variable step** — In the flow designer, add a **Variable** step, set the type to `Product`, and set the expression to `check jsondata:parseString(jsonStr)`.
+
+   ![Flow designer showing the jsondata parseString variable step for type-safe JSON parsing](/img/develop/transform/json/json-typed-parse-flow.png)
+
+</TabItem>
+<TabItem value="code" label="Ballerina Code">
 
 ```ballerina
 import ballerina/data.jsondata;
@@ -122,7 +188,22 @@ public function main() returns error? {
 }
 ```
 
+</TabItem>
+</Tabs>
+
 ### Parsing JSON arrays
+
+<Tabs>
+<TabItem value="ui" label="Visual Designer" default>
+
+1. **Define the record type** — Navigate to **Types** in the sidebar and click **+** to add a new type. Select the **Import** tab, then paste the `OrderItem` record definition. For details on creating types, see [Types](../integration-artifacts/supporting/types.md).
+
+2. **Add a Variable step** — In the flow designer, add a **Variable** step, set the type to `OrderItem[]`, and set the expression to `check jsondata:parseString(itemsJson)`.
+
+   ![Flow designer showing the jsondata parseString variable step for parsing a JSON array into typed records](/img/develop/transform/json/json-array-parse-flow.png)
+
+</TabItem>
+<TabItem value="code" label="Ballerina Code">
 
 ```ballerina
 type OrderItem record {|
@@ -141,9 +222,22 @@ public function main() returns error? {
 }
 ```
 
+</TabItem>
+</Tabs>
+
 ### Field name remapping
 
 Use the `@jsondata:Name` annotation to map JSON keys that do not match Ballerina field naming conventions.
+
+<Tabs>
+<TabItem value="ui" label="Visual Designer" default>
+
+1. **Define the record type with annotations** — Navigate to **Types** in the sidebar and click **+** to add a new type. Select the **Import** tab, then paste the record definition including `@jsondata:Name` annotations. The annotations map JSON field names to Ballerina-compatible identifiers.
+
+   ![Types panel showing the ApiResponse record with jsondata Name annotations for field remapping](/img/develop/transform/json/json-remapping-panel.png)
+
+</TabItem>
+<TabItem value="code" label="Ballerina Code">
 
 ```ballerina
 import ballerina/data.jsondata;
@@ -156,9 +250,28 @@ type ApiResponse record {|
 |};
 ```
 
+</TabItem>
+</Tabs>
+
 ## Common Transformations
 
 Restructure JSON data by converting to records, transforming, and converting back.
+
+<Tabs>
+<TabItem value="ui" label="Visual Designer" default>
+
+1. **Define source and target record types** — Navigate to **Types** in the sidebar and click **+** to add new types. Select the **Import** tab and paste the `SourceContact` and `TargetContact` record definitions. For details on creating types, see [Types](../integration-artifacts/supporting/types.md).
+
+2. **Add a Variable step for parsing** — In the flow designer, add a **Variable** step, set the type to `SourceContact`, and set the expression to `check jsondata:parseAsType(input)`.
+
+3. **Map fields visually** — To transform the parsed record into the target type, use the [Visual Data Mapper](data-mapper.md). Map `first_name` and `last_name` to `fullName` (with concatenation), and `email_address` to `email`.
+
+   ![Flow designer showing the jsondata parseAsType variable step and data mapper transformation](/img/develop/transform/json/json-transform-flow.png)
+
+   ![Data Mapper showing SourceContact input fields on the left and TargetContact output fields on the right](/img/develop/transform/json/json-data-mapper.png)
+
+</TabItem>
+<TabItem value="code" label="Ballerina Code">
 
 ```ballerina
 import ballerina/data.jsondata;
@@ -184,9 +297,24 @@ public function transform(json input) returns json|error {
 }
 ```
 
+</TabItem>
+</Tabs>
+
 ## Merging JSON Objects
 
 Combine multiple JSON objects using the spread operator or map merge.
+
+<Tabs>
+<TabItem value="ui" label="Visual Designer" default>
+
+1. **Add Variable steps** — In the flow designer, click **+** and select **Variable**. Set the type to `map<json>` and enter the JSON map literal as the expression. Add a second **Variable** step for the overrides map.
+
+2. **Merge with the spread operator** — Add another **Variable** step with the type `map<json>` and use the spread operator expression `{...defaults, ...overrides}` to merge the two maps. Later entries take precedence.
+
+   ![Flow designer showing Declare Variable steps for creating and merging JSON maps using the spread operator](/img/develop/transform/json/json-merging-flow.png)
+
+</TabItem>
+<TabItem value="code" label="Ballerina Code">
 
 ```ballerina
 public function main() {
@@ -199,11 +327,26 @@ public function main() {
 }
 ```
 
+</TabItem>
+</Tabs>
+
 ## Edge Cases
 
 ### Null handling
 
 Use optional types and the Elvis operator to handle missing or null values.
+
+<Tabs>
+<TabItem value="ui" label="Visual Designer" default>
+
+1. **Use optional access** — Add a **Variable** step with the type `json?` and use optional access syntax `check payload?.description` as the expression. This returns `()` for null or missing fields.
+
+2. **Apply the Elvis operator** — Add another **Variable** step with a concrete type (for example, `string`) and use a conditional expression such as `desc is string ? desc : "No description provided"` to provide a default value.
+
+   ![Flow designer showing Declare Variable steps for optional access and Elvis operator for null handling](/img/develop/transform/json/json-null-handling-flow.png)
+
+</TabItem>
+<TabItem value="code" label="Ballerina Code">
 
 ```ballerina
 public function main() returns error? {
@@ -216,6 +359,9 @@ public function main() returns error? {
     string description = desc is string ? desc : "No description provided";
 }
 ```
+
+</TabItem>
+</Tabs>
 
 ### Large JSON payloads
 
