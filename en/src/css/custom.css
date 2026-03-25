@@ -400,14 +400,25 @@ code {
   color: #E2E8F0;
 }
 
+/* Ballerina class-name tokens (module:Type, PascalCaseType) */
+.token.class-name {
+  color: #6f42c1;
+}
+
+[data-theme='dark'] .token.class-name {
+  color: #bd93f9;
+}
+
 /* Code blocks — override inline code style */
 .prism-code {
   border-radius: var(--ifm-code-border-radius);
-  border: 1px solid #E2E8F0;
+  border: 1px solid #CBD5E1;
+  background-color: #F1F5F9 !important;
 }
 
 [data-theme='dark'] .prism-code {
   border-color: #1E293B;
+  background-color: #0D1526 !important;
 }
 
 .prism-code code {
