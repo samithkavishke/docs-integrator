@@ -56,15 +56,15 @@ devant:Chunker chunker = check new (
 
 Sends a binary document to the Devant AI service and returns the document split into an array of semantic chunks according to the configured strategy.
 
-**Parameters:**
+Parameters:
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
 | `document` | `ai:Document` | Yes | The binary document to chunk. Must be an `ai:BinaryDocument` with `metadata.fileName` set. |
 
-**Returns:** `ai:Chunk[]|ai:Error`
+Returns: `ai:Chunk[]|ai:Error`
 
-**Sample code:**
+Sample code:
 
 ```ballerina
 devant:BinaryDataLoader loader = check new ("./documents/sample.pdf");
@@ -73,7 +73,7 @@ ai:Document doc = check loader.load();
 ai:Chunk[] chunks = check chunker.chunk(doc);
 ```
 
-**Sample response:**
+Sample response:
 
 ```ballerina
 [
@@ -129,9 +129,9 @@ Loads documents from the configured file system path. Returns a single `ai:Docum
 
 
 
-**Returns:** `ai:Document[]|ai:Document|ai:Error`
+Returns: `ai:Document[]|ai:Document|ai:Error`
 
-**Sample code:**
+Sample code:
 
 ```ballerina
 // Load a single file
@@ -143,7 +143,7 @@ devant:BinaryDataLoader dirLoader = check new ("./documents/");
 ai:Document[] docs = check dirLoader.load();
 ```
 
-**Sample response:**
+Sample response:
 
 ```ballerina
 {
