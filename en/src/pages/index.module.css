@@ -1,0 +1,469 @@
+/**
+ * Landing Page — Modern, Clean Design
+ *
+ * WSO2 Brand: #17223A #1B2A49 #5CD1FF #B7E4FC
+ * Neutrals:   #000 #0D0D0D #262626 #565656 #D9D9D9 #F2F2F2 #FFF
+ *
+ * Design: Clean SVG icons with color-coded badges,
+ * subtle borders, professional typography.
+ */
+
+/* ================================================================
+   HERO — Light blue in light theme, dark navy in dark theme
+   ================================================================ */
+.heroBanner {
+  padding: 4.5rem 0 3.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, #1B3A5C 0%, #2563A0 40%, #4A9BD9 70%, #7CC4F0 100%);
+  color: #FFFFFF;
+}
+
+.heroBanner h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 0.75rem;
+  color: #FFFFFF;
+}
+
+.heroSubtitle {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Subtle top glow */
+.heroBanner::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Dark theme hero — deeper navy */
+[data-theme='dark'] .heroBanner {
+  background: linear-gradient(180deg, #0F172A 0%, #1B2A49 100%);
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 3rem 1.5rem 2.5rem;
+  }
+  .heroBanner h1 {
+    font-size: 2rem;
+  }
+  .heroSubtitle {
+    font-size: 1rem;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Hero CTA — white button on blue gradient (light), sky blue on navy (dark) */
+.heroBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #FFFFFF;
+  color: #1B3A5C;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.heroBtn:hover {
+  background: #E0F2FE;
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.25);
+  text-decoration: none;
+  color: #1B3A5C;
+  transform: translateY(-1px);
+}
+
+[data-theme='dark'] .heroBtn {
+  background: #38BDF8;
+  color: #0F172A;
+}
+
+[data-theme='dark'] .heroBtn:hover {
+  background: #56CBFA;
+  box-shadow: 0 4px 20px rgba(56, 189, 248, 0.35);
+  color: #0F172A;
+}
+
+.heroBtn svg {
+  transition: transform 0.2s ease;
+}
+
+.heroBtn:hover svg {
+  transform: translateX(3px);
+}
+
+/* ================================================================
+   CENTRAL SEARCH BAR
+   ================================================================ */
+.searchWrapper {
+  position: relative;
+  max-width: 520px;
+  margin: 2rem auto 0;
+  z-index: 10;
+}
+
+.searchForm {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0 1rem;
+  transition: all 0.2s ease;
+}
+
+.searchForm:focus-within {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+}
+
+.searchIcon {
+  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.35);
+  margin-right: 0.5rem;
+  transition: color 0.2s ease;
+}
+
+.searchForm:focus-within .searchIcon {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.searchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #FFFFFF;
+  font-size: 0.95rem;
+  padding: 0.75rem 0;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.searchInput::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.searchInput:focus::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.searchKbd {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-family: inherit;
+  font-weight: 600;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+}
+
+.searchForm:focus-within .searchKbd {
+  display: none;
+}
+
+/* Quick-links dropdown */
+.searchDropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  padding: 0.4rem;
+  z-index: 100;
+}
+
+[data-theme='dark'] .searchDropdown {
+  background: #151E31;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+.searchDropdownLabel {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #565656;
+  padding: 0.5rem 0.75rem 0.25rem;
+  margin: 0;
+}
+
+[data-theme='dark'] .searchDropdownLabel {
+  color: #64748B;
+}
+
+.searchDropdownItem {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: #262626;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+[data-theme='dark'] .searchDropdownItem {
+  color: #D9D9D9;
+}
+
+.searchDropdownItem:hover {
+  background: #F2F2F2;
+  color: #17223A;
+  text-decoration: none;
+}
+
+[data-theme='dark'] .searchDropdownItem:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #FFFFFF;
+}
+
+@media screen and (max-width: 768px) {
+  .searchWrapper {
+    max-width: 100%;
+    margin: 1.5rem 0 0;
+  }
+
+  .searchForm {
+    border-radius: 10px;
+  }
+
+  .searchKbd {
+    display: none;
+  }
+}
+
+/* ================================================================
+   SECTION CARDS — Clean, modern grid
+   ================================================================ */
+.sectionCards {
+  padding: 3.5rem 0 3rem;
+  background: #FFFFFF;
+}
+
+[data-theme='dark'] .sectionCards {
+  background: #0B1120;
+}
+
+.sectionGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  max-width: 940px;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 768px) {
+  .sectionGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .sectionGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sectionCard {
+  position: relative;
+  padding: 1.25rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #FFFFFF;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionCard:hover {
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+  text-decoration: none;
+  color: inherit;
+}
+
+[data-theme='dark'] .sectionCard {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .sectionCard:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Icon badge — color-coded via CSS custom properties */
+.sectionIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  background: var(--icon-bg);
+  color: var(--icon-color);
+}
+
+[data-theme='dark'] .sectionIcon {
+  background: var(--icon-bg-dark);
+}
+
+.sectionCardTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  letter-spacing: -0.01em;
+  color: #262626;
+}
+
+[data-theme='dark'] .sectionCardTitle {
+  color: #F2F2F2;
+}
+
+.sectionCardDesc {
+  font-size: 0.825rem;
+  color: #565656;
+  margin: 0;
+  line-height: 1.55;
+  flex-grow: 1;
+}
+
+[data-theme='dark'] .sectionCardDesc {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Hover arrow indicator */
+.sectionCardArrow {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  font-size: 0.875rem;
+  color: #D9D9D9;
+  transition: all 0.2s ease;
+  opacity: 0;
+  transform: translateX(-4px);
+}
+
+.sectionCard:hover .sectionCardArrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: #565656;
+}
+
+[data-theme='dark'] .sectionCardArrow {
+  color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme='dark'] .sectionCard:hover .sectionCardArrow {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ================================================================
+   WHAT'S NEW — Subtle pill
+   ================================================================ */
+.whatsNew {
+  padding: 1.5rem 0 4rem;
+  text-align: center;
+}
+
+.whatsNewLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  color: #565656;
+  text-decoration: none;
+  padding: 0.6rem 1.25rem;
+  border-radius: 100px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #FFFFFF;
+  transition: all 0.2s ease;
+}
+
+.whatsNewLink:hover {
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #262626;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.whatsNewLink svg {
+  transition: transform 0.2s ease;
+}
+
+.whatsNewLink:hover svg {
+  transform: translateX(2px);
+}
+
+[data-theme='dark'] .whatsNewLink {
+  color: rgba(255, 255, 255, 0.6);
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme='dark'] .whatsNewLink:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.whatsNewBadge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: #E8590C;
+  color: #FFFFFF;
+  padding: 0.15rem 0.5rem;
+  border-radius: 100px;
+}
+
+[data-theme='dark'] .whatsNewBadge {
+  background: #FB923C;
+  color: #0B1120;
+}
