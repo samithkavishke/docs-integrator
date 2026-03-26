@@ -15,19 +15,25 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          python-version: '3.x'
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: en/package-lock.json
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r en/requirements.txt
-
-      - name: Build MkDocs Documentation
-        run: |
-          git config --global user.email "ballerina-bot@ballerina.org"
-          git config --global user.name "ballerina-bot"
           cd en/
-          mkdocs gh-deploy
+          npm ci
+
+      - name: Build Docusaurus site
+        run: |
+          cd en/
+          npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: en/build
