@@ -87,6 +87,7 @@ const config: Config = {
         alt: 'WSO2 Integrator Logo',
         src: 'img/logo.svg',
         srcDark: 'img/logo-dark.svg',
+        href: '/',
       },
       items: [
         {
