@@ -1,6 +1,6 @@
 ---
 title: Types
-description: Define shared data structures with record types, enums, union types, and table types for type-safe integrations.
+description: Define shared data structures with record types, enums, service classes, union types, and array types for type-safe integrations.
 ---
 
 import Tabs from '@theme/Tabs';
@@ -27,10 +27,10 @@ Type artifacts define the data structures used throughout your integration. They
 
    | Field | Description |
    |---|---|
-   | **Kind** | The type kind: **Record**, **Enum**, **Union**, or **Table**. |
+   | **Kind** | The type kind: **Record**, **Enum**, **Service Class**, **Union**, or **Array**. |
    | **Name** | A unique name for the type (for example, `OrderRequest`). |
-   | **Fields** | For records — add fields using the **+** button. Each field has a name and a type. |
-   | **Advanced Options** | Expand to set additional constraints such as closed record enforcement. |
+
+   The remaining fields change based on the selected **Kind**. See [Type kinds](#type-kinds) for the options available for each type.
 
 4. Click **Save**. The type is added to your project and appears in the type diagram.
 
@@ -100,7 +100,29 @@ type OrderRequest record {|
 <Tabs>
 <TabItem value="ui" label="Visual Designer" default>
 
-Select **Record** from the **Kind** dropdown to define a structured type with named fields. Use **Advanced Options** to enforce a closed record (no extra fields allowed).
+Select **Record** from the **Kind** dropdown to define a structured type with named fields.
+
+![Record type form showing fields and advanced options](/img/develop/integration-artifacts/supporting/types/record-form.png)
+
+**Fields** — click **+** to add fields. Each field has:
+
+| Option | Description |
+|---|---|
+| **Name** | The field name. |
+| **Type** | The field type (for example, `string`, `int`, or a custom record type). |
+| **{ }** | Toggle JSON literal representation for the field. |
+| **?** | Mark the field as optional (nullable). |
+| **Default Value** | Expand the field to set a default value. |
+| **Description** | Expand the field to add a description. |
+| **Readonly** | Expand the field to mark it as readonly. |
+
+**Advanced Options**:
+
+| Option | Description |
+|---|---|
+| **Allow Additional Fields** | Makes it an open record that accepts extra fields beyond those defined. |
+| **Is Readonly Type** | Marks the entire record as immutable. |
+| **Accessible by Other Integrations** | Exports the type for use in other integration projects. |
 
 </TabItem>
 <TabItem value="code" label="Ballerina Code">
@@ -123,7 +145,16 @@ type OrderRequest record {|
 <Tabs>
 <TabItem value="ui" label="Visual Designer" default>
 
-Select **Enum** from the **Kind** dropdown to define a fixed set of string values. Add each member value using the **+** button in the **Members** section.
+Select **Enum** from the **Kind** dropdown to define a fixed set of string values.
+
+![Enum type form showing members](/img/develop/integration-artifacts/supporting/types/enum-form.png)
+
+**Members** — click **+** to add members. Each member has:
+
+| Option | Description |
+|---|---|
+| **Member name** | The enum member name (for example, `PENDING`). |
+| **Constant Expression** | Expand the member to set a custom string value for the enum member. |
 
 </TabItem>
 <TabItem value="code" label="Ballerina Code">
@@ -146,7 +177,22 @@ enum OrderStatus {
 <Tabs>
 <TabItem value="ui" label="Visual Designer" default>
 
-Select **Union** from the **Kind** dropdown to allow a value to be one of several types. Add each member type using the **+** button.
+Select **Union** from the **Kind** dropdown to allow a value to be one of several types.
+
+![Union type form showing members and advanced options](/img/develop/integration-artifacts/supporting/types/union-form.png)
+
+**Members** — click **+** to add member types. Each member has:
+
+| Option | Description |
+|---|---|
+| **Enter type** | The type to include in the union (for example, `CreditCard`, `string`). |
+
+**Advanced Options**:
+
+| Option | Description |
+|---|---|
+| **Is Readonly Type** | Marks the union as immutable. |
+| **Accessible by Other Integrations** | Exports the type for use in other integration projects. |
 
 </TabItem>
 <TabItem value="code" label="Ballerina Code">
@@ -175,33 +221,76 @@ type DigitalWallet record {|
 </TabItem>
 </Tabs>
 
-### Tables
+### Service classes
 
 <Tabs>
 <TabItem value="ui" label="Visual Designer" default>
 
-Select **Table** from the **Kind** dropdown to define an in-memory keyed collection. Specify the row type and the key field.
+Select **Service Class** from the **Kind** dropdown to define a class with service-specific behavior. Service classes are used for GraphQL object types.
+
+![Service Class type form showing resource methods](/img/develop/integration-artifacts/supporting/types/service-class-form.png)
+
+**Resource Methods** — click **+** to add methods. Each method has:
+
+| Option | Description |
+|---|---|
+| **Name** | The resource method name. |
+| **Return type** | The return type of the method (for example, `string`, `error?`). |
+| **+ Add Parameter** | Expand the method to add parameters, each with a Parameter Name, Parameter Type, and optional Default Value. |
 
 </TabItem>
 <TabItem value="code" label="Ballerina Code">
 
 ```ballerina
-type ProductTable table<Product> key(id);
+service class NotificationService {
+    private final string endpoint;
 
-type Product record {|
-    readonly string id;
-    string name;
-    decimal price;
-    int stock;
+    function init(string endpoint) {
+        self.endpoint = endpoint;
+    }
+
+    remote function sendNotification(string message) returns error? {
+        // notification logic
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+### Arrays
+
+<Tabs>
+<TabItem value="ui" label="Visual Designer" default>
+
+Select **Array** from the **Kind** dropdown to define a named array type.
+
+![Array type form showing type and size fields](/img/develop/integration-artifacts/supporting/types/array-form.png)
+
+| Option | Description |
+|---|---|
+| **Type of the Array** (required) | The element type of the array (for example, `string`, `LineItem`). |
+| **Size of the Array** | Optional fixed size constraint for the array. |
+
+**Advanced Options**:
+
+| Option | Description |
+|---|---|
+| **Is Readonly Type** | Marks the array as immutable. |
+| **Accessible by Other Integrations** | Exports the type for use in other integration projects. |
+
+</TabItem>
+<TabItem value="code" label="Ballerina Code">
+
+```ballerina
+type OrderItems LineItem[];
+
+type LineItem record {|
+    string productId;
+    string productName;
+    int quantity;
+    decimal unitPrice;
 |};
-
-// Usage
-ProductTable products = table [
-    {id: "P001", name: "Widget", price: 9.99, stock: 100},
-    {id: "P002", name: "Gadget", price: 24.99, stock: 50}
-];
-
-Product? widget = products["P001"];
 ```
 
 </TabItem>
