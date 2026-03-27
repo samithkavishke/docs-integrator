@@ -34,7 +34,15 @@ Connection artifacts centralize the configuration for external systems. Define c
 
    **Pre-built Connectors**
 
-   Browse the connector library using the **All**, **Standard**, or **Organization** tabs. Available connectors include HTTP, GraphQL, WebSocket, TCP, UDP, FTP, and many more. Use the search box to filter by name.
+   Browse the connector library using the following tabs:
+
+   | Tab | Description |
+   |---|---|
+   | **All** | Shows all available connectors from every source. |
+   | **Standard** | Shows connectors from the Ballerina, Ballerinax, and WSO2 package repositories. |
+   | **Organization** | Shows connectors published to your organization's local registry. |
+
+   Available connectors include HTTP, GraphQL, WebSocket, TCP, UDP, FTP, and many more. Use the search box to filter by name.
 
 4. Select a connector type. A configuration form appears with fields specific to that connector (for example, base URL and authentication for HTTP, or host, port, and credentials for a database).
 
@@ -101,7 +109,7 @@ final kafka:Producer kafkaProducer = check new ({
 The **Add Connection** panel organizes connectors into two categories:
 
 - **Create New Connector** — generate a connector from an API spec or by introspecting a database.
-- **Pre-built Connectors** — select from the connector library. Use the **Standard** tab to see connectors from the Ballerina standard library, or **Organization** for connectors from your organization's registry.
+- **Pre-built Connectors** — select from the connector library. Use the **All** tab to browse every available connector, **Standard** to see connectors from the Ballerina, Ballerinax, and WSO2 repositories, or **Organization** to see connectors published to your organization's local registry.
 
 </TabItem>
 <TabItem value="code" label="Ballerina Code">

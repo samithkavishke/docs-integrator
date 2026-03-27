@@ -11,16 +11,14 @@ import TabItem from '@theme/TabItem';
 
 The visual data mapper lets you transform data between source and target schemas using a drag-and-drop interface in VS Code. It generates type-safe Ballerina code from your visual mappings, keeping the source code as the single source of truth.
 
-## Opening the Data Mapper
+This page covers the inline data mapper used within flow diagrams. To create a standalone, reusable data mapper artifact, see [Data Mapper artifact](../integration-artifacts/supporting/data-mapper.md).
 
-There are two ways to launch the data mapper from the WSO2 Integrator VS Code extension.
+## Opening the Data Mapper
 
 <Tabs>
 <TabItem value="ui" label="Visual Designer" default>
 
-1. Open the **Ballerina Visualizer** panel in VS Code.
-2. Click **+ Add Artifact** and select **Data Mapper** under **Other Artifacts**.
-3. Choose the source and target types from your project.
+In a service or event handler flow diagram, add a **Data Mapper** step to open the visual data mapper inline. The mapper uses the input and output types defined in the step configuration.
 
 </TabItem>
 <TabItem value="code" label="Ballerina Code">
