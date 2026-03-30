@@ -270,6 +270,15 @@ const sidebars: SidebarsConfig = {
         // ── Connector categories (alphabetical) ──
         {
           type: 'category',
+          label: 'AI',
+          link: { type: 'doc', id: 'connectors/catalog/built-in/ai/overview' },
+          items: [
+            'connectors/catalog/built-in/ai/action-reference',
+            'connectors/catalog/built-in/ai/trigger-reference',
+          ],
+        },
+        {
+          type: 'category',
           label: 'AI Devant',
           link: { type: 'doc', id: 'connectors/catalog/ai-ml/ai.devant/overview' },
           items: [
@@ -542,6 +551,25 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
+          label: 'Email',
+          link: { type: 'doc', id: 'connectors/catalog/built-in/email/overview' },
+          items: [
+            'connectors/catalog/built-in/email/setup-guide',
+            'connectors/catalog/built-in/email/action-reference',
+            'connectors/catalog/built-in/email/trigger-reference',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'FTP',
+          link: { type: 'doc', id: 'connectors/catalog/built-in/ftp/overview' },
+          items: [
+            'connectors/catalog/built-in/ftp/action-reference',
+            'connectors/catalog/built-in/ftp/trigger-reference',
+          ],
+        },
+        {
+          type: 'category',
           label: 'Github',
           link: { type: 'doc', id: 'connectors/catalog/developer-tools/github/overview' },
           items: [
@@ -597,11 +625,38 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
+          label: 'gRPC',
+          link: { type: 'doc', id: 'connectors/catalog/built-in/grpc/overview' },
+          items: [
+            'connectors/catalog/built-in/grpc/action-reference',
+            'connectors/catalog/built-in/grpc/trigger-reference',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'GraphQL',
+          link: { type: 'doc', id: 'connectors/catalog/built-in/graphql/overview' },
+          items: [
+            'connectors/catalog/built-in/graphql/action-reference',
+            'connectors/catalog/built-in/graphql/trigger-reference',
+          ],
+        },
+        {
+          type: 'category',
           label: 'Guidewire InsuranceNow',
           link: { type: 'doc', id: 'connectors/catalog/erp-business/guidewire.insnow/overview' },
           items: [
             'connectors/catalog/erp-business/guidewire.insnow/setup-guide',
             'connectors/catalog/erp-business/guidewire.insnow/action-reference',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'HTTP',
+          link: { type: 'doc', id: 'connectors/catalog/built-in/http/overview' },
+          items: [
+            'connectors/catalog/built-in/http/action-reference',
+            'connectors/catalog/built-in/http/trigger-reference',
           ],
         },
         {
@@ -1010,6 +1065,15 @@ const sidebars: SidebarsConfig = {
           items: [
             'connectors/catalog/marketing-social/mailchimp.transactional/setup-guide',
             'connectors/catalog/marketing-social/mailchimp.transactional/action-reference',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'MCP',
+          link: { type: 'doc', id: 'connectors/catalog/built-in/mcp/overview' },
+          items: [
+            'connectors/catalog/built-in/mcp/action-reference',
+            'connectors/catalog/built-in/mcp/trigger-reference',
           ],
         },
         {
@@ -1452,6 +1516,15 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
+          label: 'TCP',
+          link: { type: 'doc', id: 'connectors/catalog/built-in/tcp/overview' },
+          items: [
+            'connectors/catalog/built-in/tcp/action-reference',
+            'connectors/catalog/built-in/tcp/trigger-reference',
+          ],
+        },
+        {
+          type: 'category',
           label: 'Trello',
           link: { type: 'doc', id: 'connectors/catalog/productivity-collaboration/trello/overview' },
           items: [
@@ -1489,11 +1562,39 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
+          label: 'UDP',
+          link: { type: 'doc', id: 'connectors/catalog/built-in/udp/overview' },
+          items: [
+            'connectors/catalog/built-in/udp/action-reference',
+            'connectors/catalog/built-in/udp/trigger-reference',
+          ],
+        },
+        {
+          type: 'category',
           label: 'WSO2 APIM Catalog',
           link: { type: 'doc', id: 'connectors/catalog/developer-tools/wso2.apim.catalog/overview' },
           items: [
             'connectors/catalog/developer-tools/wso2.apim.catalog/setup-guide',
             'connectors/catalog/developer-tools/wso2.apim.catalog/action-reference',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'WebSocket',
+          link: { type: 'doc', id: 'connectors/catalog/built-in/websocket/overview' },
+          items: [
+            'connectors/catalog/built-in/websocket/action-reference',
+            'connectors/catalog/built-in/websocket/trigger-reference',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'WebSub',
+          link: { type: 'doc', id: 'connectors/catalog/built-in/websub/overview' },
+          items: [
+            'connectors/catalog/built-in/websub/setup-guide',
+            'connectors/catalog/built-in/websub/action-reference',
+            'connectors/catalog/built-in/websub/trigger-reference',
           ],
         },
         {

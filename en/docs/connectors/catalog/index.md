@@ -10,7 +10,23 @@ Browse the full catalog of pre-built connectors for SaaS applications, databases
 
 ## Connector catalog
 
-### AI & machine learning
+### Built-in Connectors
+
+| Connector | Description | Operations | Authentication |
+|-----------|-------------|------------|----------------|
+| [AI](built-in/ai/overview.md) | AI model integration with chat completions, embeddings, tool calling, and agent orchestration | Chat, Generate, Embed, Tool Calling | API Key |
+| [Email](built-in/email/overview.md) | Send and receive emails via SMTP, IMAP, and POP3 with listener-based inbox monitoring | Send, Receive, Listen | Username & Password |
+| [FTP](built-in/ftp/overview.md) | FTP client and listener for file transfer operations over FTP and SFTP | Get, Put, Delete, Rename, List, Mkdir, Rmdir, Listen | Username/Password, SSH Key |
+| [GraphQL](built-in/graphql/overview.md) | GraphQL server framework and client with automatic schema generation, subscriptions, and federation support | Query, Mutate, Subscribe, Execute | Basic Auth, JWT, OAuth 2.0 |
+| [gRPC](built-in/grpc/overview.md) | gRPC client and listener for protocol buffer-based RPC communication | Unary, Server Streaming, Client Streaming, Bidirectional Streaming | None, Basic, Mutual TLS |
+| [HTTP](built-in/http/overview.md) | HTTP and HTTP2 client and listener for REST APIs, service integrations, and HTTP-based workflows | GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS, Forward, Execute | None (built-in) |
+| [MCP](built-in/mcp/overview.md) | Model Context Protocol server and client for exposing and consuming tools, resources, and prompts | Tools, Resources, Prompts, Server, Client | None |
+| [TCP](built-in/tcp/overview.md) | Raw TCP client and server for sending and receiving byte data over persistent connections | Send, Receive, Listen, Echo | None (SSL/TLS optional) |
+| [UDP](built-in/udp/overview.md) | UDP socket communication with connectionless datagrams, connection-oriented byte transfer, and event-driven listeners | Send, Receive, Listen | None |
+| [WebSocket](built-in/websocket/overview.md) | Full-duplex communication protocol with text, binary, and typed messaging plus server-side listener | Read, Write, Ping, Pong, Close | Basic Auth, Bearer Token, JWT, OAuth2 |
+| [WebSub](built-in/websub/overview.md) | W3C publish-subscribe protocol with hub discovery, subscription management, and event notifications | Subscribe, Unsubscribe, Discover, Listen | None / HMAC Secret |
+
+### AI & Machine Learning
 
 | Connector | Description | Operations | Authentication |
 |-----------|-------------|------------|----------------|
