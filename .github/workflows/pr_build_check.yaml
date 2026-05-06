@@ -3,7 +3,7 @@ name: PR Build Check
 on:
   pull_request:
     branches:
-      - main
+      - testworkflow
 
 jobs:
   build-check:
@@ -25,8 +25,41 @@ jobs:
           npm ci
 
       - name: Build Docusaurus site
+        id: build
         run: |
           cd en/
-          npm run build
+          set -o pipefail
+          npm run build 2>&1 | tee build.log
         env:
           BASE_URL: /docs-integrator/
+
+      - name: Report broken-link warnings
+        if: always()
+        continue-on-error: true
+        run: |
+          cd en/
+          {
+            echo "## Broken links";
+            echo "";
+            if [ ! -f build.log ]; then
+              echo "_Build log not found — skipping._";
+            else
+              matches=$(grep -niE "broken (link|markdown link|anchor)|docusaurus found broken" build.log || true)
+              if [ -z "$matches" ]; then
+                echo "No broken-link warnings reported by the build.";
+              else
+                echo "The build reported the following warnings (the build is configured with \`onBrokenLinks: 'warn'\`, so it does not fail):";
+                echo "";
+                echo '```';
+                echo "$matches";
+                echo '```';
+              fi
+            fi
+          } | tee -a "${GITHUB_STEP_SUMMARY:-/dev/null}"
+
+      - name: Check for pages not linked from the sidebar
+        if: always()
+        continue-on-error: true
+        run: |
+          cd en/
+          node scripts/check-orphans.mjs
