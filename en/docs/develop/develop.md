@@ -11,7 +11,7 @@ description: "How do I build, transform, and test integrations?"
 Everything you need to build, transform, test, and debug integrations on your local machine. Design visually or write Ballerina code — both stay in sync.
 
 :::tip Where does Develop end?
-If your code is still on your machine, you're in **Develop**. Once you're pushing it somewhere else, head to [Deploy and operate](../deploy-operate/deploy-and-operate.md).
+If your code is still on your machine, you're in **Develop**. Once you're pushing it somewhere else, head to [Deploy and operate](../deploy-operate/deploy.md).
 :::
 
 ## Create and organize
