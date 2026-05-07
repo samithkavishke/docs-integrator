@@ -6,7 +6,7 @@ description: Manage multi-package integration projects in WSO2 Integrator.
 
 # Project View
 
-The Project View is the top-level view in WSO2 Integrator. It appears when you open a project that contains multiple integration and library packages, giving you an overview of all packages, deployment options, and project-level actions in one place.
+The Project View is Preview the top-level view in WSO2 Integrator. It appears when you open a project that contains multiple integration and library packages, giving you an overview of all packages, deployment options, and project-level actions in one place.
 
 ![Project View overview](/img/develop/project-views/project-view/overview.png)
 
