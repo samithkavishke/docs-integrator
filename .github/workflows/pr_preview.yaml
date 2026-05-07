@@ -1,0 +1,185 @@
+name: PR Preview (Vercel)
+
+# Manual-only trigger. A maintainer (write access) runs this from the
+# Actions tab with a PR number and an action (deploy or remove).
+#
+# Security model:
+#   - Only users with write access can run workflow_dispatch.
+#   - The "build" job checks out fork code but has NO secrets.
+#   - The "deploy" job has secrets but does NOT check out fork code;
+#     it only consumes the prebuilt artifact uploaded by "build".
+#   This isolates VERCEL_TOKEN from anything fork-controlled.
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: "PR number"
+        required: true
+      action:
+        description: "deploy or remove"
+        required: true
+        default: "deploy"
+        type: choice
+        options: [deploy, remove]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  resolve:
+    name: Resolve PR head SHA
+    if: inputs.action == 'deploy'
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.pr.outputs.sha }}
+    steps:
+      - id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR: ${{ inputs.pr }}
+        run: |
+          set -euo pipefail
+          sha=$(gh pr view "$PR" --repo "$REPO" --json headRefOid -q .headRefOid)
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: Build (no secrets)
+    needs: resolve
+    if: inputs.action == 'deploy'
+    runs-on: ubuntu-latest
+    # NOTE: no env: block — VERCEL_TOKEN must NOT be available here.
+    defaults:
+      run:
+        working-directory: en
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.resolve.outputs.sha }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: en/package-lock.json
+
+      - name: Install dependencies (no lifecycle scripts)
+        run: npm ci --ignore-scripts
+
+      - name: Build site
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docusaurus-build
+          path: en/build
+          retention-days: 1
+          if-no-files-found: error
+
+  deploy:
+    name: Deploy (secrets, no fork code)
+    needs: [resolve, build]
+    if: inputs.action == 'deploy'
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docusaurus-build
+          path: build-output
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Stage prebuilt output for Vercel
+        run: |
+          mkdir -p .vercel/output/static
+          cp -R build-output/. .vercel/output/static/
+          cat > .vercel/output/config.json <<'JSON'
+          { "version": 3 }
+          JSON
+
+      - name: Remove previous preview
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ inputs.pr }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          body=$(gh api "repos/$REPO/issues/$PR_NUMBER/comments" \
+            --jq '.[] | select(.body | contains("<!-- pr-preview-marker -->")) | .body' \
+            | head -n1 || true)
+          [ -z "$body" ] && exit 0
+          url=$(echo "$body" | grep -oE 'https://[a-zA-Z0-9.-]+\.vercel\.app' | head -n1 || true)
+          [ -z "$url" ] && exit 0
+          echo "Removing previous preview $url"
+          vercel remove "$url" --yes --token=$VERCEL_TOKEN || echo "vercel remove failed; continuing."
+
+      - name: Deploy prebuilt artifact
+        id: deploy
+        run: |
+          url=$(vercel deploy --prebuilt --archive=tgz --token=$VERCEL_TOKEN)
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+      - name: Comment preview URL on PR
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: pr-preview
+          number: ${{ inputs.pr }}
+          message: |
+            <!-- pr-preview-marker -->
+            Preview deployed: ${{ steps.deploy.outputs.url }}
+
+            Commit: ${{ needs.resolve.outputs.sha }}
+
+  teardown:
+    name: Tear down preview
+    if: inputs.action == 'remove'
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Find and remove preview deployment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ inputs.pr }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          body=$(gh api "repos/$REPO/issues/$PR_NUMBER/comments" \
+            --jq '.[] | select(.body | contains("<!-- pr-preview-marker -->")) | .body' \
+            | head -n1 || true)
+          if [ -z "$body" ]; then
+            echo "No preview marker comment found; nothing to tear down."
+            exit 0
+          fi
+          url=$(echo "$body" | grep -oE 'https://[a-zA-Z0-9.-]+\.vercel\.app' | head -n1 || true)
+          if [ -z "$url" ]; then
+            echo "Marker comment found but no Vercel URL parsed; skipping."
+            exit 0
+          fi
+          echo "Removing $url"
+          vercel remove "$url" --yes --token=$VERCEL_TOKEN || echo "vercel remove failed (already gone?); continuing."
+
+      - name: Update sticky comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: pr-preview
+          number: ${{ inputs.pr }}
+          message: |
+            <!-- pr-preview-marker -->
+            Preview removed.
