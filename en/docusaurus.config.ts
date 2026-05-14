@@ -1,9 +1,12 @@
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import { versions, activeVersion } from './versions.config';
+
+const editBranch = process.env.DOCS_EDIT_BRANCH || 'main';
 
 const config: Config = {
-  title: 'WSO2 Integrator Documentation',
+  title: `WSO2 Integrator Documentation (${activeVersion})`,
   tagline: 'Build integrations with low-code simplicity and pro-code power',
   favicon: 'img/favicon.svg',
 
@@ -60,7 +63,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          editUrl: 'https://github.com/wso2/docs-integrator/tree/main/en/',
+          editUrl: `https://github.com/wso2/docs-integrator/tree/${editBranch}/en/`,
           showLastUpdateTime: true,
         },
         blog: false,
@@ -146,6 +149,12 @@ const config: Config = {
           label: 'Reference',
           position: 'left',
           activeBaseRegex: '/docs/reference(/|$)',
+        },
+        {
+          type: 'dropdown',
+          label: activeVersion === 'next' ? 'Next' : activeVersion,
+          position: 'right',
+          items: versions.map((v) => ({ label: v.label, href: v.path })),
         },
         {
           href: 'https://github.com/wso2/docs-integrator',

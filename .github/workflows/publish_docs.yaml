@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - '[0-9]+.[0-9]+.[0-9]+'
   workflow_dispatch:
 
 jobs:
@@ -14,6 +15,23 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Resolve version metadata
+        id: meta
+        run: |
+          branch="${GITHUB_REF_NAME}"
+          if [ "$branch" = "main" ]; then
+            version="next"
+          else
+            version="$branch"
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "base_url=/en/$version/" >> "$GITHUB_OUTPUT"
+          if [ "$branch" = "${{ vars.LATEST_VERSION }}" ]; then
+            echo "is_latest=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_latest=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -27,15 +45,70 @@ jobs:
           cd en/
           npm ci
 
-      - name: Build Docusaurus site
+      - name: Build site for versioned path
         run: |
           cd en/
           npm run build
         env:
-          BASE_URL: /docs-integrator/
+          BASE_URL: ${{ steps.meta.outputs.base_url }}
+          DOCS_VERSION: ${{ steps.meta.outputs.version }}
+          DOCS_EDIT_BRANCH: ${{ github.ref_name }}
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy to /en/${{ steps.meta.outputs.version }}/
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: en/build
+          destination_dir: en/${{ steps.meta.outputs.version }}
+          keep_files: true
+          cname: integrator.docs.wso2.com
+
+      - name: Rebuild site for /en/latest/
+        if: steps.meta.outputs.is_latest == 'true'
+        run: |
+          cd en/
+          rm -rf build
+          npm run build
+        env:
+          BASE_URL: /en/latest/
+          DOCS_VERSION: ${{ steps.meta.outputs.version }}
+          DOCS_EDIT_BRANCH: ${{ github.ref_name }}
+
+      - name: Deploy to /en/latest/
+        if: steps.meta.outputs.is_latest == 'true'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: en/build
+          destination_dir: en/latest
+          keep_files: true
+          cname: integrator.docs.wso2.com
+
+      - name: Stage root redirect
+        if: github.ref_name == 'main'
+        run: |
+          mkdir -p root-redirect
+          cat > root-redirect/index.html <<'HTML'
+          <!doctype html>
+          <html lang="en">
+            <head>
+              <meta charset="utf-8">
+              <title>WSO2 Integrator Documentation</title>
+              <link rel="canonical" href="https://integrator.docs.wso2.com/en/latest/">
+              <meta http-equiv="refresh" content="0; url=/en/latest/">
+            </head>
+            <body>
+              <p>Redirecting to <a href="/en/latest/">the latest documentation</a>.</p>
+            </body>
+          </html>
+          HTML
+
+      - name: Deploy root redirect
+        if: github.ref_name == 'main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: root-redirect
+          destination_dir: .
+          keep_files: true
+          cname: integrator.docs.wso2.com
