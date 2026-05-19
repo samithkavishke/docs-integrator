@@ -11,11 +11,12 @@ const config: Config = {
     v4: true,
   },
 
-  url: 'https://integrator.docs.wso2.com',
+  url: 'https://wso2.com',
   baseUrl: process.env.BASE_URL || '/',
 
   organizationName: 'wso2',
   projectName: 'docs-integrator',
+  trailingSlash: true,
 
   onBrokenLinks: 'warn',
 
@@ -33,6 +34,8 @@ const config: Config = {
 
   plugins: [
     './src/plugins/connector-versions',
+    './plugins/docusaurus-plugin-markdown-export',
+    './src/plugins/expose-sidebars',
   ],
 
   themes: [
@@ -44,8 +47,9 @@ const config: Config = {
         language: ['en'],
         highlightSearchTermsOnTargetPage: true,
         explicitSearchResultPath: true,
-        docsRouteBasePath: '/docs',
+        docsRouteBasePath: '/',
         indexBlog: false,
+        indexPages: true,
         searchBarShortcutHint: false,
       },
     ],
@@ -56,8 +60,9 @@ const config: Config = {
       'classic',
       {
         docs: {
+          routeBasePath: '/',
           sidebarPath: './sidebars.ts',
-          editUrl: 'https://github.com/wso2/docs-integrator/tree/main/',
+          editUrl: 'https://github.com/wso2/docs-integrator/tree/main/en/',
           showLastUpdateTime: true,
         },
         blog: false,
@@ -69,110 +74,71 @@ const config: Config = {
   ],
 
   themeConfig: {
-    announcementBar: {
-      id: 'wip_banner',
-      content: '🚧 This documentation is a <strong>Work in Progress</strong>. Content may be incomplete or subject to change.',
-      backgroundColor: '#FFF7ED',
-      textColor: '#9A3412',
-      isCloseable: false,
-    },
     image: 'img/logo.svg',
     colorMode: {
       defaultMode: 'light',
       respectPrefersColorScheme: true,
     },
+    docs: {
+      sidebar: {
+        // Collapse sibling categories whenever a category expands. With
+        // `useAutoExpandActiveCategory`, this means navigating to a page
+        // collapses every other top-level category and only leaves the
+        // current path expanded.        
+        autoCollapseCategories: true,
+      },
+    },
     navbar: {
-      title: 'WSO2 Integrator',
+      title: 'WSO2 Integration Platform',
       logo: {
-        alt: 'WSO2 Integrator Logo',
+        alt: 'WSO2 Integration Platform Logo',
         src: 'img/logo.svg',
         srcDark: 'img/logo-dark.svg',
         href: '/',
       },
       items: [
         {
-          to: '/docs/get-started/overview',
-          label: 'Get Started',
-          position: 'left',
-          activeBaseRegex: '/docs/get-started(/|$)',
-        },
-        {
-          to: '/docs/develop/overview',
-          label: 'Develop',
-          position: 'left',
-          activeBaseRegex: '/docs/develop(/|$)',
-        },
-        {
-          to: '/docs/connectors/overview',
-          label: 'Connectors',
-          position: 'left',
-          activeBaseRegex: '/docs/connectors(/|$)',
-        },
-        {
-          to: '/docs/genai/overview',
-          label: 'GenAI',
-          position: 'left',
-          activeBaseRegex: '/docs/genai(/|$)',
-        },
-        {
-          to: '/docs/tutorials/overview',
-          label: 'Tutorials',
-          position: 'left',
-          activeBaseRegex: '/docs/tutorials(/|$)',
-        },
-        {
-          to: '/docs/deploy-operate/overview',
-          label: 'Deploy & Operate',
-          position: 'left',
-          activeBaseRegex: '/docs/deploy-operate(/|$)',
-        },
-        {
-          to: '/docs/reference/overview',
-          label: 'Reference',
-          position: 'left',
-          activeBaseRegex: '/docs/reference(/|$)',
-        },
-        {
           href: 'https://github.com/wso2/docs-integrator',
           label: 'GitHub',
           position: 'right',
-        },
-      ],
+        }
+      ]
     },
     footer: {
       style: 'dark',
       links: [
         {
-          title: 'Get Started',
+          title: 'Get started',
           items: [
-            { label: 'Overview', to: '/docs/get-started/overview' },
-            { label: 'Install', to: '/docs/get-started/install' },
-            { label: 'Quick Starts', to: '/docs/get-started/quick-start-api' },
+            { label: 'Overview', to: '/get-started/introduction' },
+            { label: 'Install', to: '/get-started/setup/local-setup' },
+            { label: 'Quick starts', to: '/get-started/build-automation' },
           ],
         },
         {
           title: 'Develop',
           items: [
-            { label: 'Integration Artifacts', to: '/docs/develop/integration-artifacts/overview' },
-            { label: 'Transform', to: '/docs/develop/transform/data-mapper' },
-            { label: 'Test', to: '/docs/develop/test/try-it' },
-            { label: 'Connectors', to: '/docs/connectors/overview' },
-            { label: 'GenAI', to: '/docs/genai/overview' },
+            { label: 'Integration artifacts', to: '/develop/integration-artifacts' },
+            { label: 'Transform', to: '/develop/integration-artifacts/supporting/data-mapper/' },
+            { label: 'Test', to: '/develop/test/built-in-try-it-tool' },
+            { label: 'Connectors', to: '/connectors/overview' },
+            { label: 'AI Integrations', to: '/genai/overview' },
           ],
         },
         {
-          title: 'Deploy & Operate',
+          title: 'Deploy',
           items: [
-            { label: 'Docker & Kubernetes', to: '/docs/deploy-operate/deploy/docker-kubernetes' },
-            { label: 'CI/CD', to: '/docs/deploy-operate/cicd/github-actions' },
-            { label: 'Observe', to: '/docs/deploy-operate/observe/icp' },
-            { label: 'Secure', to: '/docs/deploy-operate/secure/authentication' },
+            { label: 'Docker and Kubernetes', to: '/deploy/self-hosted/kubernetes' },
+            { label: 'CI/CD', to: '/deploy-operate/cicd/github-actions' },
+            { label: 'Observe', to: '/deploy-operate/observe/observability-overview' },
+            { label: 'Secure', to: '/deploy-operate/secure/authentication' },
           ],
         },
         {
           title: 'Community',
           items: [
-            { label: 'WSO2 MI Documentation', href: 'https://mi.docs.wso2.com' },
+            { label: 'WSO2 Integrator: MI', href: 'https://mi.docs.wso2.com' },
+            { label: 'WSO2 Integrator: SI', href: 'https://si.docs.wso2.com/latest/' },
             { label: 'Ballerina Central', href: 'https://central.ballerina.io' },
             { label: 'Community Forums', href: 'https://discord.com/invite/wso2' },
             { label: 'Stack Overflow', href: 'https://stackoverflow.com/questions/tagged/wso2' },

@@ -61,12 +61,16 @@ import ballerina/grpc;
 listener grpc:Listener grpcListener = new (9090,
     secureSocket = {
         key: {
-            certFile: "./resources/public.crt",
-            keyFile: "./resources/private.key"
+            certFile: "/path/to/server.crt",
+            keyFile: "/path/to/server.key"
         }
     }
 );
 ```
+
+:::tip Generating certificates
+For instructions on generating certificates using `keytool`, see [Keystores and Truststores](../../../../deploy-operate/secure/keystore-truststore.md).
+:::
 
 **Listener with mutual TLS:**
 
@@ -76,12 +80,12 @@ import ballerina/grpc;
 listener grpc:Listener grpcListener = new (9090,
     secureSocket = {
         key: {
-            certFile: "./resources/public.crt",
-            keyFile: "./resources/private.key"
+            certFile: "/path/to/server.crt",
+            keyFile: "/path/to/server.key"
         },
         mutualSsl: {
             verifyClient: grpc:REQUIRE,
-            cert: "./resources/public.crt"
+            cert: "/path/to/ca.crt"
         }
     }
 );
@@ -92,7 +96,7 @@ listener grpc:Listener grpcListener = new (9090,
 
 ## Service
 
-A `grpc:Service` is a Ballerina service attached to a `grpc:Listener`. Each remote function in the service corresponds to an RPC method defined in the `.proto` file. The function signature varies by communication pattern — unary methods accept and return messages directly, server streaming methods return a stream, client streaming methods accept a stream, and bidirectional streaming methods accept both a Caller and a stream.
+A `grpc:Service` is a Ballerina service attached to a `grpc:Listener`. Each remote function in the service corresponds to an RPC method defined in the `.proto` file. The function signature varies by communication pattern: unary methods accept and return messages directly, server streaming methods return a stream, client streaming methods accept a stream, and bidirectional streaming methods accept both a Caller and a stream.
 
 
 ### Callback signatures

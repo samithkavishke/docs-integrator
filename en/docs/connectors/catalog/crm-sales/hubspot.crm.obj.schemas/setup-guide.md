@@ -25,8 +25,8 @@ This guide walks you through creating a HubSpot Private App and obtaining the ac
 
 1. Click the **Scopes** tab.
 2. Search for and select the following scopes required by the Schemas API:
-    - `crm.schemas.custom.read` — read custom object schemas
-    - `crm.schemas.custom.write` — create, update, and delete custom object schemas
+    - `crm.schemas.custom.read`: read custom object schemas
+    - `crm.schemas.custom.write`: create, update, and delete custom object schemas
 3. Add any additional scopes your integration requires.
 
 
@@ -72,4 +72,4 @@ The HubSpot token refresh endpoint used by this connector is `https://api.hubapi
 
 ## Next steps
 
-- [Actions Reference](action-reference.md) - Available operations
+- [Actions Reference](actions.md) - Available operations

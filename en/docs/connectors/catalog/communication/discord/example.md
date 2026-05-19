@@ -5,7 +5,7 @@
 Build a low-code integration that sends a message to a Discord channel using the Discord connector in WSO2 Integrator. The integration uses an Automation entry point to invoke the `create_message` operation, which posts a message to a specified channel via the Discord REST API.
 
 **Operations used:**
-- **create_message** : Posts a text message to a Discord channel using Bearer token authentication
+- **create_message** : Posts a text message to a Discord channel using ApiKeysConfig authentication
 
 ## Architecture
 
@@ -22,7 +22,7 @@ flowchart LR
 
 ## Setting up the Discord integration
 
-> **New to WSO2 Integrator?** Follow the [Create a New Integration](../../../../develop/create-integrations/create-new-integration.md) guide to set up your integration first, then return here to add the connector.
+> **New to WSO2 Integrator?** Follow the [Create a New Integration](../../../../develop/create-integrations/create-a-new-integration.md) guide to set up your integration first, then return here to add the connector.
 
 ## Adding the Discord connector
 
@@ -38,7 +38,7 @@ In the Design canvas, select **+ Add Artifact** → **Connection** to open the c
 
 Search for `discord`, select the **ballerinax/discord** connector card to open the connection form, and bind each parameter to a configurable variable:
 
-- **auth** : Bearer token authentication config referencing the `discordToken` configurable variable
+- **auth** : ApiKeysConfig authentication config referencing the `discordToken` configurable variable
 - **Connection Name** : `discordClient`
 
 ![Discord connection form fully filled with all parameters before saving](/img/connectors/catalog/communication/discord/discord_screenshot_02_connection_form.png)
@@ -54,11 +54,11 @@ Select **Update Connection** to save the connection. The `discordClient` connect
 1. In the left panel, select **Configurations**.
 2. Set a value for each configurable listed below.
 
-- **discordToken** : `string` — your Discord bot token (e.g., `Bot YOUR_DISCORD_BOT_TOKEN_HERE`)
+- **discordToken** : `string`: your Discord bot token used by the ApiKeysConfig authentication config (e.g., `YOUR_DISCORD_BOT_TOKEN_HERE`)
 
 ## Configuring the Discord createMessage operation
 
-### Step 5: Add an Automation entry point
+### Step 5: Add an automation entry point
 
 Select **+ Add Artifact** and select **Automation** under the Automation category. Select **Create** to generate the automation entry point named `main`.
 
@@ -86,9 +86,9 @@ Select **+ Add Artifact** and select **Automation** under the Automation categor
 
 Try this sample in WSO2 Integration Platform.
 
-[![Deploy to Devant](https://openindevant.choreoapps.dev/images/DeployDevant-White.svg)](https://console.devant.dev/new?gh=wso2/integration-samples/tree/main/connectors/discord_connector_sample)
+[![Deploy to Devant](https://openindevant.choreoapps.dev/images/DeployDevant-White.svg)](https://console.devant.dev/new?gh=wso2/integration-samples/tree/main/integrator-default-profile/connectors/discord_connector_sample)
 
-[View source on GitHub](https://github.com/wso2/integration-samples/tree/main/connectors/discord_connector_sample)
+[View source on GitHub](https://github.com/wso2/integration-samples/tree/main/integrator-default-profile/connectors/discord_connector_sample)
 
 ## More code examples
 

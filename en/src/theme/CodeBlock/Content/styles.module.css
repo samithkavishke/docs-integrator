@@ -1,0 +1,78 @@
+.codeBlock {
+  --ifm-pre-background: var(--prism-background-color);
+  margin: 0;
+  padding: 0;
+}
+
+.codeBlockStandalone {
+  padding: 0;
+}
+
+.codeBlockLines {
+  font: inherit;
+  /* rtl:ignore */
+  float: left;
+  min-width: 100%;
+  padding: var(--ifm-pre-padding);
+}
+
+.codeBlockLinesWithNumbering {
+  display: table;
+  padding: var(--ifm-pre-padding) 0;
+}
+
+.codeFoldLine {
+  display: inline;
+  color: var(--ifm-color-emphasis-600);
+  font-style: italic;
+}
+
+.codeFoldLineWithNumber {
+  display: table-row;
+}
+
+.codeFoldLineNumber {
+  display: table-cell;
+  user-select: none;
+  opacity: 0.4;
+  padding: 0 var(--ifm-pre-padding);
+  text-align: right;
+  width: 1%;
+}
+
+.codeFoldLineNumber::before {
+  counter-increment: line-count;
+  content: counter(line-count);
+}
+
+.codeFoldLineContent {
+  display: inline;
+}
+
+.codeFoldLineWithNumber .codeFoldLineContent {
+  display: table-cell;
+  width: 100%;
+}
+
+.codeFoldButton {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-style: inherit;
+  padding: 0;
+  text-align: left;
+}
+
+.codeFoldButton:hover {
+  color: var(--ifm-color-primary);
+  text-decoration: underline;
+}
+
+@media print {
+  .codeBlockLines {
+    white-space: pre-wrap;
+  }
+}

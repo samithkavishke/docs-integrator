@@ -57,18 +57,22 @@ import ballerina/tcp;
 
 listener tcp:Listener tcpListener = new (3000, secureSocket = {
     key: {
-        certFile: "./certs/server.crt",
-        keyFile: "./certs/server.key"
+        certFile: "/path/to/server.crt",
+        keyFile: "/path/to/server.key"
     }
 });
 ```
+
+:::tip Generating certificates
+For instructions on generating certificates using `keytool`, see [Keystores and Truststores](../../../../deploy-operate/secure/keystore-truststore.md).
+:::
 
 
 ---
 
 ## Service
 
-A `tcp:Service` is attached to a `tcp:Listener` and handles the initial `onConnect` event. It returns a `tcp:ConnectionService` that handles the per-connection lifecycle — receiving bytes, handling errors, and reacting to connection closure.
+A `tcp:Service` is attached to a `tcp:Listener` and handles the initial `onConnect` event. It returns a `tcp:ConnectionService` that handles the per-connection lifecycle: receiving bytes, handling errors, and reacting to connection closure.
 
 
 ### Callback signatures
@@ -81,7 +85,7 @@ A `tcp:Service` is attached to a `tcp:Listener` and handles the initial `onConne
 | `onClose` | <code>remote function onClose() returns tcp:Error?</code> | Invoked when the client closes the connection. |
 
 :::note
-The `onBytes` callback is required on every `ConnectionService`. The `onError` and `onClose` callbacks are optional — implement only the events you need.
+The `onBytes` callback is required on every `ConnectionService`. The `onError` and `onClose` callbacks are optional: implement only the events you need.
 :::
 
 ### Full usage example

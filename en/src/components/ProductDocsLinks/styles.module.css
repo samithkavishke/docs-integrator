@@ -1,0 +1,59 @@
+/* ================================================================
+   PRODUCT DOCS LINKS — text-only sidebar footer
+   Pinned to the bottom of the homepage drawer and docs sidebar, with
+   a divider above to separate from the main navigation.
+   ================================================================ */
+.productLinks {
+  border-top: 1px solid var(--ifm-color-emphasis-200, #E2E8F0);
+  padding: 0.5rem 0.5rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+[data-theme='dark'] .productLinks {
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+.productLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  color: var(--ifm-menu-color);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.4;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.productLink:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+  color: var(--ifm-menu-color);
+  text-decoration: none;
+}
+
+[data-theme='dark'] .productLink:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.productLinkText {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.productLinkIcon {
+  flex-shrink: 0;
+  color: var(--ifm-color-emphasis-500, #94A3B8);
+  transition: color 0.15s ease;
+}
+
+.productLink:hover .productLinkIcon {
+  color: var(--ifm-menu-color-active, #0077B6);
+}

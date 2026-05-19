@@ -49,9 +49,9 @@
 - Complete runnable code
 - This is the "Hello World" of AI agents
 
-### Page: Build a Sample Hotel Booking Agent
+### Page: Build a Hotel Finder Agent
 
-**File:** `en/docs/genai/getting-started/hotel-booking-agent.md`
+**File:** `en/docs/genai/getting-started/build-a-hotel-finder-agent.md`
 
 **What to cover:**
 - More complex agent: multiple tools (search rooms, check availability, book room)

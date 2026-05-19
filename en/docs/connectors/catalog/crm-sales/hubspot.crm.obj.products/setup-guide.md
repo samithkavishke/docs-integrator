@@ -30,8 +30,8 @@ This guide walks you through creating a HubSpot Private App and obtaining the ac
 
 Under the **Scopes** tab, search for and enable the following scopes:
 
-- `crm.objects.products.read` — Required to list, read, and search products.
-- `crm.objects.products.write` — Required to create, update, and archive products.
+- `crm.objects.products.read`: Required to list, read, and search products.
+- `crm.objects.products.write`: Required to create, update, and archive products.
 
 Select the appropriate checkboxes and click **Create app**.
 
@@ -43,7 +43,7 @@ Grant only the scopes your integration actually needs. Limiting scope access red
 ## Copy the access token
 
 1. After creating the app, HubSpot displays your **Access Token** on the app detail page.
-2. Click **Show token** and copy the value — this is the bearer token you will use to authenticate.
+2. Click **Show token** and copy the value; this is the bearer token you will use to authenticate.
 3. Click **Done**.
 
 
@@ -68,4 +68,4 @@ The OAuth 2.0 token URL for HubSpot is `https://api.hubapi.com/oauth/v1/token`. 
 
 ## Next steps
 
-- [Actions Reference](action-reference.md) - Available operations
+- [Actions Reference](actions.md) - Available operations

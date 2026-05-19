@@ -9,9 +9,13 @@ import TabItem from '@theme/TabItem';
 
 # CSV & Flat File Processing
 
-Handle tabular data formats -- CSV, TSV, and fixed-width files. The `ballerina/data.csv` module provides type-safe parsing, transformation, and serialization for comma-separated and delimited data.
+CSV and flat files are commonly used data exchange formats for spreadsheets, reports, batch-processing systems, legacy applications, and data integration workflows. Formats such as CSV, TSV, and fixed-width files are widely used to store and transfer structured tabular data between systems.
 
-## Reading CSV into Records
+WSO2 Integrator provides built-in support for CSV and flat-file processing, enabling developers to read, parse, validate, transform, and generate delimited or fixed-width data without relying on external libraries. The ballerina/data.csv module offers type-safe APIs for handling tabular data and converting rows into structured records.
+
+With native CSV and flat-file support, developers can efficiently process large datasets, transform file content, map records between formats, and integrate file-based systems with APIs, databases, and enterprise applications.
+
+## Reading CSV into records
 
 Parse CSV content directly into typed Ballerina records using `csv:parseString()`. Define a record type whose fields match the CSV column headers.
 
@@ -29,15 +33,24 @@ Parse CSV content directly into typed Ballerina records using `csv:parseString()
 
    For details on creating types, see [Types](../integration-artifacts/supporting/types.md).
 
-   ![Types panel showing the Employee record created from scratch with fields matching CSV columns](/img/develop/transform/csv-flat-file/csv-reading-type-panel.png)
+2. **Add a Variable step** — In the flow designer, click **+** and select **Statement** → **Declare Variable**. Set the type to `string` and the name to `csvData`. Switch the toggle from **Record** to **Expression**, then enter the CSV string value.
 
-2. **Add a Variable step for parsing** — In the flow designer, click **+** and select **Variable**. Set the type to `Employee[]` and the expression to `check csv:parseString(csvData)`.
+3. **Parse the CSV string** — Click **+** and select **Call Function**. Search for `parseString` and select it under **data.csv**. Configure:
+   - **Csv String***: `csvData`
+   - **Result***: `employees`
+   - **T***: `Employee[]`
 
-3. **Add a Foreach step** — Click **+** and select **Foreach** under **Control**. Set the **Collection** to `employees` and the **Variable** to `emp`. Add steps inside the loop body for processing.
+4. **Add a Foreach step** — Click **+** and select **Foreach** under **Control**. Set:
+   - **Collection**: `employees`
+   - **Variable Name***: `emp`
+   - **Variable Type***: `Employee`
+
+5. **Add println inside the loop** — Inside the Foreach body, click **+** and select **Call Function**. Search under standard library → **io** → select `println`. Use **Add Item** to add three items. For each, search **variables**, expand `emp`, and select `name`, `department`, and `salary` respectively.
 
    ![Flow designer showing CSV parsing variable and foreach loop](/img/develop/transform/csv-flat-file/csv-reading-flow.png)
 
 </TabItem>
+
 <TabItem value="code" label="Ballerina Code">
 
 ```ballerina
@@ -68,20 +81,30 @@ Carol,Engineering,110000.00,8`;
 </TabItem>
 </Tabs>
 
-## Reading CSV from Files and Streams
+## Reading CSV from files and streams
 
-Use `csv:parseBytes()` for byte arrays or `csv:parseStream()` for streaming large files without loading them entirely into memory.
+Use `csv:parseBytes()` for byte arrays or `csv:parseStream()` for streaming large CSV files without loading them entirely into memory.
 
 <Tabs>
 <TabItem value="ui" label="Visual Designer" default>
 
-1. **Define the record type** — Navigate to **Types** and click **+**. Select **Create from scratch**, set **Kind** to **Record**, and name it `Transaction`. Add fields: `date` (string), `description` (string), `amount` (decimal), `category` (string). For details on creating types, see [Types](../integration-artifacts/supporting/types.md).
+1. **Define the record type** — Navigate to **Types** and click **+**. Select **Create from scratch**, set **Kind** to **Record**, and name it `Transaction`. Add fields: `date` (string), `description` (string), `amount` (decimal), and `category` (string). For details on creating types, see [Types](../integration-artifacts/supporting/types.md).
 
-2. **Add Variable steps** — In the flow designer, add a **Variable** step to read the file bytes (`check io:fileReadBytes("transactions.csv")`), then a second **Variable** step with type `Transaction[]` and expression `check csv:parseBytes(content)`.
+2. **Read the file as bytes** — In the flow designer, click **+** and select **Call Function**. Search under **io** and select `fileReadBytes`. Configure:
+   - **Path***: `transactions.csv`
+   - **Result***: `content`
+
+3. **Parse the bytes as CSV** — Click **+** and select **Call Function**. Search for `parseBytes` and select it under **data.csv**. Configure:
+   - **Csv Bytes***: `content`
+   - **Result***: `transactions`
+   - **T***: `Transaction[]`
+
+4. **(Optional) Stream large files** — For memory-efficient processing of large files, use `io:fileReadBlocksAsStream` followed by `csv:parseStream`.
 
    ![Flow designer showing file read and CSV parse steps](/img/develop/transform/csv-flat-file/csv-files-streams-flow.png)
 
 </TabItem>
+
 <TabItem value="code" label="Ballerina Code">
 
 ```ballerina
@@ -96,12 +119,12 @@ type Transaction record {|
 |};
 
 public function main() returns error? {
-    // Read from file as bytes
     byte[] content = check io:fileReadBytes("transactions.csv");
     Transaction[] transactions = check csv:parseBytes(content);
 
-    // Or stream large files for memory efficiency
-    stream<byte[], io:Error?> byteStream = check io:fileReadBlocksAsStream("large-data.csv");
+    stream<byte[], io:Error?> byteStream =
+        check io:fileReadBlocksAsStream("large-data.csv");
+
     Transaction[] streamed = check csv:parseStream(byteStream);
 }
 ```
@@ -109,26 +132,31 @@ public function main() returns error? {
 </TabItem>
 </Tabs>
 
-## Selective Column Projection
+## Selective column projection
 
-Use closed record types to select only the columns you need. Columns not represented in the target record are automatically skipped.
+Use closed record types to extract only the columns you need. Columns not represented in the target record are automatically ignored.
 
 <Tabs>
 <TabItem value="ui" label="Visual Designer" default>
 
-1. **Define a subset record type** — Navigate to **Types** and click **+**. Select **Create from scratch**, set **Kind** to **Record**, and name it `EmployeeSummary`. Add only the fields you need: `name` (string) and `salary` (decimal). Columns not represented in the record are automatically skipped during parsing.
+1. **Define a subset record type** — Navigate to **Types** and click **+**. Create a record named `EmployeeSummary` with only the required fields: `name` (string) and `salary` (decimal).
 
-2. **Add a Variable step** — Set the type to `EmployeeSummary[]` and the expression to `check csv:parseString(csvData)`.
+2. **Add a Variable step** — Add a **Declare Variable** step with the CSV string assigned to `csvData`.
+
+3. **Parse the CSV string** — Use `csv:parseString` with:
+   - **Csv String***: `csvData`
+   - **Result***: `summaries`
+   - **T***: `EmployeeSummary[]`
 
    ![Flow designer showing selective column projection with a subset record type](/img/develop/transform/csv-flat-file/csv-projection-flow.png)
 
 </TabItem>
+
 <TabItem value="code" label="Ballerina Code">
 
 ```ballerina
 import ballerina/data.csv;
 
-// Only extract name and salary from a CSV with many columns
 type EmployeeSummary record {|
     string name;
     decimal salary;
@@ -139,7 +167,6 @@ public function main() returns error? {
 Alice,Engineering,95000.00,5,Seattle
 Bob,Sales,72000.00,3,New York`;
 
-    // Only name and salary are extracted
     EmployeeSummary[] summaries = check csv:parseString(csvData);
 }
 ```
@@ -147,20 +174,32 @@ Bob,Sales,72000.00,3,New York`;
 </TabItem>
 </Tabs>
 
-## Custom Delimiters and Options
+## Custom delimiters and options
 
-Configure parsing behavior for TSV, pipe-delimited, or other non-standard formats.
+Configure parsing behavior for TSV, pipe-delimited, or other non-standard file formats.
 
 <Tabs>
 <TabItem value="ui" label="Visual Designer" default>
 
-1. **Define the record type** — Navigate to **Types** and click **+**. Select **Create from scratch**, set **Kind** to **Record**, and name it `LogEntry`. Add fields: `timestamp` (string), `level` (string), `message` (string).
+1. **Define the record type** — Create a record named `LogEntry` with fields:
+   - `timestamp` (string)
+   - `level` (string)
+   - `message` (string)
 
-2. **Add a Variable step** — Set the type to `LogEntry[]` and the expression to `check csv:parseString(tsvData, {delimiter: "\t"})`. The second argument specifies parsing options such as the delimiter character.
+2. **Add a Variable step** — Add a **Declare Variable** step for `tsvData` and provide the tab-separated content.
+
+3. **Parse with custom delimiter** — Use `csv:parseString` and configure:
+   - **Csv String***: `tsvData`
+   - **Result***: `logs`
+   - **T***: `LogEntry[]`
+
+   Under **Advanced Configurations**:
+   - **Options**: `{delimiter: "\t"}`
 
    ![Flow designer showing CSV parse with custom delimiter configuration](/img/develop/transform/csv-flat-file/csv-custom-delimiters-flow.png)
 
 </TabItem>
+
 <TabItem value="code" label="Ballerina Code">
 
 ```ballerina
@@ -173,12 +212,13 @@ type LogEntry record {|
 |};
 
 public function main() returns error? {
-    // Tab-separated values
     string tsvData = string `timestamp	level	message
 2025-03-15T10:00:00Z	INFO	Service started
 2025-03-15T10:01:23Z	ERROR	Connection refused`;
 
-    LogEntry[] logs = check csv:parseString(tsvData, {delimiter: "\t"});
+    LogEntry[] logs = check csv:parseString(tsvData, {
+        delimiter: "\t"
+    });
 }
 ```
 
@@ -187,16 +227,25 @@ public function main() returns error? {
 
 ## Headerless CSV
 
-Parse CSV files that have no header row by specifying `headerRows: 0` and using array-based output or mapping by position.
+Parse CSV files without header rows using `{header: null}`.
 
 <Tabs>
 <TabItem value="ui" label="Visual Designer" default>
 
-1. **Add a Variable step** — In the flow designer, click **+** and select **Variable**. Set the type to `string[][]` and the expression to `check csv:parseString(csvData, {headerRows: 0})`. The `headerRows: 0` option tells the parser that the CSV has no header row.
+1. **Declare the CSV data variable** — Add a **Declare Variable** step with the headerless CSV content.
+
+2. **Parse as headerless CSV** — Configure `csv:parseString` with:
+   - **Csv String***: `csvData`
+   - **Result***: `rows`
+   - **T***: `string[][]`
+
+   Under **Advanced Configurations**:
+   - **Options**: `{header: null}`
 
    ![Flow designer showing headerless CSV parsing into string arrays](/img/develop/transform/csv-flat-file/csv-headerless-flow.png)
 
 </TabItem>
+
 <TabItem value="code" label="Ballerina Code">
 
 ```ballerina
@@ -206,36 +255,41 @@ public function main() returns error? {
     string csvData = string `Alice,Engineering,95000
 Bob,Sales,72000`;
 
-    // Parse into arrays of strings
-    string[][] rows = check csv:parseString(csvData, {headerRows: 0});
+    string[][] rows = check csv:parseString(csvData, {
+        header: null
+    });
 }
 ```
 
 </TabItem>
 </Tabs>
 
-## Writing CSV Output
+## Writing CSV output
 
-Convert record arrays to CSV strings using `csv:transform()` and write them to files.
+Write arrays of records directly to CSV files using `io:fileWriteCsv()`.
 
 <Tabs>
 <TabItem value="ui" label="Visual Designer" default>
 
-1. **Define the record type** — Navigate to **Types** and click **+**. Select **Create from scratch**, set **Kind** to **Record**, and name it `Product`. Add fields: `sku` (string), `name` (string), `price` (decimal), `stock` (int). For details on creating types, see [Types](../integration-artifacts/supporting/types.md).
+1. **Define the record type** — Create a record named `Product` with fields:
+   - `sku` (string)
+   - `name` (string)
+   - `price` (decimal)
+   - `stock` (int)
 
-2. **Add a Variable step for transformation** — Set the type to `string[][]` and the expression to `check csv:transform(products)`.
+2. **Add a Variable step** — Create a variable named `products` of type `Product[]`.
 
-3. **Add a Foreach step** — Set the **Collection** to `rows` and the **Variable** to `row`. Inside the loop, add steps to build the CSV output string.
-
-4. **Add a Function Call step** — Call `io:fileWriteString("products.csv", csvOutput)` to write the output.
+3. **Write the CSV file** — Use `io:fileWriteCsv` with:
+   - **Path***: `products.csv`
+   - **Content***: `products`
 
    ![Flow designer showing CSV transform and file write steps](/img/develop/transform/csv-flat-file/csv-writing-flow.png)
 
 </TabItem>
+
 <TabItem value="code" label="Ballerina Code">
 
 ```ballerina
-import ballerina/data.csv;
 import ballerina/io;
 
 type Product record {|
@@ -252,39 +306,37 @@ public function main() returns error? {
         {sku: "GZM-03", name: "Gizmo", price: 19.99, stock: 0}
     ];
 
-    // Convert records to string arrays for CSV output
-    string[][] rows = check csv:transform(products);
-
-    // Write with header
-    string csvOutput = "sku,name,price,stock\n";
-    foreach string[] row in rows {
-        csvOutput += string:'join(",", ...row) + "\n";
-    }
-    check io:fileWriteString("products.csv", csvOutput);
+    check io:fileWriteCsv(
+        path = "products.csv",
+        content = products
+    );
 }
 ```
 
 </TabItem>
 </Tabs>
 
-## Transforming Between Record Types
+## Transforming between record types
 
-Use `csv:transform()` to reshape CSV data from one record type to another.
+Transform CSV data from one record structure into another using query expressions.
 
 <Tabs>
 <TabItem value="ui" label="Visual Designer" default>
 
-1. **Define the source and target record types** — Navigate to **Types** and click **+**. Create `RawOrder` with fields matching the CSV headers (`order_id`, `customer_name`, `item_sku`, `quantity`, `unit_price` — all string). Then create `ProcessedOrder` with fields `orderId` (string), `customer` (string), `total` (decimal). For details on creating types, see [Types](../integration-artifacts/supporting/types.md).
+1. **Define the source and target record types** — Create:
+   - `RawOrder`
+   - `ProcessedOrder`
 
-2. **Add a Variable step for parsing** — Set the type to `RawOrder[]` and the expression to `check csv:parseString(csvData)`.
+2. **Parse the CSV string** — Use `csv:parseString` to parse into `RawOrder[]`.
 
-3. **Add a Variable step with query expression** — Set the type to `ProcessedOrder[]` and use a query expression to transform: `from RawOrder r in raw ... select { orderId: r.order_id, customer: r.customer_name, total: ... }`.
+3. **Transform the data** — Add a **Declare Variable** step using a query expression to map and transform values.
 
-4. **Add a Foreach step** — Iterate over the processed records for output.
+4. **Iterate and print results** — Add a **Foreach** step to process transformed records.
 
    ![Flow designer showing CSV parse, query transform, and foreach output steps](/img/develop/transform/csv-flat-file/csv-transform-flow.png)
 
 </TabItem>
+
 <TabItem value="code" label="Ballerina Code">
 
 ```ballerina
@@ -312,7 +364,6 @@ ORD-002,Globex Inc,GDG-02,2,49.99`;
 
     RawOrder[] raw = check csv:parseString(csvData);
 
-    // Transform to a different record type
     ProcessedOrder[] processed = from RawOrder r in raw
         let int qty = check int:fromString(r.quantity)
         let decimal price = check decimal:fromString(r.unit_price)
@@ -331,20 +382,81 @@ ORD-002,Globex Inc,GDG-02,2,49.99`;
 </TabItem>
 </Tabs>
 
-## Edge Cases
+## Fail-safe processing
+
+Use the `failSafe` option to continue parsing even when invalid rows are encountered.
+
+<Tabs>
+<TabItem value="ui" label="Visual Designer" default>
+
+1. **Define the record type** — Create a `Book` record with fields:
+   - `name`
+   - `author`
+   - `price`
+   - `publishDate`
+
+2. **Add CSV input data** — Include at least one invalid row to test fail-safe behavior.
+
+3. **Enable fail-safe options** — Configure the parser with:
+   ```json
+   {
+       "failSafe": {
+           "enableConsoleLogs": true
+       }
+   }
+   ```
+
+   ![Flow designer showing fail-safe CSV parsing configuration](/img/develop/transform/csv-flat-file/csv-failsafe-flow.png)
+
+</TabItem>
+
+<TabItem value="code" label="Ballerina Code">
+
+```ballerina
+import ballerina/data.csv;
+import ballerina/io;
+
+type Book record {|
+    string name;
+    string author;
+    decimal price;
+    string publishDate;
+|};
+
+public function main() returns error? {
+    string csvData = string `name,author,price,publishDate
+Clean Code,Robert Martin,25.50,2008-08-01
+Design Patterns,Gang of Four,INVALID,1994-10-31`;
+
+    Book[] books = check csv:parseString(csvData, {
+        failSafe: {
+            enableConsoleLogs: true
+        }
+    });
+
+    io:println(books);
+}
+```
+
+</TabItem>
+</Tabs>
+
+The invalid row is skipped, the error is logged, and only valid rows are returned.
+
+## Edge cases
 
 ### Quoted fields and special characters
 
-The `ballerina/data.csv` module handles RFC 4180 compliant CSV by default, including quoted fields with commas, newlines, and escaped quotes.
+The `ballerina/data.csv` module supports RFC 4180 compliant CSV, including quoted fields containing commas, newlines, and escaped quotes.
 
 ### Encoding
 
-Specify byte encoding when reading files with non-UTF-8 content by converting to byte arrays before parsing.
+Use byte arrays and proper encoding conversion when processing non-UTF-8 CSV files.
 
 ### Large files
 
-Use `csv:parseStream()` or `csv:parseToStream()` for memory-efficient processing of large CSV files. The stream-based API processes records incrementally without loading the entire file.
+Use `csv:parseStream()` or `csv:parseToStream()` for memory-efficient streaming of large CSV files.
 
-## What's Next
+## What's next
 
-- [EDI Processing](edi.md) -- Enterprise data interchange formats
+- [EDI Processing](edi.md) — Process enterprise data interchange formats

@@ -10,7 +10,7 @@ The `ballerina/ai` package exposes the following clients:
 
 | Client | Purpose |
 |--------|---------|
-| [`Model Provider`](#model-provider) | Unified abstraction for interacting with LLMs — supports multi-turn chat and structured output generation. |
+| [`Model Provider`](#model-provider) | Unified abstraction for interacting with LLMs: supports multi-turn chat and structured output generation. |
 | [`Agent`](#agent) | Autonomous AI agent that reasons, plans, and executes tools iteratively to answer user queries. |
 | [`Chat Client`](#chat-client) | HTTP client for sending chat messages to an ai:Listener-based chat service endpoint. |
 | [`Vector Knowledge Base`](#vector-knowledge-base) | High-level RAG abstraction for document ingestion, chunking, embedding, vector storage, and retrieval. |
@@ -20,9 +20,9 @@ For event-driven integration, see the [Trigger Reference](trigger-reference.md).
 
 ---
 
-## Model Provider
+## Model provider
 
-Unified abstraction for interacting with LLMs — supports multi-turn chat and structured output generation.
+Unified abstraction for interacting with LLMs: supports multi-turn chat and structured output generation.
 
 ### Configuration
 
@@ -44,7 +44,7 @@ final ai:ModelProvider model = check new openai:ModelProvider(openAiApiKey, mode
 
 ### Operations
 
-#### Chat & Generation
+#### Chat and generation
 
 <details>
 <summary>chat</summary>
@@ -138,7 +138,7 @@ Autonomous AI agent that reasons, plans, and executes tools iteratively to answe
 | `maxIter` | <code>INFER_TOOL_COUNT&#124;int</code> | `INFER_TOOL_COUNT` | Maximum reasoning iterations. Defaults to number of tools + 1. |
 | `verbose` | <code>boolean</code> | `false` | Enables verbose debug logging. |
 | `memory` | <code>Memory?</code> | `ShortTermMemory` | Memory implementation for conversation history. Set to `()` for stateless agent. |
-| `toolLoadingStrategy` | <code>ToolLoadingStrategy</code> | `NO_FILTER` | Strategy for loading tool schemas — `NO_FILTER` loads all tools, `LLM_FILTER` uses selective double-dispatch. |
+| `toolLoadingStrategy` | <code>ToolLoadingStrategy</code> | `NO_FILTER` | Strategy for loading tool schemas: `NO_FILTER` loads all tools, `LLM_FILTER` uses selective double-dispatch. |
 
 ### Initializing the client
 
@@ -168,7 +168,7 @@ final ai:Agent mathAgent = check new (
 
 ### Operations
 
-#### Agent Execution
+#### Agent execution
 
 <details>
 <summary>run</summary>
@@ -184,7 +184,7 @@ Executes the agent for a given user query. The agent iteratively reasons, invoke
 | `query` | <code>string</code> | Yes | The natural language input provided to the agent. |
 | `sessionId` | <code>string</code> | No | Session ID for memory-based conversation tracking. Defaults to a constant session ID. |
 | `context` | <code>Context</code> | No | Additional contextual data passed to tools during execution. |
-| `td` | <code>typedesc&lt;Trace&#124;string&gt;</code> | No | Type descriptor — use `string` for plain answer or `ai:Trace` for detailed execution trace. |
+| `td` | <code>typedesc&lt;Trace&#124;string&gt;</code> | No | Type descriptor: use `string` for plain answer or `ai:Trace` for detailed execution trace. |
 
 **Returns:** `string|Trace|error`
 
@@ -209,7 +209,7 @@ string answer = check mathAgent.run(
 
 ---
 
-## Chat Client
+## Chat client
 
 HTTP client for sending chat messages to an ai:Listener-based chat service endpoint.
 
@@ -230,7 +230,7 @@ ai:ChatClient chatClient = check new ("http://localhost:9090");
 
 ### Operations
 
-#### Chat Operations
+#### Chat operations
 
 <details>
 <summary>Send chat message</summary>
@@ -270,7 +270,7 @@ ai:ChatRespMessage response = check chatClient->/chat.post({
 
 ---
 
-## Vector Knowledge Base
+## Vector knowledge base
 
 High-level RAG abstraction for document ingestion, chunking, embedding, vector storage, and retrieval.
 
@@ -392,7 +392,7 @@ check knowledgeBase.deleteByFilter({
 
 ---
 
-## Tool Store
+## Tool store
 
 Manages tool registration and execution for agents. Typically used internally by the Agent, but can be used standalone for custom agent implementations.
 
@@ -415,7 +415,7 @@ ai:ToolStore toolStore = check new (greet);
 
 ### Operations
 
-#### Tool Execution
+#### Tool execution
 
 <details>
 <summary>execute</summary>

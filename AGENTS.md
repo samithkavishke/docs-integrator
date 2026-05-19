@@ -1,0 +1,1 @@
+- To host the docs site on localhost, run `npm install` once in `en`, then run `npm run start -- --host localhost` from `en` and open the localhost URL printed by Docusaurus.

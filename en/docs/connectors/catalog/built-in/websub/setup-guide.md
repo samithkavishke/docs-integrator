@@ -21,7 +21,7 @@ Determine the WebSub hub URL and the topic URL you want to subscribe to:
 
 1. If the publisher advertises WebSub support, check the resource URL's HTTP `Link` headers for `rel="hub"` and `rel="self"` values.
 2. Alternatively, consult the publisher's documentation for the hub endpoint and available topic URLs.
-3. Note the **hub URL** and **topic URL** — you will need these when configuring the subscriber.
+3. Note the **hub URL** and **topic URL**; you will need these when configuring the subscriber.
 
 
 :::tip
@@ -39,7 +39,7 @@ The WebSub hub needs a publicly accessible callback URL to send intent verificat
     ngrok http 9090
     ```
 
-3. Note the generated public URL (e.g., `https://abc123.ngrok.io`) — this will be your callback base URL.
+3. Note the generated public URL (e.g., `https://abc123.ngrok.io`): this will be your callback base URL.
 
 
 :::note
@@ -51,7 +51,7 @@ The hub will send HTTP GET requests for intent verification and HTTP POST reques
 For authenticated content distribution, set up an HMAC secret:
 
 1. Generate a random string to use as the subscription **secret** (e.g., using a password generator or `openssl rand -hex 32`).
-2. Store the secret securely — you will provide it when configuring the subscriber service.
+2. Store the secret securely: you will provide it when configuring the subscriber service.
 3. When a secret is configured, the hub will include an `X-Hub-Signature` header in content distribution requests, and the connector will verify the signature automatically.
 
 
@@ -59,7 +59,7 @@ For authenticated content distribution, set up an HMAC secret:
 Using a subscription secret is recommended for production deployments to ensure that content distribution notifications are genuinely from the hub.
 :::
 
-## Next steps
+## What's next
 
-- [Action Reference](action-reference.md) - Available operations
-- [Trigger Reference](trigger-reference.md) - Event-driven integration
+- [Action reference](action-reference.md): Available operations
+- [Trigger reference](trigger-reference.md): Event-driven integration

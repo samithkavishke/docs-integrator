@@ -1,5 +1,6 @@
 ---
 title: Setup Guide
+description: Set up a local or managed Apache Kafka cluster and obtain the connection details required to use the Ballerina Kafka connector.
 ---
 # Setup Guide
 
@@ -25,7 +26,7 @@ This guide walks you through setting up an Apache Kafka cluster and obtaining th
     bin/kafka-server-start.sh config/server.properties
     ```
 
-4. Note the broker's **bootstrap server address** — by default this is `localhost:9092`.
+4. Note the broker's **bootstrap server address**: by default this is `localhost:9092`.
 
 :::tip
 For Kafka 3.3+ you can use KRaft mode instead of ZooKeeper. See the Kafka documentation for KRaft setup instructions.
@@ -59,16 +60,16 @@ If your Kafka cluster requires authentication, configure SASL credentials:
     ```
 
 2. Create a JAAS configuration file with your username and password.
-3. Note the **username**, **password**, and **SASL mechanism** — you will use these when configuring the Ballerina connector.
+3. Note the **username**, **password**, and **SASL mechanism**; you will use these when configuring the Ballerina connector.
 
 :::note
 Managed Kafka services (Confluent Cloud, Amazon MSK, Azure Event Hubs) provide their own authentication setup. Consult your provider's documentation for connection details.
 :::
 
-## Step 4: Configure sSL/TLS (optional)
+## Step 4: Configure SSL/TLS (optional)
 
 For encrypted connections:
 
-1. Generate or obtain SSL certificates for your Kafka cluster (CA certificate, server certificate, and key).
+1. Generate a CA certificate, server certificate, and key, or obtain them from your PKI. See [Keystores and Truststores](../../../../deploy-operate/secure/keystore-truststore.md) for step-by-step instructions using `keytool`.
 2. Configure the broker's `server.properties` with the keystore and truststore paths.
-3. Note the **truststore/certificate file path** and **keystore credentials** for use in the connector configuration.
+3. Note the **truststore/certificate file path** and **keystore credentials**; you will use these when configuring the Ballerina connector.

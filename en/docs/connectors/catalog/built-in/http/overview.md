@@ -1,6 +1,9 @@
 ---
 connector: true
 connector_name: "http"
+title: "HTTP Overview"
+description: "Build outbound HTTP requests and inbound services with the ballerina/http module in WSO2 Integrator."
+keywords: [wso2 integrator, http, rest, client, listener, service]
 ---
 
 # HTTP Module Overview
@@ -26,37 +29,39 @@ The HTTP module provides four client types for different use cases:
 
 | Client | Purpose |
 |--------|---------|
-| [`Client`](#) | Standard HTTP client for making outbound requests with full protocol support. |
-| [`StatusCodeClient`](#) | HTTP client with status-code-based response binding for typed responses per HTTP status. |
-| [`FailoverClient`](#) | Attempts subsequent endpoints on failure for high availability. |
-| [`LoadBalanceClient`](#) | Round-robin load balancing across multiple endpoints. |
+| [`Client`](action-reference.md#client) | Standard HTTP client for making outbound requests with full protocol support. |
+| [`StatusCodeClient`](action-reference.md#statuscodeclient) | HTTP client with status-code-based response binding for typed responses per HTTP status. |
+| [`FailoverClient`](action-reference.md#failoverclient) | Attempts subsequent endpoints on failure for high availability. |
+| [`LoadBalanceClient`](action-reference.md#loadbalanceclient) | Round-robin load balancing across multiple endpoints. |
 
 See the **[Action Reference](action-reference.md)** for the full list of operations, parameters, and sample code for each client.
 
 ## Listeners and services
 
-The HTTP module provides a listener for accepting inbound HTTP requests. The `http:Listener` binds to a network port and dispatches incoming requests to service resources that you define — no polling required.
+The HTTP module provides a listener for accepting inbound HTTP requests. The `http:Listener` binds to a network port and dispatches incoming requests to service resources that you define: no polling required.
 
 Supported service resource methods:
 
 | HTTP Method | Resource Accessor | Description |
 |-------------|-------------------|-------------|
-| GET | `resource function get` | Handle GET requests — retrieve data. |
-| POST | `resource function post` | Handle POST requests — create resources. |
-| PUT | `resource function put` | Handle PUT requests — replace resources. |
-| PATCH | `resource function patch` | Handle PATCH requests — partial updates. |
-| DELETE | `resource function delete` | Handle DELETE requests — remove resources. |
-| HEAD | `resource function head` | Handle HEAD requests — headers only. |
-| OPTIONS | `resource function options` | Handle OPTIONS requests — discover methods. |
+| GET | `resource function get` | Handle GET requests: retrieve data. |
+| POST | `resource function post` | Handle POST requests: create resources. |
+| PUT | `resource function put` | Handle PUT requests: replace resources. |
+| PATCH | `resource function patch` | Handle PATCH requests: partial updates. |
+| DELETE | `resource function delete` | Handle DELETE requests: remove resources. |
+| HEAD | `resource function head` | Handle HEAD requests: headers only. |
+| OPTIONS | `resource function options` | Handle OPTIONS requests: discover methods. |
 | Any | `resource function default` | Catch-all for any HTTP method not explicitly handled. |
 
 See the **[Trigger Reference](trigger-reference.md)** for listener configuration, service resource methods, parameter binding, and interceptors.
 
 ## Documentation
 
-* **[Action Reference](action-reference.md)**: Full reference for all clients — operations, parameters, return types, and sample code.
+* **[Action Reference](action-reference.md)**: Full reference for all clients: operations, parameters, return types, and sample code.
 
 * **[Trigger Reference](trigger-reference.md)**: Listener configuration, service resource methods, parameter binding, and interceptors.
+
+* **[Example](example.md)**: Learn how to build and configure an integration using the **HTTP** connector, including connection setup, operation configuration, execution flow, and event-driven trigger setup.
 
 ## How to contribute
 

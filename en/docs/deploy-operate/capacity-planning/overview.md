@@ -1,14 +1,15 @@
 ---
 sidebar_position: 1
-title: Capacity Planning
-description: Capacity planning overview and sizing guidelines for WSO2 Integrator deployments.
+title: Overview and Sizing Guidelines
+description: Estimate CPU, memory, connection pools, and instance counts for WSO2 Integrator deployments.
+keywords: [wso2 integrator, capacity planning, sizing, resource estimation, throughput, scaling]
 ---
 
-# Capacity Planning
+# Overview and Sizing Guidelines
 
-Proper capacity planning ensures your Ballerina integrations have sufficient resources to handle expected workloads while maintaining performance SLAs. This page provides sizing guidelines, resource estimation methods, and scaling recommendations.
+Proper capacity planning ensures your integrations have sufficient resources to handle expected workloads while maintaining performance SLAs. This page provides sizing guidelines, resource estimation methods, and scaling recommendations.
 
-## Key Metrics for Sizing
+## Key metrics for sizing
 
 | Metric | Description | How to Measure |
 |--------|-------------|----------------|
@@ -18,7 +19,7 @@ Proper capacity planning ensures your Ballerina integrations have sufficient res
 | Message size | Average request/response payload size | Log analysis or API analytics |
 | Integration complexity | Number of downstream calls per request | Code analysis |
 
-## Resource Estimation
+## Resource estimation
 
 ### CPU
 
@@ -38,7 +39,7 @@ Proper capacity planning ensures your Ballerina integrations have sufficient res
 | High-throughput service (JVM) | 1 - 2 GB | Large payloads, many connections |
 | GraalVM native image | 64 - 256 MB | Significantly lower footprint |
 
-### Instance Count
+### Instance count
 
 Estimate the number of instances based on throughput requirements:
 
@@ -54,7 +55,7 @@ instances = ceil(2000 / 500) + 1 = 5 instances
 
 Always add at least one buffer instance for rolling updates and failover.
 
-## Sizing by Deployment Target
+## Sizing by deployment target
 
 ### Kubernetes
 
@@ -97,7 +98,7 @@ spec:
           averageUtilization: 80
 ```
 
-### Virtual Machines
+### Virtual machines
 
 | Deployment Size | VM Spec | Instances | Handles |
 |----------------|---------|-----------|---------|
@@ -114,9 +115,9 @@ spec:
 | Provisioned Concurrency | Set to expected minimum concurrent executions |
 | Reserved Concurrency | Set to protect downstream systems |
 
-## Connection Pool Sizing
+## Connection pool sizing
 
-### Database Connection Pools
+### Database connection pools
 
 ```ballerina
 final mysql:Client dbClient = check new ({
@@ -135,7 +136,7 @@ final mysql:Client dbClient = check new ({
 
 **Rule of thumb**: `maxOpenConnections = (number_of_instances * connections_per_instance) <= database_max_connections`
 
-### HTTP Client Connection Pools
+### HTTP client connection pools
 
 ```ballerina
 final http:Client apiClient = check new ("https://api.example.com", {
@@ -149,7 +150,7 @@ final http:Client apiClient = check new ("https://api.example.com", {
 });
 ```
 
-## Load Testing
+## Load testing
 
 Validate your capacity plan with load testing before going to production:
 
@@ -161,7 +162,7 @@ k6 run --vus 100 --duration 5m load-test.js
 ab -n 10000 -c 100 http://localhost:9090/api/orders
 ```
 
-### Key Results to Collect
+### Key results to collect
 
 | Metric | Target |
 |--------|--------|
@@ -171,7 +172,7 @@ ab -n 10000 -c 100 http://localhost:9090/api/orders
 | CPU Utilization | Under 70% at peak |
 | Memory Utilization | Under 80% at peak |
 
-## Scaling Strategies
+## Scaling strategies
 
 | Strategy | When to Use |
 |----------|-------------|
@@ -180,8 +181,8 @@ ab -n 10000 -c 100 http://localhost:9090/api/orders
 | Auto-scaling (HPA) | Variable traffic patterns |
 | Event-driven scaling (KEDA) | Queue/event-driven workloads |
 
-## What's Next
+## What's next
 
-- [Performance Reports](performance-reports.md) -- Benchmark results per scenario
-- [Scaling & High Availability](../deploy/scaling-ha.md) -- Configure horizontal scaling
-- [GraalVM Native Images](../deploy/graalvm.md) -- Reduce resource requirements with native compilation
+- [Performance reports](performance-reports.md) — Benchmark results per scenario
+- [Scaling and high availability](../deploy/scaling-high-availability.md) — Configure horizontal scaling
+- [GraalVM native images](../deploy/graalvm-native-images.md) — Reduce resource requirements with native compilation

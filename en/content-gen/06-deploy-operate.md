@@ -217,7 +217,18 @@
 
 ---
 
-## Secure (5 pages)
+## Secure (8 pages)
+
+### Page: Keystores and Truststores
+
+**File:** `en/docs/deploy-operate/secure/keystore-truststore.md`
+
+**What to cover:**
+- Keystore and truststore concepts
+- Create a keystore with Java keytool (key pair, CSR, CA-signed certificate import)
+- Create a truststore for CA-signed and self-signed certificates
+- Configure TLS and mutual TLS (mTLS) in WSO2 Integrator services (HTTP, gRPC)
+- Externalize keystore and truststore passwords via Config.toml or environment variables
 
 ### Page: Runtime Security Best Practices
 
@@ -243,12 +254,11 @@
 
 ### Page: API Security & Rate Limiting
 
-**File:** `en/docs/deploy-operate/secure/api-security.md`
+**File:** `en/docs/deploy-operate/secure/api-security-rate-limiting.md`
 
 **What to cover:**
 - API key validation
 - Rate limiting implementation
-- IP whitelisting
 - CORS configuration for APIs
 - API gateway integration
 
@@ -263,9 +273,18 @@
 - HashiCorp Vault integration
 - Encrypting Config.toml values
 
+### Page: IP Whitelisting
+
+**File:** `en/docs/deploy-operate/secure/ip-whitelisting.md`
+
+**What to cover:**
+- IP-based access control configuration
+- Allowlist and blocklist rules
+- Applying IP restrictions to services
+
 ### Page: Compliance Considerations
 
-**File:** `en/docs/deploy-operate/secure/compliance.md`
+**File:** `en/docs/deploy-operate/secure/compliance-considerations.md`
 
 **What to cover:**
 - GDPR data handling

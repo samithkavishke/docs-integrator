@@ -1,0 +1,83 @@
+name: PR Build Check
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: en/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd en/
+          npm ci
+
+      - name: Enforce title case
+        run: |
+          cd en/
+          set -o pipefail
+          node scripts/enforce-title-case.mjs --dry-run 2>&1 | tee title-case.log || {
+            {
+              echo "## Title-case violations"
+              echo ""
+              echo "The following values need title-case corrections."
+              echo "Run \`node en/scripts/enforce-title-case.mjs\` locally and commit the result."
+              echo ""
+              echo '```'
+              cat title-case.log
+              echo '```'
+            } >> "${GITHUB_STEP_SUMMARY:-/dev/null}"
+            exit 1
+          }
+
+      - name: Build Docusaurus site
+        id: build
+        run: |
+          cd en/
+          set -o pipefail
+          npm run build 2>&1 | tee build.log
+        env:
+          BASE_URL: /docs-integrator/
+
+      - name: Report broken-link warnings
+        if: always()
+        continue-on-error: false
+        run: |
+          cd en/
+          {
+            echo "## Broken links";
+            echo "";
+            if [ ! -f build.log ]; then
+              echo "_Build log not found — skipping._";
+            else
+              matches=$(grep -niE "broken (link|markdown link|anchor)|docusaurus found broken" build.log || true)
+              if [ -z "$matches" ]; then
+                echo "No broken-link warnings reported by the build.";
+              else
+                echo "The build reported the following warnings (the build is configured with \`onBrokenLinks: 'warn'\`, so it does not fail):";
+                echo "";
+                echo '```';
+                echo "$matches";
+                echo '```';
+              fi
+            fi
+          } | tee -a "${GITHUB_STEP_SUMMARY:-/dev/null}"
+
+      - name: Check for pages not linked from the sidebar
+        if: always()
+        continue-on-error: true
+        run: |
+          cd en/
+          node scripts/check-orphans.mjs

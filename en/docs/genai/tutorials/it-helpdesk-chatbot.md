@@ -1,122 +1,83 @@
 ---
 sidebar_position: 3
-title: "Building an IT Helpdesk Chatbot with Persistent Memory"
-description: Build an IT support chatbot that remembers conversation history across sessions using Redis-backed persistent memory.
+title: "Building an IT Helpdesk AI Agent with Persistent Memory"
+description: Build an IT helpdesk AI agent that uses persistent MSSQL-backed memory to retain conversation history across requests and service restarts.
 ---
 
-# Building an IT Helpdesk Chatbot with Persistent Memory
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-**Time:** 40 minutes | **Level:** Intermediate | **What you'll build:** An IT helpdesk chatbot that assists employees with technical issues, looks up support tickets, searches a knowledge base, and remembers past conversations using Redis-backed persistent memory.
+# Building an IT Helpdesk AI Agent with Persistent Memory
 
-In this tutorial, you build an IT support chatbot with persistent memory so that returning employees do not need to repeat their issues. The chatbot connects to a ticketing system and an internal knowledge base, and it exposes its interface as a WebSocket service for real-time bidirectional communication. Redis is used as the memory store to persist conversation history across sessions and service restarts.
+## What you will build
+
+In this tutorial, you will build an IT helpdesk AI agent that assists employees with technical support issues and remembers conversations across service restarts using persistent MSSQL-backed memory.
+
+The AI agent exposes a chat interface using `ai:Listener`, responds to employee questions, searches an internal knowledge base for troubleshooting guidance, and maintains conversation history using `ballerinax/ai.memory.mssql`.
+
+By persisting chat history using a database-backed memory store, employees can continue conversations using the same `sessionId` without repeating previously shared information, even after the integration service restarts.
+
+## What you will learn
+
+In this tutorial, you will learn how to:
+
+- Create an AI agent using `ai:Agent`
+- Expose the agent through `ai:Listener`
+- Persist conversation history across service restarts using MSSQL-backed memory
+- Maintain employee-specific conversations using `sessionId`
 
 ## Prerequisites
 
-- [WSO2 Integrator VS Code extension installed](/docs/get-started/install)
-- An OpenAI API key (or another supported LLM provider)
-- Redis server running locally or remotely
-- Familiarity with [Memory Configuration](/docs/genai/agents/memory-configuration)
+Before getting started, ensure that the following requirements are met:
+
+- Install the [WSO2 Integrator VS Code extension](../../get-started/setup/local-setup.md)
+- Set up an MSSQL database for agent memory persistence
+- Have a basic understanding of memory configuration concepts. For more information, refer to [Memory](../develop/agents/memory.md)
 
 ## Architecture
 
 ```mermaid
-flowchart TD
+flowchart LR
     Employee([Employee])
-    subgraph Agent["IT Helpdesk Agent"]
-        LLM["LLM (GPT-4o)"]
-        Memory["Memory (Redis)"]
+
+    subgraph "IT Helpdesk AI Agent"
+        direction TB
+
+        Agent["ai:Agent"]
+        Memory["Persistent Memory\nMSSQL"]
+        Model["Model Provider\nDefault / OpenAI / Azure OpenAI"]
+
         subgraph Tools["Tools"]
-            T1["ticketLookup"]
-            T2["createTicket"]
-            T3["searchKB"]
-            T4["checkStatus"]
-            T5["resetPwd"]
+            T1["searchKnowledgeBase"]
         end
-        LLM --- Memory
-        LLM --- Tools
+
+        Agent --- Memory
+        Agent --- T1
+        Agent --- Model
     end
-    System[Ticket System]
-    KB[Knowledge Base (Wiki)]
-    Admin[IT Admin API]
 
-    Employee <-->|WebSocket| LLM
-    Tools ----> System & KB & Admin
+    DB[("MSSQL")]
+
+    Employee <-->|ai:Listener| Agent
+
+    Memory --- DB
 ```
 
-## Step 1: Create the Project
+## Build the integration
 
-```toml
-# Ballerina.toml
-[package]
-org = "myorg"
-name = "it_helpdesk_chatbot"
-version = "0.1.0"
+In this section, you will create the integration project and configure the AI agent for the IT helpdesk system.
 
-[[dependency]]
-org = "ballerinax"
-name = "ai.agent"
+### Step 1: Create the integration project
 
-[[dependency]]
-org = "ballerinax"
-name = "ai.provider.openai"
+Create a new integration project by following the instructions in [Create a project](../../develop/create-integrations/create-a-project.md).
 
-[[dependency]]
-org = "ballerinax"
-name = "redis"
+### Step 2: Define the data type
 
-[[dependency]]
-org = "ballerina"
-name = "websocket"
-```
-
-## Step 2: Set Up Configuration
-
-```toml
-# Config.toml
-openaiKey = "<your-openai-api-key>"
-redisHost = "localhost"
-redisPort = 6379
-redisPassword = ""
-ticketApiUrl = "http://localhost:8080/api/tickets"
-kbApiUrl = "http://localhost:8081/api/kb"
-itAdminApiUrl = "http://localhost:8082/api/admin"
-```
-
+Define the following data type.
+<Tabs>
+<TabItem value="code" label="Ballerina Code">
 ```ballerina
-// config.bal
-configurable string openaiKey = ?;
-configurable string redisHost = ?;
-configurable int redisPort = ?;
-configurable string redisPassword = ?;
-configurable string ticketApiUrl = ?;
-configurable string kbApiUrl = ?;
-configurable string itAdminApiUrl = ?;
-```
-
-## Step 3: Define Data Types
-
-```ballerina
-// types.bal
-type SupportTicket record {|
-    string ticketId;
-    string employeeId;
-    string subject;
-    string description;
-    string category;       // "hardware", "software", "network", "access", "other"
-    string priority;       // "low", "medium", "high", "critical"
-    string status;         // "open", "in_progress", "waiting", "resolved", "closed"
-    string? assignedTo;
-    string createdAt;
-    string? resolvedAt;
-    TicketComment[] comments;
-|};
-
-type TicketComment record {|
-    string author;
-    string content;
-    string timestamp;
-|};
-
+# types.bal
 type KbArticle record {|
     string articleId;
     string title;
@@ -125,318 +86,269 @@ type KbArticle record {|
     string[] tags;
     float relevanceScore;
 |};
-
-type PasswordResetResult record {|
-    boolean success;
-    string message;
-    string? temporaryPassword;
-    string? expiresAt;
-|};
-
-type ChatMessage record {|
-    string role;      // "user" or "assistant"
-    string content;
-    string timestamp;
-|};
 ```
+</TabItem>
+</Tabs>
 
-## Step 4: Configure Redis-Backed Persistent Memory
+Initialize the `kbArticles`.
+
+<Tabs>
+<TabItem value="code" label="Ballerina Code">
+```ballerina
+final KbArticle[] & readonly kbArticles = [
+    {
+        articleId: "KB-101",
+        title: "VPN Troubleshooting",
+        content: "Restart the VPN client and reconnect.",
+        category: "network",
+        tags: ["vpn"],
+        relevanceScore: 0.95
+    }
+];
+```
+</TabItem>
+</Tabs>
+### Step 3: Create the AI agent
+
+Create the AI agent named `itHelpDeskAgent` by following the instructions in [Creating an Agent](../develop/agents/creating-an-agent.md).
+
+### Step 4: Update the system prompt
+
+<Tabs>
+<TabItem value="ui" label="Visual Designer" default>
+
+- Click the created agent and add the instructions.
+
+![Add instruction](/img/genai/tutorials/hr-knowledge-base-rag/28-add-instruction.png)
+
+</TabItem>
+
+<TabItem value="code" label="Ballerina Code">
 
 ```ballerina
-// memory.bal
-import ballerinax/redis;
-import ballerinax/ai.agent;
+# agents.bal
+final ai:Agent itHelpDeskAgent = check new (
+    systemPrompt = {
+        role: string `itHelpDesk`,
+        instructions: string `
+            You are an IT Helpdesk Assistant.
 
-final redis:Client redisClient = check new ({
-    host: redisHost,
-    port: redisPort,
-    password: redisPassword.length() > 0 ? redisPassword : ()
-});
-
-// Create a persistent memory store backed by Redis
-function createPersistentMemory(string sessionId) returns agent:ChatMemory {
-    return new agent:PersistentChatMemory({
-        store: redisClient,
-        sessionId: sessionId,
-        maxMessages: 50,
-        ttl: 86400 * 7     // Keep conversation history for 7 days
-    });
-}
+            Rules:
+            - ALWAYS call searchKnowledgeBase first.
+            - ONLY use information returned by tools.
+            - Do NOT generate additional troubleshooting steps.
+            - Keep responses short.
+            - Remember previous conversations.`
+    },
+    model = wso2ModelProvider,
+    tools = []
+);
 ```
+</TabItem>
+</Tabs>
 
-## Step 5: Define Agent Tools
+### Step 5: Add a tool to the agent
+
+Add the following tool to the agent by following the instructions in [Create custom tool](../develop/agents/tools.md#4-create-custom-tool).
+
+<Tabs>
+<TabItem value="code" label="Ballerina Code">
 
 ```ballerina
-// tools.bal
-import ballerinax/ai.agent;
-import ballerina/http;
+# agents.bal
+@ai:AgentTool
+isolated function searchKnowledgeBase(string query) returns string {
 
-final http:Client ticketApi = check new (ticketApiUrl);
-final http:Client kbApi = check new (kbApiUrl);
-final http:Client itAdminApi = check new (itAdminApiUrl);
+    string normalizedQuery = query.toLowerAscii();
 
-@agent:Tool {
-    name: "lookupTicket",
-    description: "Look up an existing IT support ticket by ticket ID. Returns ticket details including status, priority, assigned technician, and comments. Use this when an employee asks about the status of a previously reported issue."
-}
-isolated function lookupTicket(
-    @agent:Param {description: "Ticket ID in the format TKT-XXXXX"} string ticketId
-) returns json|error {
-    json|error result = ticketApi->get(string `/tickets/${ticketId}`);
-    if result is error {
-        return {
-            "found": false,
-            "message": string `Ticket '${ticketId}' not found. Please verify the ticket ID.`
-        };
+    if normalizedQuery.includes("vpn") {
+        return "VPN Troubleshooting: Restart the VPN client and reconnect.";
     }
-    return result;
-}
 
-@agent:Tool {
-    name: "listEmployeeTickets",
-    description: "List all support tickets for a specific employee. Returns recent tickets sorted by creation date. Use this when an employee wants to see their ticket history."
-}
-isolated function listEmployeeTickets(
-    @agent:Param {description: "Employee ID"} string employeeId,
-    @agent:Param {description: "Filter by status: 'open', 'in_progress', 'resolved', or 'all'"} string status = "all"
-) returns json|error {
-    string query = status == "all" ? "" : string `&status=${status}`;
-    return check ticketApi->get(string `/tickets?employeeId=${employeeId}${query}`);
-}
+    if normalizedQuery.includes("password") {
+        return "Use the self-service password reset portal.";
+    }
 
-@agent:Tool {
-    name: "createTicket",
-    description: "Create a new IT support ticket. Use this when an employee reports a new issue that cannot be resolved immediately through the knowledge base or basic troubleshooting."
-}
-isolated function createTicket(
-    @agent:Param {description: "Employee ID"} string employeeId,
-    @agent:Param {description: "Brief subject line"} string subject,
-    @agent:Param {description: "Detailed description of the issue, including any troubleshooting steps already taken"} string description,
-    @agent:Param {description: "Category: 'hardware', 'software', 'network', 'access', or 'other'"} string category,
-    @agent:Param {description: "Priority: 'low', 'medium', 'high', or 'critical'"} string priority = "medium"
-) returns json|error {
-    return check ticketApi->post("/tickets", {
-        employeeId, subject, description, category, priority
-    });
-}
-
-@agent:Tool {
-    name: "searchKnowledgeBase",
-    description: "Search the IT knowledge base for troubleshooting guides, how-to articles, and common solutions. Use this FIRST before creating a ticket to check if there is a known solution."
-}
-isolated function searchKnowledgeBase(
-    @agent:Param {description: "Search query describing the issue or topic"} string query,
-    @agent:Param {description: "Category filter: 'hardware', 'software', 'network', 'access', or 'all'"} string category = "all"
-) returns json|error {
-    string categoryParam = category == "all" ? "" : string `&category=${category}`;
-    return check kbApi->get(string `/search?q=${query}${categoryParam}&limit=5`);
-}
-
-@agent:Tool {
-    name: "checkSystemStatus",
-    description: "Check the current status of IT systems and services (email, VPN, intranet, etc.). Use this when an employee reports they cannot access a service — it may be a known outage."
-}
-isolated function checkSystemStatus(
-    @agent:Param {description: "System name: 'email', 'vpn', 'intranet', 'erp', 'all'"} string system = "all"
-) returns json|error {
-    return check itAdminApi->get(string `/system-status?system=${system}`);
-}
-
-@agent:Tool {
-    name: "requestPasswordReset",
-    description: "Initiate a password reset for an employee's account. Only use when the employee explicitly requests a password reset and provides their employee ID."
-}
-isolated function requestPasswordReset(
-    @agent:Param {description: "Employee ID"} string employeeId,
-    @agent:Param {description: "System to reset password for: 'email', 'vpn', 'erp', 'intranet'"} string system
-) returns json|error {
-    return check itAdminApi->post("/password-reset", {
-        employeeId, system
-    });
+    return "No matching knowledge base article found.";
 }
 ```
+</TabItem>
+</Tabs>
 
-## Step 6: Create the Agent
+### Step 6: Add persistent memory to the agent
+
+Add persistent memory by following the instructions in [Memory](../develop/agents/memory.md).
+
+<Tabs>
+<TabItem value="ui" label="Visual Designer" default>
+    ![Agent with inmemory](/img/genai/develop/agents/29-agent-with-inmemory.png)
+</TabItem>
+
+<TabItem value="code" label="Ballerina Code">
+```ballerina
+# agents.bal
+import ballerinax/ai.memory.mssql;
+
+final mssql:ShortTermMemoryStore mssqlMemoryStore = check new ({
+    host: "localhost",
+    port: 1433,
+    user: "sa",
+    password: "Test123#",
+    database: "helpdesk"
+}, tableName = "chatHistory");
+
+final ai:ShortTermMemory persistentMemory =
+    check new (mssqlMemoryStore);
+```
+
+Update the agent configuration to use the persistent memory instance.
 
 ```ballerina
-// agent.bal
-import ballerinax/ai.agent;
-import ballerinax/ai.provider.openai;
+# agents.bal
+final ai:Agent itHelpDeskAgent = check new (
+    systemPrompt = {
+        role: string `itHelpDesk`,
+        instructions: string `
+            You are an IT Helpdesk Assistant.
 
-final openai:Client llmClient = check new ({
-    auth: {token: openaiKey},
-    model: "gpt-4o"
-});
+            Rules:
+            - ALWAYS call searchKnowledgeBase first.
+            - ONLY use information returned by tools.
+            - Do NOT generate additional troubleshooting steps.
+            - Keep responses short.
+            - Remember previous conversations.`
+    },
+    model = wso2ModelProvider,
+    memory = persistentMemory,
+    tools = [searchKnowledgeBase]
+);
+```
+</TabItem>
+</Tabs>
 
-function createHelpdeskAgent(string sessionId) returns agent:ChatAgent|error {
-    return new (
-        model: llmClient,
-        systemPrompt: string `You are the IT Helpdesk Assistant for the company.
+### Step 8: Run and test the integration
 
-Role:
-- Help employees resolve technical issues, find information, and manage support tickets.
-- Provide step-by-step troubleshooting guidance when possible.
+1. Run the agent integration.
 
-Tools:
-- searchKnowledgeBase: ALWAYS search the KB first before creating a ticket.
-- checkSystemStatus: Check if there is a known outage before troubleshooting.
-- lookupTicket / listEmployeeTickets: Check existing tickets to avoid duplicates.
-- createTicket: Create a ticket only when the issue cannot be resolved through self-service.
-- requestPasswordReset: Reset passwords only when explicitly requested by the employee.
+![Run integration](/img/genai/tutorials/hr-knowledge-base-rag/29-run-integration.png)
 
-Guidelines:
-- Greet returning employees by referencing their previous conversations when relevant.
-- Always check for known outages before troubleshooting connectivity issues.
-- Search the knowledge base before creating a ticket — many issues have documented solutions.
-- When creating tickets, include all troubleshooting steps already attempted.
-- For password resets, verify the employee ID before proceeding.
-- Prioritize critical issues: system outages and security incidents are always high priority.
-- Be patient and use clear, non-technical language when guiding employees.
-- If an issue seems related to a security incident, escalate immediately.`,
-        tools: [
-            lookupTicket, listEmployeeTickets, createTicket,
-            searchKnowledgeBase, checkSystemStatus, requestPasswordReset
-        ],
-        memory: createPersistentMemory(sessionId)
-    );
-}
+2. Ask a question as an employee:
+
+<Tabs>
+<TabItem value="bash" label="Curl Command" default>
+
+```bash
+curl -X POST http://localhost:9090/hthr/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+        "sessionId": "EMP-1001",
+        "message": "My VPN is not working"
+      }'
 ```
 
-## Step 7: Expose as a WebSocket Service
+</TabItem>
+</Tabs>
 
-The WebSocket interface enables real-time, bidirectional chat between the employee and the agent.
-
-```ballerina
-// service.bal
-import ballerina/websocket;
-import ballerina/log;
-
-service /helpdesk on new websocket:Listener(8090) {
-
-    resource function get chat(string employeeId) returns websocket:Service|error {
-        log:printInfo(string `Employee ${employeeId} connected to helpdesk`);
-
-        // Create an agent with persistent memory tied to this employee
-        agent:ChatAgent helpdeskAgent = check createHelpdeskAgent(employeeId);
-
-        return new ChatService(helpdeskAgent, employeeId);
-    }
-}
-
-service class ChatService {
-    *websocket:Service;
-
-    private final agent:ChatAgent agent;
-    private final string employeeId;
-
-    function init(agent:ChatAgent agent, string employeeId) {
-        self.agent = agent;
-        self.employeeId = employeeId;
-    }
-
-    remote function onTextMessage(websocket:Caller caller, string message) returns error? {
-        log:printInfo(string `[${self.employeeId}] Message: ${message}`);
-
-        // Prepend employee context to the message
-        string contextMessage = string `[Employee: ${self.employeeId}] ${message}`;
-
-        // Get agent response
-        string|error response = self.agent.chat(contextMessage, self.employeeId);
-
-        if response is error {
-            check caller->writeTextMessage(
-                "I apologize, but I encountered an error processing your request. " +
-                "Please try again or contact the IT helpdesk directly at ext. 5555."
-            );
-            log:printError("Agent error", response);
-        } else {
-            check caller->writeTextMessage(response);
-        }
-    }
-
-    remote function onClose(websocket:Caller caller, int statusCode, string reason) {
-        log:printInfo(string `[${self.employeeId}] Disconnected: ${reason}`);
-    }
-
-    remote function onError(websocket:Caller caller, error err) {
-        log:printError(string `[${self.employeeId}] WebSocket error`, err);
-    }
+<Tabs>
+<TabItem value="bash" label="Response" default>
+```json
+{
+  "message":"To address your VPN issue, please restart the VPN client and try reconnecting. If you have already done this, let me know for further assistance!"
 }
 ```
+</TabItem>
+</Tabs>
 
-## Step 8: Run and Test
+3. Continue the conversation using the same `sessionId`:
 
-1. Start the service:
-   ```bash
-   bal run
-   ```
+<Tabs>
+<TabItem value="bash" label="Curl Command" default>
+```bash
+curl -X POST http://localhost:9090/hthr/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+        "sessionId":"EMP-1001",
+        "message":"I already restarted it"
+      }'
+```
+</TabItem>
+</Tabs>
 
-2. Test using a WebSocket client (e.g., `wscat`):
-   ```bash
-   # Connect as an employee
-   wscat -c "ws://localhost:8090/helpdesk/chat?employeeId=EMP-10042"
+<Tabs>
+<TabItem value="bash" label="Response" default>
 
-   # Type messages in the WebSocket session:
-   > I can't connect to the VPN from home
-   > I've already restarted my laptop and tried both Wi-Fi and ethernet
-   > Can you check if there's an outage?
-   > Okay, please create a ticket for this
-   ```
+```json
+{
+  "message":"It seems I only have the information about restarting the VPN client. Since you've already done that, please consider these additional steps:
 
-3. Test persistent memory by reconnecting:
-   ```bash
-   # Reconnect as the same employee
-   wscat -c "ws://localhost:8090/helpdesk/chat?employeeId=EMP-10042"
+1. Check your internet connection.
+2. Update the VPN client to the latest version.
+3. Verify your VPN settings are correct.
+4. Check firewall or antivirus settings, as they might block the VPN.
 
-   # The agent remembers the previous conversation:
-   > Any updates on my VPN issue?
-   > I also need a password reset for my email account
-   ```
-
-4. Alternatively, test with a simple HTTP endpoint for debugging:
-   ```bash
-   curl -X POST http://localhost:8090/helpdesk/debug \
-     -H "Content-Type: application/json" \
-     -d '{"message": "My laptop screen is flickering", "employeeId": "EMP-10042"}'
-   ```
-
-## Step 9: Add Conversation Summary for Long Sessions
-
-For long-running conversations, summarize older messages to stay within token limits while retaining key context.
-
-```ballerina
-// summary_memory.bal
-import ballerinax/ai.agent;
-
-// Use a summarizing memory that compresses older messages
-function createSummarizingMemory(string sessionId) returns agent:ChatMemory {
-    return new agent:SummarizingChatMemory({
-        store: redisClient,
-        sessionId: sessionId,
-        model: llmClient,
-        maxTokens: 4000,
-        summaryPrompt: "Summarize the conversation so far, focusing on: " +
-            "1) The employee's reported issues and their current status, " +
-            "2) Any ticket IDs or reference numbers, " +
-            "3) Troubleshooting steps already attempted."
-    });
+If you need more help, just let me know!"
 }
 ```
+</TabItem>
+</Tabs>
 
-## What You Built
+4. Continue the conversation again using the same `sessionId`:
 
-You now have an IT helpdesk chatbot that:
-- Provides real-time support through a WebSocket interface
-- Searches the knowledge base for known solutions before escalating
-- Checks system status to identify known outages
-- Creates and tracks support tickets
-- Initiates password resets for employee accounts
-- Remembers past conversations using Redis-backed persistent memory
-- Summarizes long conversations to manage token limits
+<Tabs>
+<TabItem value="bash" label="Curl Command" default>
+```bash
+curl -X POST http://localhost:9090/hthr/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+        "sessionId":"EMP-1001",
+        "message":"Any other suggestions?"
+      }'
+```
+</TabItem>
+</Tabs>
 
-## What's Next
+<Tabs>
+<TabItem value="bash" label="Response" default>
 
-- [Memory Configuration](/docs/genai/agents/memory-configuration) -- Explore memory options in depth
-- [Chat Agents](/docs/genai/agents/chat-agents) -- Learn more about chat agent patterns
-- [Agent Tracing](/docs/genai/agent-observability/agent-tracing) -- Add observability and debugging
-- [Troubleshooting](/docs/genai/reference/troubleshooting) -- Common issues and solutions
+```json
+{
+  "message":"I currently don't have any further suggestions from the knowledge base. However, you might try these:
+
+1. Reboot your device.
+2. Connect to a different server in your VPN client, if available.
+3. Check for service outages on your VPN provider's status page.
+4. Contact your VPN provider's support for more assistance.
+
+Let me know if you need anything else!"
+}
+```
+</TabItem>
+</Tabs>
+
+5. Restart the service and reconnect using the same `sessionId`:
+
+<Tabs>
+<TabItem value="bash" label="Curl Command" default>
+
+```bash
+curl -X POST http://localhost:9090/hthr/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+        "sessionId":"EMP-1001",
+        "message":"Do you remember my issue?"
+      }'
+```
+</TabItem>
+</Tabs>
+
+<Tabs>
+<TabItem value="bash" label="Response" default>
+```json
+{
+  "message":"Yes, your issue is that your VPN is not working, and you've already restarted the client. Would you like me to assist you with anything specific regarding that?"
+}
+```
+</TabItem>
+</Tabs>
+
+The AI agent remembers previous conversations because the conversation history is stored in persistent MSSQL backed memory and retrieved using the same `sessionId`.

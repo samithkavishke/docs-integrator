@@ -16,8 +16,8 @@ This guide walks you through setting up a JMS broker and obtaining the connectio
 1. Download and install a JMS-compliant broker such as [Apache ActiveMQ](https://activemq.apache.org/components/classic/download/).
 2. Extract the downloaded archive to a directory of your choice.
 3. Start the broker:
-    - **Linux/macOS**: Run `./bin/activemq start` from the installation directory.
-    - **Windows**: Run `bin\activemq.bat start` from the installation directory.
+   - **Linux/macOS**: Run `./bin/activemq start` from the installation directory.
+   - **Windows**: Run `bin\activemq.bat start` from the installation directory.
 4. Verify the broker is running by accessing the admin console (e.g., `http://localhost:8161/admin` for ActiveMQ, default credentials: `admin`/`admin`).
 
 :::note
@@ -41,8 +41,8 @@ Consult your broker's documentation for the correct initial context factory clas
 
 1. Log in to your broker's admin console.
 2. Create the queues and/or topics your application will use.
-    - For ActiveMQ: Navigate to **Queues** or **Topics** in the admin console and enter the destination name.
-3. Note the exact destination names — you will reference them in your Ballerina code.
+   - For ActiveMQ: Navigate to **Queues** or **Topics** in the admin console and enter the destination name.
+3. Note the exact destination names; you will reference them in your Ballerina code.
 
 :::note
 Some brokers auto-create destinations on first use. Check your broker's configuration if you prefer to pre-create destinations.

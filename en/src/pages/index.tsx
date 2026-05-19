@@ -1,8 +1,9 @@
-import type {ReactNode} from 'react';
-import {useState, useEffect, useRef, useCallback} from 'react';
+import type { ReactNode } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from '@docusaurus/Link';
-import {useHistory} from '@docusaurus/router';
+import { useHistory } from '@docusaurus/router';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
 
@@ -77,6 +78,22 @@ function IconReference(): ReactNode {
   );
 }
 
+function IconManage(): ReactNode {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="4" y1="21" x2="4" y2="14" />
+      <line x1="4" y1="10" x2="4" y2="3" />
+      <line x1="12" y1="21" x2="12" y2="12" />
+      <line x1="12" y1="8" x2="12" y2="3" />
+      <line x1="20" y1="21" x2="20" y2="16" />
+      <line x1="20" y1="12" x2="20" y2="3" />
+      <line x1="1" y1="14" x2="7" y2="14" />
+      <line x1="9" y1="8" x2="15" y2="8" />
+      <line x1="17" y1="16" x2="23" y2="16" />
+    </svg>
+  );
+}
+
 /* ------------------------------------------------------------------ */
 /*  Section Data                                                       */
 /* ------------------------------------------------------------------ */
@@ -92,9 +109,9 @@ type SectionCard = {
 
 const sections: SectionCard[] = [
   {
-    title: 'Get Started',
+    title: 'Get started',
     description: 'Install, set up, and build your first integration in under 10 minutes.',
-    link: '/docs/get-started/overview',
+    link: '/get-started/introduction',
     icon: <IconGetStarted />,
     iconBg: '#ECFDF5',
     iconBgDark: 'rgba(5, 150, 105, 0.15)',
@@ -103,7 +120,7 @@ const sections: SectionCard[] = [
   {
     title: 'Develop',
     description: 'Build services, transform data, and test integrations on your machine.',
-    link: '/docs/develop/overview',
+    link: '/develop/overview',
     icon: <IconDevelop />,
     iconBg: '#EFF6FF',
     iconBgDark: 'rgba(37, 99, 235, 0.15)',
@@ -111,44 +128,53 @@ const sections: SectionCard[] = [
   },
   {
     title: 'Connectors',
-    description: 'Browse 200+ pre-built connectors for SaaS, databases, messaging, and AI.',
-    link: '/docs/connectors/overview',
+    description: 'Browse 400+ pre-built connectors for SaaS, databases, messaging, and AI.',
+    link: '/connectors/overview',
     icon: <IconConnectors />,
     iconBg: '#F0EDFF',
     iconBgDark: 'rgba(124, 58, 237, 0.15)',
     iconColor: '#7C3AED',
   },
   {
-    title: 'GenAI',
+    title: 'AI Integrations',
     description: 'Build AI-powered integrations with agents, RAG, and MCP servers.',
-    link: '/docs/genai/overview',
+    link: '/genai/overview',
     icon: <IconGenAI />,
     iconBg: '#FDF4FF',
     iconBgDark: 'rgba(168, 85, 247, 0.15)',
     iconColor: '#A855F7',
   },
   {
-    title: 'Tutorials',
-    description: 'End-to-end walkthroughs, integration patterns, and sample projects.',
-    link: '/docs/tutorials/overview',
+    title: 'Guides',
+    description: 'End-to-end tutorials and integration patterns.',
+    link: '/guides/overview',
     icon: <IconTutorials />,
     iconBg: '#FFF8EB',
     iconBgDark: 'rgba(217, 119, 6, 0.15)',
     iconColor: '#D97706',
   },
   {
-    title: 'Deploy & Operate',
+    title: 'Deploy',
     description: 'Docker, Kubernetes, CI/CD, observability, and production security.',
-    link: '/docs/deploy-operate/overview',
+    link: '/deploy/overview',
     icon: <IconDeploy />,
     iconBg: '#ECFEFF',
     iconBgDark: 'rgba(8, 145, 178, 0.15)',
     iconColor: '#0891B2',
   },
   {
+    title: 'Manage',
+    description: 'Centralized control and observability via the Integration Control Plane (ICP).',
+    link: '/manage/overview',
+    icon: <IconManage />,
+    iconBg: '#EEF2FF',
+    iconBgDark: 'rgba(79, 70, 229, 0.15)',
+    iconColor: '#4F46E5',
+  },
+  {
     title: 'Reference',
     description: 'Language reference, configuration keys, CLI commands, and error codes.',
-    link: '/docs/reference/overview',
+    link: '/reference/overview',
     icon: <IconReference />,
     iconBg: '#F1F5F9',
     iconBgDark: 'rgba(100, 116, 139, 0.15)',
@@ -160,10 +186,10 @@ const sections: SectionCard[] = [
 /*  Quick-links shown when the search input is focused but empty       */
 /* ------------------------------------------------------------------ */
 const quickLinks = [
-  {label: 'Quick Start: REST API', to: '/docs/get-started/quick-start-api'},
-  {label: 'Connectors Catalog', to: '/docs/connectors'},
-  {label: 'Build an AI Agent', to: '/docs/get-started/quick-start-ai-agent'},
-  {label: 'Deploy to Kubernetes', to: '/docs/deploy-operate/deploy/docker-kubernetes'},
+  { label: 'Build an Automation', to: '/get-started/build-automation' },
+  { label: 'Build an AI Agent', to: '/get-started/build-ai-agent' },
+  { label: 'Build an API Integration', to: '/get-started/build-api-integration' },
+  { label: 'Connector catalog', to: '/connectors/overview' },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -171,6 +197,7 @@ const quickLinks = [
 /* ------------------------------------------------------------------ */
 function SearchBar(): ReactNode {
   const history = useHistory();
+  const searchPath = useBaseUrl('/search');
   const [query, setQuery] = useState('');
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -208,32 +235,34 @@ function SearchBar(): ReactNode {
   }, []);
 
   const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (query.trim()) {
-        history.push(`/search?q=${encodeURIComponent(query.trim())}`);
+        history.push(`${searchPath}?q=${encodeURIComponent(query.trim())}`);
         setFocused(false);
       }
     },
-    [query, history],
+    [query, history, searchPath],
   );
 
   return (
     <div ref={wrapperRef} className={styles.searchWrapper}>
       <form onSubmit={handleSubmit} className={styles.searchForm}>
-        <svg
-          className={styles.searchIcon}
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round">
-          <circle cx="11" cy="11" r="8" />
-          <line x1="21" y1="21" x2="16.65" y2="16.65" />
-        </svg>
+        <button type="submit" className={styles.searchIconButton} aria-label="Search">
+          <svg
+            className={styles.searchIcon}
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </button>
         <input
           ref={inputRef}
           type="text"
@@ -273,15 +302,16 @@ function HomepageHeader(): ReactNode {
   return (
     <header className={styles.heroBanner}>
       <div className="container">
-        <Heading as="h1">WSO2 Integrator</Heading>
+
+        <Heading as="h1">WSO2 Integration Platform</Heading>
         <p className={styles.heroSubtitle}>
-          Build integrations with low-code simplicity and pro-code power.
+          Build and deploy integrations with low-code simplicity and pro-code power.
         </p>
         <SearchBar />
         <div className={styles.buttons}>
           <Link
             className={styles.heroBtn}
-            to="/docs/get-started/quick-start-api">
+            to="/get-started/build-automation">
             Build your first integration
             <svg
               width="16"
@@ -344,7 +374,7 @@ function WhatsNew(): ReactNode {
     <section className={styles.whatsNew}>
       <div className="container">
         <Link
-          to="/docs/reference/release-notes"
+          to="/reference/appendix/release-notes"
           className={styles.whatsNewLink}>
           <span className={styles.whatsNewBadge}>New</span>
           Check out the latest release notes
@@ -370,7 +400,7 @@ function WhatsNew(): ReactNode {
 /*  Home page                                                          */
 /* ------------------------------------------------------------------ */
 export default function Home(): ReactNode {
-  const {siteConfig} = useDocusaurusContext();
+  const { siteConfig } = useDocusaurusContext();
   return (
     <Layout title="Home" description={siteConfig.tagline}>
       <HomepageHeader />

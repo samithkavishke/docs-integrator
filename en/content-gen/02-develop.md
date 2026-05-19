@@ -208,16 +208,6 @@
 - Session handling
 - Dead letter queue processing
 
-### Page: SMTP Event Handler
-
-**File:** `en/docs/develop/integration-artifacts/event/smtp.md`
-
-**What to cover:**
-- Sending emails via SMTP
-- HTML and plain text emails
-- Attachments
-- Connection pooling
-
 ### Page: POP3/IMAP4 Event Handler
 
 **File:** `en/docs/develop/integration-artifacts/event/pop3-imap4.md`

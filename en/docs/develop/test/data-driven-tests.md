@@ -1,244 +1,141 @@
 ---
 sidebar_position: 5
 title: Data-Driven Tests
-description: Run parameterized tests with multiple data sets using Ballerina data providers.
+description: Run the same test function against multiple input sets using Ballerina data providers in WSO2 Integrator.
+keywords: [wso2 integrator, data-driven tests, data provider, parameterized tests, ballerina test]
 ---
 
 # Data-Driven Tests
 
-Eliminate repetitive test functions by running the same test logic against multiple input-output combinations. Ballerina's data provider feature feeds different data sets into a single test function, improving coverage while keeping your test code concise.
+A data-driven test decouples the test logic from the test data. Instead of writing a separate test function for each input combination, you write one function and point it at a data provider, a function that returns a collection of input sets. The framework calls the test function once per set, passing each row as arguments.
 
-## Data Providers Overview
+Set the `dataProvider` field in `@test:Config` to the name of the provider function.
 
-A data provider is a function that returns a set of test data. You attach it to a test function using the `dataProvider` field in the `@test:Config` annotation. The test framework runs the test function once for each data entry.
+## Map data provider
+
+Use a map when you want each case to have a meaningful name that appears in the test output and can be targeted individually on the command line. The map key is the case identifier and the map value is a tuple of the parameters the test function expects. The data provider can return an `error` to signal a problem with the data set.
 
 ```ballerina
 import ballerina/test;
 
-// Data provider function returns a 2D array of arguments
-function statusCodeData() returns string[][] {
+@test:Config {
+    dataProvider: discountDataProvider
+}
+function testDiscountCalculation(decimal originalPrice, decimal discountPct, decimal expectedFinal) returns error? {
+    decimal discounted = originalPrice * (1 - discountPct / 100);
+    test:assertEquals(discounted, expectedFinal, msg = "Discount calculation is incorrect");
+}
+
+function discountDataProvider() returns map<[decimal, decimal, decimal]>|error {
+    return {
+        "ten-percent":    [100.0d, 10.0d, 90.0d],
+        "half-price":     [200.0d, 50.0d, 100.0d],
+        "no-discount":    [50.0d,  0.0d,  50.0d]
+    };
+}
+```
+
+Output:
+
+```
+Running Tests
+
+    dataproviders
+
+        3 passing
+        0 failing
+        0 skipped
+```
+
+Each case name appears in the output, so failures are immediately traceable to a specific scenario rather than an opaque index.
+
+## List data provider
+
+Use a list when the cases are a series of equivalent inputs and names would add little value. Cases are identified by their zero-based index.
+
+```ballerina
+import ballerina/test;
+
+@test:Config {
+    dataProvider: additionDataProvider
+}
+function testAddition(string a, string b, string expected) returns error? {
+    int x = check int:fromString(a);
+    int y = check int:fromString(b);
+    int result = check int:fromString(expected);
+    test:assertEquals(x + y, result, msg = "Addition result is wrong");
+}
+
+function additionDataProvider() returns string[][] {
     return [
-        ["completed", "green"],
-        ["pending", "yellow"],
-        ["cancelled", "red"],
-        ["failed", "red"]
+        ["1",  "2",  "3"],
+        ["10", "20", "30"],
+        ["5",  "6",  "11"]
     ];
 }
-
-@test:Config {
-    dataProvider: statusCodeData
-}
-function testStatusToColor(string status, string expectedColor) {
-    string result = getStatusColor(status);
-    test:assertEquals(result, expectedColor);
-}
-
-function getStatusColor(string status) returns string {
-    match status {
-        "completed" => { return "green"; }
-        "pending" => { return "yellow"; }
-        _ => { return "red"; }
-    }
-}
 ```
 
-## Map-Based Data Providers
+Output:
 
-Use a map-based data provider for named test cases, making failures easier to identify.
+```
+Running Tests
 
-```ballerina
-import ballerina/test;
+    dataproviders
 
-function emailValidationData() returns map<[string, boolean]> {
-    return {
-        "valid_simple": ["user@example.com", true],
-        "valid_subdomain": ["user@mail.example.com", true],
-        "missing_at_sign": ["userexample.com", false],
-        "missing_domain": ["user@", false],
-        "empty_string": ["", false],
-        "valid_with_plus": ["user+tag@example.com", true]
-    };
-}
-
-@test:Config {
-    dataProvider: emailValidationData
-}
-function testEmailValidation(string email, boolean expected) {
-    boolean result = isValidEmail(email);
-    test:assertEquals(result, expected,
-        msg = string `Email "${email}" validation failed`);
-}
-
-function isValidEmail(string email) returns boolean {
-    // Simplified validation logic
-    return email.includes("@") && email.length() > 3;
-}
+        3 passing
+        0 failing
+        0 skipped
 ```
 
-When a map-based test case fails, the test report shows the case name (e.g., `testEmailValidation[missing_at_sign]`), making it clear which scenario broke.
+## Run a specific case
 
-## Record-Based Data Providers
+Running the entire data set during development is slow when you only care about one failing case. Target a specific case by appending `#` and the identifier to the test function name.
 
-For complex test data, use records to keep data organized and self-documenting.
+For map data sets, use the key in double quotes:
 
-```ballerina
-import ballerina/test;
-
-type OrderTestCase record {|
-    string description;
-    decimal subtotal;
-    decimal taxRate;
-    decimal discount;
-    decimal expectedTotal;
-|};
-
-function orderCalculationData() returns map<[OrderTestCase]> {
-    return {
-        "basic_order": [{
-            description: "Basic order with tax, no discount",
-            subtotal: 100.00,
-            taxRate: 0.08,
-            discount: 0.00,
-            expectedTotal: 108.00
-        }],
-        "discounted_order": [{
-            description: "Order with 10% discount",
-            subtotal: 200.00,
-            taxRate: 0.08,
-            discount: 20.00,
-            expectedTotal: 194.40
-        }],
-        "zero_tax": [{
-            description: "Tax-exempt order",
-            subtotal: 50.00,
-            taxRate: 0.00,
-            discount: 0.00,
-            expectedTotal: 50.00
-        }]
-    };
-}
-
-@test:Config {
-    dataProvider: orderCalculationData
-}
-function testOrderTotalCalculation(OrderTestCase tc) returns error? {
-    decimal result = calculateTotal(tc.subtotal, tc.taxRate, tc.discount);
-    test:assertEquals(result, tc.expectedTotal,
-        msg = tc.description);
-}
-
-function calculateTotal(decimal subtotal, decimal taxRate, decimal discount)
-        returns decimal {
-    decimal afterDiscount = subtotal - discount;
-    return afterDiscount + (afterDiscount * taxRate);
-}
+```
+bal test --tests testDiscountCalculation#"half-price"
 ```
 
-## Testing HTTP Endpoints with Data Providers
+Output:
 
-Combine data providers with service tests to validate multiple request-response scenarios.
+```
+Running Tests
 
-```ballerina
-import ballerina/http;
-import ballerina/test;
+    dataproviders
 
-http:Client testClient = check new ("http://localhost:9090");
-
-function endpointTestData() returns map<[string, string, int]> {
-    return {
-        "valid_user": ["/api/users/U001", "GET", 200],
-        "missing_user": ["/api/users/INVALID", "GET", 404],
-        "health_check": ["/api/health", "GET", 200],
-        "invalid_path": ["/api/nonexistent", "GET", 404]
-    };
-}
-
-@test:Config {
-    dataProvider: endpointTestData
-}
-function testEndpointStatusCodes(string path, string method, int expectedStatus)
-        returns error? {
-    http:Response response = check testClient->execute(method, path, ());
-    test:assertEquals(response.statusCode, expectedStatus,
-        msg = string `${method} ${path} returned unexpected status`);
-}
+        1 passing
+        0 failing
+        0 skipped
 ```
 
-## Data Providers with External Files
+For list data sets, use the zero-based index:
 
-Load test data from JSON files for large or frequently updated test datasets.
-
-```ballerina
-import ballerina/io;
-import ballerina/test;
-
-type TransformTestCase record {|
-    string name;
-    json input;
-    json expectedOutput;
-|};
-
-function transformTestData() returns map<[TransformTestCase]>|error {
-    json rawData = check io:fileReadJson("tests/resources/transform-cases.json");
-    TransformTestCase[] cases = check rawData.fromJsonWithType();
-
-    map<[TransformTestCase]> dataMap = {};
-    foreach TransformTestCase tc in cases {
-        dataMap[tc.name] = [tc];
-    }
-    return dataMap;
-}
-
-@test:Config {
-    dataProvider: transformTestData
-}
-function testDataTransformation(TransformTestCase tc) returns error? {
-    json result = check transformPayload(tc.input);
-    test:assertEquals(result, tc.expectedOutput, msg = tc.name);
-}
-
-function transformPayload(json input) returns json|error {
-    // Transformation logic under test
-    return input;
-}
+```
+bal test --tests testAddition#1
 ```
 
-## Combining Data Providers with Test Groups
+Output:
 
-Tag data-driven tests with groups for selective execution.
+```
+Running Tests
 
-```ballerina
-import ballerina/test;
+    dataproviders
 
-function criticalPathData() returns string[][] {
-    return [
-        ["create", "201"],
-        ["read", "200"],
-        ["update", "200"],
-        ["delete", "204"]
-    ];
-}
-
-@test:Config {
-    dataProvider: criticalPathData,
-    groups: ["critical", "crud"]
-}
-function testCrudOperations(string operation, string expectedCode) {
-    // Test CRUD operations
-    test:assertTrue(true);
-}
+        1 passing
+        0 failing
+        0 skipped
 ```
 
-## Best Practices
+Use the `*` wildcard to run all cases whose key matches a pattern:
 
-- **Use map-based providers** over array-based when possible -- named test cases produce clearer failure messages
-- **Keep data providers focused** -- each provider should serve a single test concern
-- **Extract large datasets to files** -- JSON or CSV resource files are easier to maintain than inline arrays
-- **Add descriptive names** to each test case so failures are immediately understandable
-- **Combine with test groups** to run subsets of data-driven tests during development
+```
+bal test --tests testDiscountCalculation#"*-percent"
+```
 
-## What's Next
+## What's next
 
-- [Test Groups & Selective Execution](test-groups.md) -- Organize and filter tests
-- [Test Services & Clients](test-services-clients.md) -- End-to-end service testing
-- [Execute Tests](execute-tests.md) -- Run tests from CLI and IDE
+- [Test groups](groups.md) — partition tests into named groups and run or skip subsets
+- [Execute tests](execute-tests.md) — full CLI reference for filtering, rerunning, and parallel execution
+- [Write unit tests](unit-testing.md) — assertions and `@test:Config` reference used inside data-driven tests
+- [Mocking](mocking.md) — combine data providers with mocked dependencies

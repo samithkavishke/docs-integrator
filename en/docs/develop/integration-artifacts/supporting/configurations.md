@@ -1,6 +1,7 @@
 ---
 title: Configurations
-description: Externalize environment-specific settings using configurable variables and Config.toml.
+description: Step-by-step guide for declaring configurable variables and supplying values through the visual designer.
+keywords: [wso2 integrator, configurations, configurable, config.toml, secrets, environment]
 ---
 
 import Tabs from '@theme/Tabs';
@@ -8,130 +9,144 @@ import TabItem from '@theme/TabItem';
 
 # Configurations
 
-Configuration artifacts externalize values that change between environments using Ballerina's `configurable` keyword. This separates environment-specific settings (URLs, credentials, feature flags) from your integration logic.
+**Configurable variables** externalize configuration: you declare variables in your integration and supply values for them at runtime. They keep two things out of your code:
+
+- **Secrets**: credentials, API keys, and tokens you don't want in source control.
+- **Environment-specific settings**: URLs, ports, and feature flags that differ between development, staging, and production.
+
+Because the values live outside the code, the same integration implementation runs unchanged in every environment.
+
+:::note
+WSO2 Integrator's configuration support is built on Ballerina's configurable variable model. For the complete configuration reference, see [Configuration management](../../../reference/config/configuration-management.md).
+:::
 
 ## Adding a configuration
 
 <Tabs>
 <TabItem value="ui" label="Visual Designer" default>
 
-1. Open the **WSO2 Integrator: BI** sidebar in VS Code.
+1. Open your integration project in **WSO2 Integrator**.
 
-   ![WSO2 Integrator sidebar showing the project structure with Configurations listed](/img/develop/integration-artifacts/supporting/configurations/step-1.png)
+2. Click **+** next to **Configurations** in the sidebar. Alternatively, click **+ Add Artifact** in the **Design** panel, then click **Configuration** under **Other Artifacts** or **Library Artifacts**.
 
-2. Click **+** next to **Configurations** in the sidebar.
+   ![WSO2 Integrator sidebar showing add Configuration](/img/develop/integration-artifacts/supporting/configurations/add-configuration.png)
 
 3. In the **Add Configurable Variable** panel, fill in the following fields:
 
-   ![Add Configurable Variable form showing Variable Name, Variable Type, Default Value, and Documentation fields](/img/develop/integration-artifacts/supporting/configurations/step-2.png)
-
    | Field | Description |
    |---|---|
-   | **Variable Name** | The identifier used to reference the variable in code (for example, `apiEndpoint`). Required. |
-   | **Variable Type** | The Ballerina type of the variable (for example, `string`, `int`, `boolean`). Required. |
-   | **Default Value** | An optional default value. Leave empty to make the variable required — the integration will not start unless it is provided in `Config.toml`. |
-   | **Documentation** | Optional description in Markdown format, used as inline documentation. |
+   | **Variable Name** | The identifier used to reference the variable within your integration (for example, `token`). Required. |
+   | **Variable Type** | The type of the variable (for example, `string`, `int`, `boolean`, or a user-defined type). Required. |
+   | **Default Value** | An optional default value. Leave empty to make the variable required. The integration fails to start unless you supply a value at runtime. |
+   | **Documentation** | Optional description set as variable documentation. |
 
-4. Click **Save**. The variable is added to your project's configurable declarations.
+   ![Add Configurable Variable form showing Variable Name, Variable Type, Default Value, and Documentation fields](/img/develop/integration-artifacts/supporting/configurations/create-configuration.png)
+
+4. Click **Save**. The variable is written to a `config.bal` file at the project root and appears under **Configurations** in the sidebar.
 
 </TabItem>
 <TabItem value="code" label="Ballerina Code">
 
-```ballerina
-// config.bal
+Declare configurable variables at the module level using the `configurable` keyword:
 
-// Required configuration (must be provided in Config.toml)
+```ballerina
+// Required configuration
 configurable string apiEndpoint = ?;
 configurable string apiKey = ?;
 
-// Optional with defaults
+// Optional configuration with defaults
 configurable int maxRetries = 3;
-configurable decimal timeoutSeconds = 30.0;
+configurable decimal timeoutSeconds = 30.0d;
 configurable boolean enableCache = true;
 configurable int cacheMaxSize = 1000;
 
-// Complex configuration using records
-configurable NotificationConfig notificationConfig = {
-    emailEnabled: true,
-    slackEnabled: false,
-    slackWebhookUrl: ""
-};
-
+// Grouped configuration using a record type
 type NotificationConfig record {|
     boolean emailEnabled;
     boolean slackEnabled;
     string slackWebhookUrl;
 |};
+
+configurable NotificationConfig notificationConfig = {
+    emailEnabled: true,
+    slackEnabled: false,
+    slackWebhookUrl: ""
+};
 ```
+
+The `?` placeholder marks a configurable variable as required. The integration fails to start unless you supply a value at runtime.
 
 </TabItem>
 </Tabs>
 
 ## Viewing configurations
 
-<Tabs>
-<TabItem value="ui" label="Visual Designer" default>
+Click the icon next to **Configurations** in the sidebar to open the **Configurable Variables** panel.
 
-Click **View Configurations** (or the configurations icon) next to **Configurations** in the sidebar to open the **Configurable Variables** panel.
-
-![Configurable Variables panel showing variables grouped by Integration and Imported libraries](/img/develop/integration-artifacts/supporting/configurations/step-3.png)
+![Configurable Variables panel showing variables grouped by Integration and Imported libraries](/img/develop/integration-artifacts/supporting/configurations/configurable-variables.png)
 
 The panel organizes variables into two groups:
 
-- **Integration** — variables declared in your integration project. Each entry shows the variable name, type, and default value.
-- **Imported libraries** — configurable variables exposed by libraries your integration depends on (for example, `ballerina/http` or `ballerina/log`).
+1. **Integration**: variables declared in your integration project. Each entry shows the variable name, type, and default value if specified.
+2. **Imported libraries**: configurable variables exposed by libraries your integration uses (for example, the default listener port `defaultListenerPort` from the HTTP module).
 
-Use the **Search Configurables** box to filter by name. Click a variable to edit or delete it.
+Use the **Search Configurables** box to filter by name. Click the Pencil icon on a variable to edit it or the Trash icon to delete it.
+
+## Providing values
+
+<Tabs>
+<TabItem value="ui" label="Visual Designer" default>
+
+Use the **Configurable Variables** panel to set values for your configurable variables. The editor writes them to the project's `Config.toml` file. To open the panel, see [Viewing configurations](#viewing-configurations).
+
+![Providing values in the Configurable Variables panel](/img/develop/integration-artifacts/supporting/configurations/provide-values.png)
 
 </TabItem>
-<TabItem value="code" label="Ballerina Code">
+<TabItem value="toml" label="Config.toml File">
 
-Provide values for configurable variables in a `Config.toml` file at the project root:
+Place a `Config.toml` file at the project root (alongside `Ballerina.toml`) to supply values for configurable variables. The runtime reads it automatically at startup.
 
 ```toml
-apiEndpoint = "https://api.example.com/v2"
-apiKey = "sk-abc123"
-maxRetries = 5
-timeoutSeconds = 60.0
-enableCache = true
-cacheMaxSize = 5000
+[demoorg.connections]
+timeout = 10
 
-[notificationConfig]
-emailEnabled = true
-slackEnabled = true
-slackWebhookUrl = "https://hooks.slack.com/services/..."
+[ballerina.http]
+traceLogConsole = true
+```
+</TabItem>
+<TabItem value="code" label="Ballerina Code">
+`config.bal`
+
+```ballerina
+configurable string group = "default";
+configurable decimal timeout = ?;
 ```
 
+`connections.bal`
+
+```ballerina
+import ballerina/http;
+
+final http:Client weatherEP = check new ("http://localhost:8080", timeout = timeout);
+```
 </TabItem>
 </Tabs>
 
-## Configuration types
-
-| Type | Example | Notes |
-|---|---|---|
-| **Required** | `configurable string apiKey = ?;` | Must be provided; build fails otherwise |
-| **With default** | `configurable int maxRetries = 3;` | Uses default if not specified |
-| **Boolean flag** | `configurable boolean enableCache = true;` | Feature toggles |
-| **Record** | `configurable DbConfig db = {...};` | Grouped settings for a subsystem |
-| **Array** | `configurable string[] allowedOrigins = [];` | Lists of values |
-
-## Environment-specific overrides
-
-Use different `Config.toml` files for each environment.
-
-```
-my-integration/
-├── Config.toml              # Development defaults
-├── Config-staging.toml      # Staging overrides
-├── Config-production.toml   # Production overrides
-└── ...
-```
+:::tip Learn more
+For the complete configuration reference (supported types, value sources, resolution priority), see [Configuration management](../../../reference/config/configuration-management.md).
+:::
 
 ## Best practices
 
 | Practice | Description |
 |---|---|
-| **Dedicated file** | Keep all configurable declarations in a `config.bal` file |
-| **Use `?` for secrets** | Mark sensitive values as required so they are never hardcoded |
-| **Group related settings** | Use record types to group related configuration values |
-| **Document defaults** | Add comments explaining the purpose and valid range of each setting |
+| **Never commit the Config.toml file** | Keep the `Config.toml` file out of version control. See [Secrets and encryption](../../../deploy-operate/secure/secrets-encryption.md). |
+| **Mark required values explicitly** | For configurations that must come from the environment (such as endpoints and credentials), leave **Default Value** empty in the Visual Designer and use `?` in code so that the value is mandated and absence causes startup to fail. |
+| **Group related settings** | Use record types to group settings that belong to the same subsystem (for example, database configuration or CRM settings). |
+| **Document defaults** | Use the **Documentation** field to explain the purpose and valid range of each setting. |
+
+## What's next
+
+- [Configuration management](../../../reference/config/configuration-management.md) — Complete configuration reference: value sources, precedence, and environment variables.
+- [Secrets and encryption](../../../deploy-operate/secure/secrets-encryption.md) — Securely manage credentials and other sensitive values.
+- [Connections](connections.md) — Use configurable variables to parameterize connections.

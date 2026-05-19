@@ -18,7 +18,7 @@ For event-driven integration, see the [Trigger Reference](trigger-reference.md).
 
 ---
 
-## SMTP Client
+## SMTP client
 
 Sends emails via SMTP with support for text/HTML bodies, attachments, and custom headers.
 
@@ -62,6 +62,10 @@ Sends an email using a structured `Message` record.
 | `email` | <code>Message</code> | Yes | The email message record containing `to`, `subject`, `body`, and other fields. |
 
 **Returns:** `Error?`
+
+:::note
+If `contentType` is set in the `Message` record, it must be a `text/*` MIME type (e.g., `"text/plain"`, `"text/html"`). Non-text content types will return an `email:Error` at runtime.
+:::
 
 **Sample code:**
 
@@ -122,7 +126,7 @@ check smtpClient->send(
 
 ---
 
-## IMAP Client
+## IMAP client
 
 Receives emails from an IMAP server with configurable folder and timeout.
 
@@ -207,7 +211,7 @@ check imapClient->close();
 
 ---
 
-## POP Client
+## POP client
 
 Receives emails from a POP3 server with configurable folder and timeout.
 

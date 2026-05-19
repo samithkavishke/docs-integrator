@@ -52,7 +52,7 @@ nats-server --auth mytoken123
 
 **No Authentication (Development)**
 
-The default NATS server requires no credentials — omit the `auth` field in your connector config for local development.
+The default NATS server requires no credentials: omit the `auth` field in your connector config for local development.
 
 :::note
 For production deployments, use NATS operator/account-based security with NKeys and JWTs. Refer to the [NATS security documentation](https://docs.nats.io/nats-concepts/security) for advanced configurations.

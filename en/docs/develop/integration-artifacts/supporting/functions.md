@@ -1,6 +1,7 @@
 ---
 title: Functions
 description: Encapsulate reusable logic in function artifacts for validation, transformation, and shared operations.
+keywords: [wso2 integrator, functions, function artifact, reusable logic, validation]
 ---
 
 import Tabs from '@theme/Tabs';
@@ -8,121 +9,78 @@ import TabItem from '@theme/TabItem';
 
 # Functions
 
-Function artifacts encapsulate reusable logic that can be called from any integration artifact. Keep functions in separate `.bal` files organized by domain to maintain clean separation of concerns.
+Function artifacts encapsulate reusable logic that can be called from any integration artifact. By default, every function is added to the `functions.bal` file in the project root.
 
 ## Adding a function
 
 <Tabs>
 <TabItem value="ui" label="Visual Designer" default>
 
-1. Open the **WSO2 Integrator: BI** sidebar in VS Code.
+1. Click **+** next to **Functions** in the sidebar. Alternatively, click **+ Add Artifact** in the **Design** panel, then click **Function** under **Other Artifacts** or **Library Artifacts**.
 
-   ![WSO2 Integrator sidebar showing the project structure with Functions listed](/img/develop/integration-artifacts/supporting/functions/step-1.png)
+   ![Artifacts page with the Function option highlighted under Other Artifacts](/img/develop/integration-artifacts/supporting/functions/functions-artifact-selection.png)
 
-2. Click **+** next to **Functions** in the sidebar.
+2. Fill in the **Create New Function** form.
 
-3. In the **Create New Function** form, fill in the following fields:
-
-   ![Create New Function form showing Name, Description, Parameters, and Return Type fields](/img/develop/integration-artifacts/supporting/functions/step-2.png)
+   ![Create New Function form with Name, Description, Public, Parameters, and Return Type fields](/img/develop/integration-artifacts/supporting/functions/create-new-function-form.png)
 
    | Field | Description |
    |---|---|
    | **Name** | A unique identifier for the function (for example, `validateOrder`). Required. |
    | **Description** | Optional description of the function's purpose. |
-   | **Public** | Check **Make visible across the workspace** to export the function for use in other integrations. |
-   | **Parameters** | Click **+ Add Parameter** to define each input. Each parameter has a name and a type. |
+   | **Public** | Select **Make visible across the project** to allow use from other integrations. |
+   | **Parameters** | Click **+ Add Parameter** to define each input. Each parameter requires a name and a type, and optionally a description. |
    | **Return Type** | The type of the value returned by the function. Leave empty for functions that return nothing. |
 
-4. Click **Create**. The function opens in the **flow designer** canvas where you add integration steps.
+3. Click **Create**. The function is added to `functions.bal` and opens in the flow designer canvas, where you add the integration steps as the function body.
 
 </TabItem>
 <TabItem value="code" label="Ballerina Code">
 
 ```ballerina
-// functions/validation.bal
+import ballerina/lang.regexp;
 
-function validateEmail(string email) returns boolean {
-    return email.includes("@") && email.includes(".");
-}
-
-function validateOrderRequest(OrderRequest request) returns string[] {
-    string[] errors = [];
-
-    if request.items.length() == 0 {
-        errors.push("Order must have at least one item");
+# Validates an email address
+# + email - The email address to validate
+# + return - Whether the email address is valid
+public function isValidEmailAddress(string email) returns boolean {
+    string:RegExp|error emailPattern = regexp:fromString("^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$");
+    if emailPattern is error {
+        return false;
     }
-
-    foreach LineItem item in request.items {
-        if item.quantity <= 0 {
-            errors.push("Invalid quantity for product: " + item.productId);
-        }
-        if item.unitPrice < 0d {
-            errors.push("Invalid price for product: " + item.productId);
-        }
-    }
-
-    if request.shippingAddress.zipCode.length() != 5 {
-        errors.push("ZIP code must be 5 digits");
-    }
-
-    return errors;
+    return emailPattern.isFullMatch(email);
 }
 ```
 
 </TabItem>
 </Tabs>
 
-## Function configuration
+## Editing a function
 
-<Tabs>
-<TabItem value="ui" label="Visual Designer" default>
+To open and edit a function's flow view, click its name in the sidebar under **Functions**.
 
-After creating a function, click its name in the sidebar under **Functions** to reopen the configuration form. You can update the name, description, parameters, and return type.
+To change the function's name, description, parameters, or return type, click **Configure** in the top-right of the flow view.
 
-The **Public** checkbox controls whether the function is accessible from outside the current integration project. Public functions are prefixed with `public` in the generated code.
-
-</TabItem>
-<TabItem value="code" label="Ballerina Code">
-
-Use access modifiers and type annotations to control visibility and type safety:
-
-```ballerina
-// functions/transforms.bal
-
-// Public function callable from other modules
-public function calculateOrderTotal(LineItem[] items, string? couponCode) returns decimal {
-    decimal subtotal = 0;
-    foreach LineItem item in items {
-        subtotal += item.unitPrice * <decimal>item.quantity;
-    }
-    decimal discount = getDiscount(couponCode);
-    return subtotal * (1 - discount);
-}
-
-// Private helper — not accessible from outside this file
-function getDiscount(string? couponCode) returns decimal {
-    match couponCode {
-        "SAVE10" => { return 0.10d; }
-        "SAVE20" => { return 0.20d; }
-        _ => { return 0d; }
-    }
-}
-```
-
-</TabItem>
-</Tabs>
+![Function flow view with a function selected in the sidebar and the Configure button highlighted](/img/develop/integration-artifacts/supporting/functions/function-configure.png)
 
 ## Project organization
 
-Group functions by their domain to keep the codebase organized.
+By default, all functions are added to a single `functions.bal` file at the project root. For larger projects, you can split functions into additional `.bal` files grouped by domain.
 
 ```
 my-integration/
-├── functions/
-│   ├── validation.bal         # Input validation functions
-│   ├── transforms.bal         # Data transformation functions
-│   ├── notifications.bal      # Notification helper functions
-│   └── formatting.bal         # String/date formatting utilities
+├── functions.bal              # Default file for all functions
+├── types.bal
+├── connections.bal
+└── main.bal
+```
+
+To split functions across multiple files, create new `.bal` files at the project root and move related functions into them.
+
+```
+my-integration/
+├── functions.bal              # General-purpose functions
+├── validation.bal             # Input validation functions
 ├── types.bal
 ├── connections.bal
 └── main.bal
@@ -132,8 +90,14 @@ my-integration/
 
 | Practice | Description |
 |---|---|
-| **Single responsibility** | Each function should do one thing well |
-| **Typed parameters** | Use specific record types instead of `json` or `anydata` |
-| **Error returns** | Return `error?` for operations that can fail |
-| **Isolated functions** | Mark pure functions as `isolated` for thread safety |
-| **Descriptive names** | Use verb-based names like `validateOrder`, `calculateTotal` |
+| **Typed parameters** | Use specific record types instead of `json` or `anydata`. |
+| **Error returns** | Return `error?` for operations that can fail. |
+| **Isolated functions** | Mark functions as `isolated`. The compiler then verifies there is no unsafe access of shared mutable state, making them safe to call concurrently. |
+| **Descriptive names** | Start function names with a verb (for example, `validateOrder`, `calculateTotal`). |
+
+## What's next
+
+- [Types](./types.md) — Define record types for function parameters and return values.
+- [Data mapper](./data-mapper/data-mapper.md) — Transform data between record types using a visual canvas.
+- [Connections](./connections.md) — Reuse connection configurations across integration artifacts.
+- [Configurations](./configurations.md) — Externalize values such as endpoints and credentials.

@@ -1,100 +1,254 @@
 ---
 title: Twilio
-description: React to Twilio webhook events such as incoming SMS, call status changes, and voice events.
+description: React to Twilio call status and SMS status webhook events using pre-built event handlers for each call or message state.
+keywords: [twilio, webhook, sms status, call status, event integration, ballerina]
 ---
+
+import ThemedImage from '@theme/ThemedImage';
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Twilio
 
-React to Twilio webhook events such as incoming SMS messages, call status changes, and voice events. Twilio delivers events as HTTP POST requests to your service, making this a webhook-based integration pattern.
+Twilio event integrations receive webhook callbacks from the Twilio platform and trigger handler functions as call or message status changes occur. Use them to track call progress, monitor SMS delivery, and build real-time communication workflows without polling the Twilio API.
+
+## Creating a Twilio events service
+
+:::note
+The Twilio webhook listener must be reachable from the internet. For local development, use a tunneling tool such as [ngrok](https://ngrok.com) to create a public URL for your local port. In production, deploy the integration to a publicly accessible host.
+
+After starting the integration, configure the webhook URL in the **Twilio Console** under your phone number settings:
+- For SMS status callbacks: set the **A MESSAGE COMES IN** webhook to `http://<your-host>:<port>` with method `HTTP POST`.
+- For call status callbacks: set the **STATUS CALLBACK URL** to `http://<your-host>:<port>` with method `HTTP POST`.
+:::
+
+<Tabs>
+<TabItem value="ui" label="Visual Designer" default>
+
+1. Click **+ Add Artifact** in the canvas or click **+** next to **Entry Points** in the sidebar.
+2. In the **Artifacts** panel, select **Twilio** under **Event Integration**.
+3. In the creation form, fill in the following fields:
+
+   <ThemedImage
+       alt="Twilio Event Integration creation form"
+       sources={{
+           light: useBaseUrl('/img/develop/integration-artifacts/event/twilio/step-creation-form.png'),
+           dark: useBaseUrl('/img/develop/integration-artifacts/event/twilio/step-creation-form.png'),
+       }}
+   />
+
+   | Field | Description | Default |
+   |---|---|---|
+   | **Event Channel** | The Twilio event channel to subscribe to. Select **CallStatusService** to handle call status events or **SmsStatusService** to handle SMS status events. | Required |
+   | **Webhook Listener Port** | The port on which the webhook listener accepts incoming requests from Twilio. | `8090` |
+
+   Expand **Advanced Configurations** to set the listener name.
+
+   | Field | Description | Default |
+   |---|---|---|
+   | **Listener Name** | Identifier for the listener created with this service. | `twilioListener` |
+
+4. Click **Create**.
+
+5. WSO2 Integrator opens the service in the **Service Designer**. The canvas shows the attached listener pill and the **Event Handlers** section with all handlers for the selected channel pre-added.
+
+   <ThemedImage
+       alt="Service Designer showing the Twilio Event Integration canvas"
+       sources={{
+           light: useBaseUrl('/img/develop/integration-artifacts/event/twilio/step-service-designer.png'),
+           dark: useBaseUrl('/img/develop/integration-artifacts/event/twilio/step-service-designer.png'),
+       }}
+   />
+
+   All event handlers for the selected channel are added automatically. Click any handler to open it in the flow diagram view and implement the logic.
+
+</TabItem>
+<TabItem value="code" label="Ballerina Code">
 
 ```ballerina
-import ballerina/http;
+import ballerinax/trigger.twilio;
+import ballerina/log;
 
-type TwilioSmsEvent record {|
-    string MessageSid;
-    string From;
-    string To;
-    string Body;
-    string NumMedia;
-|};
+configurable int port = 8090;
 
-// Twilio sends webhooks as HTTP POST requests
-service /twilio on new http:Listener(8090) {
+listener twilio:Listener twilioListener = new (port);
 
-    resource function post sms(TwilioSmsEvent event) returns xml {
-        log:printInfo("SMS received", from = event.From, body = event.Body);
+service twilio:CallStatusService on twilioListener {
 
-        // Process the incoming SMS
-        string response = processIncomingSms(event.From, event.Body);
-
-        // Return TwiML response
-        return xml `<Response><Message>${response}</Message></Response>`;
+    remote function onQueued(twilio:CallStatusEventWrapper event) returns error? {
+        log:printInfo("Call queued", callSid = event.CallSid ?: "");
     }
 
-    resource function post call\-status(http:Request req) returns http:Ok {
-        // Handle call status callback
-        log:printInfo("Call status update received");
-        return http:OK;
+    remote function onRinging(twilio:CallStatusEventWrapper event) returns error? {
+        log:printInfo("Call ringing", callSid = event.CallSid ?: "");
+    }
+
+    remote function onInProgress(twilio:CallStatusEventWrapper event) returns error? {
+        log:printInfo("Call in progress", callSid = event.CallSid ?: "");
+    }
+
+    remote function onCompleted(twilio:CallStatusEventWrapper event) returns error? {
+        log:printInfo("Call completed",
+                      callSid = event.CallSid ?: "",
+                      duration = event.CallDuration ?: "");
+    }
+
+    remote function onBusy(twilio:CallStatusEventWrapper event) returns error? {
+        log:printInfo("Call busy", callSid = event.CallSid ?: "");
+    }
+
+    remote function onFailed(twilio:CallStatusEventWrapper event) returns error? {
+        log:printInfo("Call failed", callSid = event.CallSid ?: "");
+    }
+
+    remote function onNoAnswer(twilio:CallStatusEventWrapper event) returns error? {
+        log:printInfo("Call no answer", callSid = event.CallSid ?: "");
+    }
+
+    remote function onCanceled(twilio:CallStatusEventWrapper event) returns error? {
+        log:printInfo("Call canceled", callSid = event.CallSid ?: "");
     }
 }
 ```
 
-## Webhook Event Types
+</TabItem>
+</Tabs>
 
-| Endpoint | Event | Payload |
+## Service and listener configuration
+
+In the **Service Designer**, click the **Configure** icon in the header to open the **Twilio Event Integration Configuration** panel.
+
+<Tabs>
+<TabItem value="ui" label="Visual Designer" default>
+
+<ThemedImage
+    alt="Twilio Event Integration Configuration panel"
+    sources={{
+        light: useBaseUrl('/img/develop/integration-artifacts/event/twilio/step-configuration.png'),
+        dark: useBaseUrl('/img/develop/integration-artifacts/event/twilio/step-configuration.png'),
+    }}
+/>
+
+The configuration panel has two sections. The top section configures the service and the bottom section configures the attached listener.
+
+**Service configuration:**
+
+| Field | Description |
+|---|---|
+| **Event Channel** | The Twilio event channel this service handles. Select **CallStatusService** or **SmsStatusService**. |
+
+**Listener configuration** (under **Configuration for twilioListener**):
+
+| Field | Description | Default |
 |---|---|---|
-| `POST /twilio/sms` | Incoming SMS | `MessageSid`, `From`, `To`, `Body`, `NumMedia` |
-| `POST /twilio/call-status` | Call status change | `CallSid`, `CallStatus`, `Direction`, `Duration` |
-| `POST /twilio/voice` | Incoming voice call | `CallSid`, `From`, `To`, `CallStatus` |
+| **Name** | Identifier for the listener. | `twilioListener` |
+| **Listen On** | Port on which the listener accepts incoming webhook requests. | `8090` |
 
-## TwiML Responses
+Click **+ Attach Listener** to attach an additional listener to the same service.
 
-Twilio expects TwiML (XML) responses to control call and message behavior.
+Click **Save Changes** to apply updates.
+
+</TabItem>
+<TabItem value="code" label="Ballerina Code">
 
 ```ballerina
-// Auto-reply based on message content
-resource function post sms(TwilioSmsEvent event) returns xml {
-    string body = event.Body.toLowerAscii();
+listener twilio:Listener twilioListener = new (8090);
+```
 
-    if body.includes("help") {
-        return xml `<Response>
-            <Message>Available commands: STATUS, HELP, CANCEL. Reply with a command.</Message>
-        </Response>`;
+`twilio:Listener` accepts a port number as its argument. The listener starts an HTTP server on that port to receive Twilio webhook callbacks.
+
+For **SmsStatusService**:
+
+```ballerina
+service twilio:SmsStatusService on twilioListener {
+
+    remote function onAccepted(twilio:SmsStatusChangeEventWrapper event) returns error? {
+        log:printInfo("SMS accepted", messageSid = event.MessageSid ?: "");
     }
 
-    if body.includes("status") {
-        string status = checkOrderStatus(event.From);
-        return xml `<Response><Message>${status}</Message></Response>`;
+    remote function onQueued(twilio:SmsStatusChangeEventWrapper event) returns error? {
+        log:printInfo("SMS queued", messageSid = event.MessageSid ?: "");
     }
 
-    return xml `<Response>
-        <Message>Thanks for your message. Reply HELP for options.</Message>
-    </Response>`;
+    remote function onSending(twilio:SmsStatusChangeEventWrapper event) returns error? {
+        log:printInfo("SMS sending", messageSid = event.MessageSid ?: "");
+    }
+
+    remote function onSent(twilio:SmsStatusChangeEventWrapper event) returns error? {
+        log:printInfo("SMS sent", messageSid = event.MessageSid ?: "");
+    }
+
+    remote function onFailed(twilio:SmsStatusChangeEventWrapper event) returns error? {
+        log:printInfo("SMS failed", messageSid = event.MessageSid ?: "");
+    }
+
+    remote function onDelivered(twilio:SmsStatusChangeEventWrapper event) returns error? {
+        log:printInfo("SMS delivered", messageSid = event.MessageSid ?: "");
+    }
+
+    remote function onUndelivered(twilio:SmsStatusChangeEventWrapper event) returns error? {
+        log:printInfo("SMS undelivered", messageSid = event.MessageSid ?: "");
+    }
+
+    remote function onReceiving(twilio:SmsStatusChangeEventWrapper event) returns error? {
+        log:printInfo("SMS receiving", messageSid = event.MessageSid ?: "");
+    }
+
+    remote function onReceived(twilio:SmsStatusChangeEventWrapper event) returns error? {
+        log:printInfo("SMS received",
+                      messageSid = event.MessageSid ?: "",
+                      'from = event.From ?: "",
+                      body = event.Body ?: "");
+    }
 }
 ```
 
-## Webhook Signature Validation
+</TabItem>
+</Tabs>
 
-Validate incoming requests to ensure they originate from Twilio.
+## Event handlers
 
-```ballerina
-import ballerina/crypto;
+When a Twilio Events service is created, WSO2 Integrator adds all handlers for the selected channel automatically. Click any handler in the **Service Designer** to open the flow diagram view and implement the processing logic.
 
-configurable string twilioAuthToken = ?;
+### CallStatusService handlers
 
-resource function post sms(
-    @http:Header string x\-twilio\-signature,
-    @http:Payload byte[] payload
-) returns xml|http:Unauthorized|error {
-    // Verify Twilio signature
-    byte[] hmac = check crypto:hmacSha1(payload, twilioAuthToken.toBytes());
-    string expectedSig = hmac.toBase64();
-    if x\-twilio\-signature != expectedSig {
-        return http:UNAUTHORIZED;
-    }
+The `CallStatusService` channel provides handlers for each Twilio call state.
 
-    TwilioSmsEvent event = check (check string:fromBytes(payload)).fromJsonStringWithType();
-    string response = processIncomingSms(event.From, event.Body);
-    return xml `<Response><Message>${response}</Message></Response>`;
-}
-```
+| Handler | Triggered when |
+|---|---|
+| `onQueued` | The call has been created and is waiting to be dialed |
+| `onRinging` | The call is ringing at the destination |
+| `onInProgress` | The call has been answered and is active |
+| `onCompleted` | The call ended normally |
+| `onBusy` | The destination returned a busy signal |
+| `onFailed` | The call could not be connected |
+| `onNoAnswer` | The destination did not answer |
+| `onCanceled` | The call was canceled before it was answered |
+
+### SmsStatusService handlers
+
+The `SmsStatusService` channel provides handlers for each Twilio SMS delivery state.
+
+| Handler | Triggered when |
+|---|---|
+| `onAccepted` | Twilio has accepted the message request |
+| `onQueued` | The message is queued for delivery |
+| `onSending` | Twilio is in the process of sending the message |
+| `onSent` | The message has been dispatched to the carrier |
+| `onFailed` | The message could not be sent |
+| `onDelivered` | The carrier confirmed delivery to the recipient |
+| `onUndelivered` | The carrier received the message but could not deliver it |
+| `onReceiving` | An inbound message has been received and is being processed |
+| `onReceived` | An inbound SMS message was fully received |
+
+## Error handling
+
+Service callbacks return `error?`. If a handler returns an `error`, the listener returns a non-`2xx` HTTP response to Twilio, which triggers Twilio's retry mechanism. Handle expected failures within the callback and return `()` (nil) to acknowledge the event without triggering a retry.
+
+## What's next
+
+- [Kafka](kafka.md) — consume messages from Apache Kafka topics
+- [MQTT](mqtt.md) — subscribe to MQTT topics for IoT and lightweight messaging
+- [Connections](../supporting/connections.md) — reuse Twilio credentials across services
+- [Twilio connector reference](../../../connectors/catalog/communication/twilio/overview.md) — full connector API reference
