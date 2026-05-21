@@ -62,7 +62,7 @@ The toolbar sits at the top of the Integrator view and provides quick access to 
 | Action | Description |
 |---|---|
 | **Undo** / **Redo** | Reverses or reapplies recent changes. Works across both the visual designer and the code editor. |
-| **Configure** | Opens the configuration panel, equivalent to adding a configuration from the project explorer. |
+| **Configure** | Opens the [configure editor](../editors/configure-editor.md), equivalent to adding a configuration from the project explorer. |
 | **Run** | Builds and runs your integration locally. WSO2 Integrator compiles the Ballerina code, starts the services, and displays the output in the terminal panel. |
 | **Debug** | Starts a debug session with the debugger attached. Set breakpoints, step through execution, inspect variables and payloads, and evaluate expressions at runtime. |
 

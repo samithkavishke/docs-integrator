@@ -6,7 +6,7 @@ description: Configure integrations, services, and functions through a unified c
 
 # Configure Editor
 
-The Configure editor is the side panel you open whenever you select **Configure** in the IDE. It groups the settings that apply to the current artifact (an integration, a service, or a function) into a single form, so you can review and update them without editing source code. The editor adapts its content to the level you opened it from.
+The Configure editor is the main view that opens whenever you select **Configure** in the IDE. It groups the settings that apply to the current artifact (an integration, a service, or a function) into a single form, so you can review and update them without editing source code. The editor adapts its content to the level you opened it from.
 
 ![Service configuration in the Configure editor](/img/develop/understand-ide/editors/configure-editor/service-configuration.png)
 
@@ -15,7 +15,7 @@ The Configure editor is the side panel you open whenever you select **Configure*
 The Configure editor can be reached from many places in the IDE. The level you open it from determines which configuration the editor loads:
 
 - **Integration level**: open from the Integrator view toolbar, the project explorer, or any artifact that does not have its own configuration scope. This level is reachable from anywhere in the integration.
-- **Service level**: open from the **Configure** action in the [Service Design editor](service-design-editor.md) header, or from the service's three-dot menu in the project explorer.
+- **Service level**: open from the **Configure** action in the [Service Design Editor](service-design-editor.md) header, or from the service's three-dot menu in the project explorer.
 - **Function level**: open from the **Configure** action on a function.
 - **Data mapper level**: open from the **Configure** action on a data mapper. Data mappers use the same form as functions.
 

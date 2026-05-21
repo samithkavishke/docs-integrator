@@ -24,13 +24,13 @@ The header shows the service type and a short tagline, together with the high-le
 |---|---|
 | **Back** | Returns to the previous view (typically the Integrator view). |
 | **Undo** / **Redo** | Reverses or reapplies recent changes to the service. |
-| **Configure** | Opens the service configuration panel so you can change the listener, base path, and other service-level settings. |
+| **Configure** | Opens the [configure editor](../editors/configure-editor.md) so you can change the listener and other service-level settings. |
 | **Try It** | Sends sample requests to the service from inside the IDE. Available for HTTP services only. |
 | **More** | Opens additional actions for the service. For HTTP services, this includes **Export OpenAPI** to download the generated OpenAPI specification. |
 
 ## Read-only metadata
 
-Below the header, the editor displays read-only metadata that describes the service at a glance. The exact fields depend on the service type, and they are surfaced here so you can confirm the service binding without opening the **Configure** panel.
+Below the header, the editor displays read-only metadata that describes the service at a glance. The exact fields depend on the service type, and they are surfaced here so you can confirm the service binding without opening the [**Configure Editor**](../editors/configure-editor.md).
 To change any of these values, open the service configuration through **Configure** in the header.
 
 ## Resources and handlers

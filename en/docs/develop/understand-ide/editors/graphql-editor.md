@@ -28,7 +28,7 @@ The header runs along the top of the editor and combines the breadcrumb, the ser
 | **Back** | Returns to the previous view, typically the Integrator view. |
 | **Title** | Displays **GraphQL** followed by the service base path (for example, `/graphql`). |
 | **Undo** / **Redo** | Reverses or reapplies recent changes to the service. |
-| **Configure** | Opens the [Configure editor](configure-editor.md) for the GraphQL service. Use it to change the base path, port, listener, or other service-level settings. |
+| **Configure** | Opens the [Configure Editor](configure-editor.md) for the GraphQL service. Use it to change the base path, port, listener, or other service-level settings. |
 
 ## Service node
 

@@ -32,7 +32,7 @@ The header runs along the top of the editor and combines the breadcrumb, the dat
 | **Refresh** | Reloads the editor to pick up changes made to the underlying types. |
 | **Filter input and output fields** | Filters fields whose names match the search term, useful for large records. |
 | **Auto Map** | Runs the AI-based automatic mapping action described below. |
-| **Configure** | Opens the [Configure editor](configure-editor.md) for the data mapper. Use it to rename the data mapper, toggle **Public**, or change its inputs and output. |
+| **Configure** | Opens the [Configure Editor](configure-editor.md) for the data mapper. Use it to rename the data mapper, toggle **Public**, or change its inputs and output. |
 | **Close** | Closes the data mapper and returns to the previous view. |
 
 ## Expression bar
