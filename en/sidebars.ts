@@ -53,7 +53,7 @@ const sidebars: SidebarsConfig = {
           items: [
             'get-started/build-automation',
             'get-started/build-ai-agent',
-            'get-started/build-api-integration',
+            'get-started/build-integration-api',
             'get-started/build-event-driven-integration',
             'get-started/build-file-driven-integration',
           ],
@@ -295,7 +295,20 @@ const sidebars: SidebarsConfig = {
             'develop/debugging/features',
           ],
         },
-        // 6.8 Tools
+        // 6.8 Troubleshooting
+        {
+          type: 'category',
+          label: 'Troubleshooting',
+          items: [
+            'develop/troubleshooting/errors-and-stack-traces',
+            'develop/troubleshooting/logging',
+            'develop/troubleshooting/deployment',
+            'develop/troubleshooting/strand-dump-analysis',
+            'develop/troubleshooting/profiling',
+            'develop/troubleshooting/ide-troubleshooting',
+          ],
+        },
+        // 6.9 Tools
         {
           type: 'category',
           label: 'Tools',
@@ -1409,6 +1422,16 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
+          label: 'SAP JCo',
+          link: { type: 'doc', id: 'connectors/catalog/erp-business/sap.jco/overview' },
+          items: [
+            'connectors/catalog/erp-business/sap.jco/setup-guide',
+            'connectors/catalog/erp-business/sap.jco/action-reference',
+            'connectors/catalog/erp-business/sap.jco/trigger-reference',
+          ],
+        },
+        {
+          type: 'category',
           label: 'SAP Sales Area',
           link: { type: 'doc', id: 'connectors/catalog/erp-business/sap.s4hana.salesarea_0001/sap-sales-area-connector-overview' },
           items: [
@@ -1887,7 +1910,6 @@ const sidebars: SidebarsConfig = {
             'deploy/self-hosted/openshift',
             'deploy-operate/deploy/vm-based-deployment',
             'deploy-operate/deploy/serverless-deployment',
-            'deploy-operate/deploy/devant-ipaas',
             'deploy-operate/deploy/aws-azure-gcp',
             'deploy-operate/deploy/graalvm-native-images',
             'deploy-operate/deploy/environments',
@@ -1954,7 +1976,7 @@ const sidebars: SidebarsConfig = {
           label: 'Capacity Planning',
           items: [
             'deploy-operate/capacity-planning/overview',
-            'deploy-operate/capacity-planning/performance-reports',
+            'deploy-operate/capacity-planning/performance-benchmarks',
           ],
         },
       ],
@@ -2107,6 +2129,7 @@ const sidebars: SidebarsConfig = {
             'manage/icp/manage-runtimes',
             'manage/icp/reverse-proxy',
             'manage/icp/access-control',
+            'manage/icp/encrypt-secrets',
             {
               type: 'category',
               label: 'User Stores',
