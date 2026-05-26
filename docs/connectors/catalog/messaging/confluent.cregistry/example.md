@@ -22,7 +22,7 @@ flowchart LR
 
 ## Setting up the Confluent Schema Registry integration
 
-> **New to WSO2 Integrator?** Follow the [Create a New Integration](../../../../develop/create-integrations/create-new-integration.md) guide to set up your integration first, then return here to add the connector.
+> **New to WSO2 Integrator?** Follow the [Create a New Integration](../../../../develop/create-integrations/create-a-new-integration.md) guide to set up your integration first, then return here to add the connector.
 
 ## Adding the Confluent Schema Registry connector
 
@@ -79,7 +79,7 @@ Configure the following fields:
 - **subject** : The subject name under which the schema will be registered
 - **schema** : The Avro schema definition as a JSON string
 - **result** : Name of the variable to hold the returned schema ID
-- **resultType** : Set to `int`—the registry returns the schema ID as an integer
+- **resultType** : Set to `int`: the registry returns the schema ID as an integer
 
 Select **Save** to add the operation to the flow.
 

@@ -1,4 +1,8 @@
-# Twitter Connector Overview
+---
+title: Overview
+---
+
+# Overview
 
 Twitter (X) is a widely-used social networking service provided by X Corp., enabling users to post and interact with messages known as "tweets." The Ballerina `ballerinax/twitter` connector (v5.0.0) provides programmatic access to the Twitter (X) API v2 endpoints, allowing you to manage tweets, users, direct messages, bookmarks, likes, and more from your Ballerina integration flows.
 
@@ -6,16 +10,16 @@ Twitter (X) is a widely-used social networking service provided by X Corp., enab
 
 - Create, retrieve, and delete tweets using Twitter API v2 resource-based operations
 - Search tweets with recent and full-archive search endpoints
-- Manage user relationships — follow, unfollow, mute, block, and list followers/following
+- Manage user relationships: follow, unfollow, mute, block, and list followers/following
 - Send and retrieve direct messages (DM) in one-to-one and group conversations
 - Bookmark and un-bookmark tweets for the authenticated user
 - Like and unlike tweets, and retrieve a user's liked tweets
 - Retrieve user profile information including public metrics and pinned tweets
-- Manage lists — create, update, delete lists and manage list members
+- Manage lists: create, update, delete lists and manage list members
 
 ## Actions
 
-Actions are operations you invoke on Twitter (X) from your integration — posting tweets, searching content, managing users, sending direct messages, and more. The Twitter connector exposes all actions through a single client:
+Actions are operations you invoke on Twitter (X) from your integration, including posting tweets, searching content, managing users, sending direct messages, and more. The Twitter connector exposes all actions through a single client:
 
 | Client | Actions |
 |--------|---------|
@@ -27,7 +31,7 @@ See the **[Action Reference](actions.md)** for the full list of operations, para
 
 * **[Setup Guide](setup-guide.md)**: This guide walks you through creating a Twitter Developer App and obtaining the OAuth 2.0 credentials required to use the Twitter connector.
 
-* **[Action Reference](actions.md)**: Full reference for all clients — operations, parameters, return types, and sample code.
+* **[Action Reference](actions.md)**: Full reference for all clients: operations, parameters, return types, and sample code.
 
 * **[Example](example.md)**: Learn how to build and configure an integration using the **Twitter** connector, including connection setup, operation configuration, and execution flow.
 

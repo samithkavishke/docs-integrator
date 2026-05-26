@@ -1,4 +1,8 @@
-# JMS Connector Overview
+---
+title: Overview
+---
+
+# Overview
 
 JMS (Java Message Service) is a Java API standard for message-oriented middleware. The Ballerina `ballerinax/java.jms` connector (v1.2.0) provides programmatic access to JMS 2.0 and 1.0 compliant brokers such as ActiveMQ, allowing you to send and receive messages through queues and topics in your Ballerina integration flows.
 
@@ -28,7 +32,7 @@ See the **[Action Reference](actions.md)** for the full list of operations, para
 
 ## Triggers
 
-Triggers allow your integration to react to incoming JMS messages in real time. The connector provides a `jms:Listener` that connects to a JMS broker and dispatches messages to your service callbacks automatically — no polling required.
+Triggers allow your integration to react to incoming JMS messages in real time. The connector provides a `jms:Listener` that connects to a JMS broker and dispatches messages to your service callbacks automatically; no polling required.
 
 Supported trigger events:
 
@@ -42,7 +46,7 @@ See the **[Trigger Reference](triggers.md)** for listener configuration, service
 
 * **[Setup Guide](setup-guide.md)**: This guide walks you through setting up a JMS broker and obtaining the connection details required to use the JMS connector.
 
-* **[Action Reference](actions.md)**: Full reference for all clients — operations, parameters, return types, and sample code.
+* **[Action Reference](actions.md)**: Full reference for all clients: operations, parameters, return types, and sample code.
 
 * **[Trigger Reference](triggers.md)**: Reference for event-driven integration using the listener and service model.
 

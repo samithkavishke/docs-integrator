@@ -1,10 +1,14 @@
-# PayPal Invoices Connector Overview
+---
+title: Overview
+---
+
+# Overview
 
 PayPal Invoicing is a service that lets merchants create, send, and manage invoices online through PayPal. The Ballerina `ballerinax/paypal.invoices` connector (v1.0.1) provides programmatic access to the PayPal Invoicing API v2, enabling you to create and manage invoices, record payments and refunds, and manage invoice templates from your Ballerina integration flows.
 
 ## Key features
 
-- Full CRUD operations on invoices — create, read, update, and delete draft invoices
+- Full CRUD operations on invoices: create, read, update, and delete draft invoices
 - Send invoices to recipients and send payment reminders
 - Cancel sent invoices with optional recipient notification
 - Record and delete external payments and refunds against invoices
@@ -15,7 +19,7 @@ PayPal Invoicing is a service that lets merchants create, send, and manage invoi
 
 ## Actions
 
-Actions are operations you invoke on PayPal Invoicing from your integration — creating invoices, sending them, recording payments, managing templates, and more. The connector exposes actions through a single client:
+Actions are operations you invoke on PayPal Invoicing from your integration. Use these actions for creating invoices, sending them, recording payments, managing templates, and more. The connector exposes actions through a single client:
 
 | Client | Actions |
 |--------|---------|
@@ -27,7 +31,7 @@ See the **[Action Reference](actions.md)** for the full list of operations, para
 
 * **[Setup Guide](setup-guide.md)**: This guide walks you through creating a PayPal Developer application and obtaining the OAuth 2.0 client credentials required to use the PayPal Invoices connector.
 
-* **[Action Reference](actions.md)**: Full reference for all clients — operations, parameters, return types, and sample code.
+* **[Action Reference](actions.md)**: Full reference for all clients: operations, parameters, return types, and sample code.
 
 * **[Example](example.md)**: Learn how to build and configure an integration using the **PayPal Invoices** connector, including connection setup, operation configuration, and execution flow.
 

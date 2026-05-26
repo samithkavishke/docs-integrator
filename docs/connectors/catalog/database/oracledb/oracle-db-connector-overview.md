@@ -1,4 +1,8 @@
-# Oracle DB Connector Overview
+---
+title: Overview
+---
+
+# Overview
 
 Oracle Database is a multi-model relational database management system widely used for enterprise workloads. The Ballerina `ballerinax/oracledb` connector (v1.15.0) provides programmatic access to Oracle Database through JDBC, enabling you to execute queries, perform CRUD operations, call stored procedures, and work with Oracle-specific data types such as VARRAYs, nested tables, OBJECT types, and interval types within your Ballerina integration flows.
 
@@ -15,7 +19,7 @@ Oracle Database is a multi-model relational database management system widely us
 
 ## Actions
 
-Actions are operations you invoke on an Oracle database from your integration — querying records, inserting data, calling stored procedures, and more. The Oracle DB connector exposes actions through a single client:
+Actions are operations you invoke on an Oracle database from your integration, including querying records, inserting data, calling stored procedures, and more. The Oracle DB connector exposes actions through a single client:
 
 | Client | Actions |
 |--------|---------|
@@ -27,7 +31,7 @@ See the **[Action Reference](actions.md)** for the full list of operations, para
 
 * **[Setup Guide](setup-guide.md)**: This guide walks you through setting up an Oracle Database instance and obtaining the connection details required to use the Oracle DB connector.
 
-* **[Action Reference](actions.md)**: Full reference for all clients — operations, parameters, return types, and sample code.
+* **[Action Reference](actions.md)**: Full reference for all clients: operations, parameters, return types, and sample code.
 
 * **[Example](example.md)**: Learn how to build and configure an integration using the **Oracle DB** connector, including connection setup, operation configuration, and execution flow.
 

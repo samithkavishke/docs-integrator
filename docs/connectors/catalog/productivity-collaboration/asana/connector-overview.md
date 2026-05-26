@@ -1,4 +1,8 @@
-# Asana Connector Overview
+---
+title: Overview
+---
+
+# Overview
 
 Asana is a cloud-based project management and work tracking platform that helps teams organize, plan, and manage their work. The Ballerina `ballerinax/asana` connector (v3.0.0) provides programmatic access to the Asana REST API, enabling you to manage tasks, projects, sections, teams, users, and more within your Ballerina integration flows.
 
@@ -15,7 +19,7 @@ Asana is a cloud-based project management and work tracking platform that helps 
 
 ## Actions
 
-Actions are operations you invoke on Asana from your integration — creating tasks, managing projects, organizing sections, and more. The Asana connector exposes all actions through a single client:
+Actions are operations you invoke on Asana from your integration. Use these actions for creating tasks, managing projects, organizing sections, and more. The Asana connector exposes all actions through a single client:
 
 | Client | Actions |
 |--------|---------|
@@ -27,7 +31,7 @@ See the **[Action Reference](actions.md)** for the full list of operations, para
 
 * **[Setup Guide](setup-guide.md)**: This guide walks you through creating an Asana Personal Access Token to authenticate with the Asana connector.
 
-* **[Action Reference](actions.md)**: Full reference for all clients — operations, parameters, return types, and sample code.
+* **[Action Reference](actions.md)**: Full reference for all clients: operations, parameters, return types, and sample code.
 
 * **[Example](example.md)**: Learn how to build and configure an integration using the **Asana** connector, including connection setup, operation configuration, and execution flow.
 

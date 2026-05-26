@@ -1,3 +1,7 @@
+---
+title: Example
+---
+
 # Example
 
 ## What you'll build
@@ -22,7 +26,7 @@ flowchart LR
 
 ## Setting up the Email SMTP integration
 
-> **New to WSO2 Integrator?** Follow the [Create a New Integration](../../../../develop/create-integrations/create-new-integration.md) guide to set up your integration first, then return here to add the connector.
+> **New to WSO2 Integrator?** Follow the [Create a New Integration](../../../../develop/create-integrations/create-a-new-integration.md) guide to set up your integration first, then return here to add the connector.
 
 ## Adding the Email SMTP connector
 
@@ -45,7 +49,7 @@ Bind each field to a configurable variable using the helper panel. For each fiel
 - **host** : SMTP server hostname (bind to a `string` configurable variable)
 - **username** : Email account username (bind to a `string` configurable variable)
 - **password** : Email account password or App Password (bind to a `string` configurable variable)
-- **port** : SMTP port — switch to **Expression** mode first, then bind to an `int` configurable variable
+- **port**: SMTP port: switch to **Expression** mode first, then bind to an `int` configurable variable
 - **security** : Set to `SSL` from the dropdown
 
 ![Email SMTP connection form fully filled with all parameters before saving](/img/connectors/catalog/built-in/email/email_screenshot_02_connection_form.png)
@@ -98,3 +102,9 @@ Try this sample in WSO2 Integration Platform.
 [![Deploy to Devant](https://openindevant.choreoapps.dev/images/DeployDevant-White.svg)](https://console.devant.dev/new?gh=wso2/integration-samples/tree/main/integrator-default-profile/connectors/email_connector_sample)
 
 [View source on GitHub](https://github.com/wso2/integration-samples/tree/main/integrator-default-profile/connectors/email_connector_sample)
+
+## More code examples
+
+The `Email` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerina-email/tree/master/examples), covering SMTP email sending and message configuration use cases.
+
+1. [Gmail SMTP client](https://github.com/ballerina-platform/module-ballerina-email/tree/master/examples/gmail-smtp-client): Send email through Gmail SMTP using the Ballerina Email connector.

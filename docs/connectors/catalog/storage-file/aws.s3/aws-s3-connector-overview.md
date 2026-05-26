@@ -1,21 +1,24 @@
-# AWS S3 Connector Overview
+---
+title: Overview
+---
 
-Amazon Simple Storage Service (Amazon S3) is an object storage service that offers industry-leading scalability, data availability, security, and performance. The Ballerina `ballerinax/aws.s3` connector (v3.5.1) provides programmatic access to the Amazon S3 REST API (2006-03-01), enabling you to manage buckets and objects directly from your Ballerina integration flows.
+# Overview
+
+Amazon Simple Storage Service (Amazon S3) is an object storage service that offers industry-leading scalability, data availability, security, and performance. The Ballerina `ballerinax/aws.s3` connector (v4.0.0) provides programmatic access to the Amazon S3 REST API (2006-03-01), enabling you to manage buckets and objects directly from your Ballerina integration flows.
 
 ## Key features
 
-- Create, list, and delete S3 buckets with optional canned ACL policies
+- Create (with optional canned ACL policies), list, and delete S3 buckets
 - Upload objects from strings, JSON, XML, byte arrays, or byte streams with configurable metadata and ACL
-- Retrieve objects as byte streams with conditional headers (ETag, modified-since, range)
-- List objects in a bucket with prefix filtering, delimiter grouping, pagination, and owner retrieval
+- Retrieve objects as byte streams with conditional retrieval (`If-Match`/`If-None-Match`, `If-Modified-Since`/`If-Unmodified-Since`) and byte-range support
+- List objects in a bucket with prefix filtering, delimiter grouping, pagination, max-keys limits, start-after offsets, response encoding, and owner information
 - Delete objects with optional version ID support for versioned buckets
 - Generate presigned URLs for secure, time-limited object retrieval or creation without sharing credentials
-- Multipart upload support — initiate, upload parts, complete, or abort large object uploads
-- EC2 IAM role-based authentication for deployments running on AWS infrastructure
+- Multipart upload support: initiate, upload parts, complete, or abort large object uploads
 
 ## Actions
 
-Actions are operations you invoke on AWS S3 from your integration — creating buckets, uploading and downloading objects, generating presigned URLs, and performing multipart uploads. The AWS S3 connector exposes all actions through a single client:
+Actions are operations you invoke on AWS S3 from your integration. Use these actions for creating buckets, uploading and downloading objects, generating presigned URLs, and performing multipart uploads. The AWS S3 connector exposes all actions through a single client:
 
 | Client | Actions |
 |--------|---------|
@@ -27,7 +30,7 @@ See the **[Action Reference](actions.md)** for the full list of operations, para
 
 * **[Setup Guide](setup-guide.md)**: This guide walks you through creating an AWS account and obtaining the access credentials required to use the AWS S3 connector.
 
-* **[Action Reference](actions.md)**: Full reference for all clients — operations, parameters, return types, and sample code.
+* **[Action Reference](actions.md)**: Full reference for all clients: operations, parameters, return types, and sample code.
 
 * **[Example](example.md)**: Learn how to build and configure an integration using the **AWS S3** connector, including connection setup, operation configuration, and execution flow.
 

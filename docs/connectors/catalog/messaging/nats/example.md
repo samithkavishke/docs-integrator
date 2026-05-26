@@ -22,7 +22,7 @@ flowchart LR
 
 ## Setting up the NATS integration
 
-> **New to WSO2 Integrator?** Follow the [Create a New Integration](../../../../develop/create-integrations/create-new-integration.md) guide to set up your integration first, then return here to add the connector.
+> **New to WSO2 Integrator?** Follow the [Create a New Integration](../../../../develop/create-integrations/create-a-new-integration.md) guide to set up your integration first, then return here to add the connector.
 
 ## Adding the NATS connector
 
@@ -35,7 +35,7 @@ In the WSO2 Integrator panel, expand your project and select the **+** button ne
 ### Step 2: Select the NATS connector
 
 1. Enter `nats` in the search box.
-2. Select the card labelled **Nats** (the standard, non-JetStream connector—not "Nats JetStream" or "Nats JetStream Listener").
+2. Select the card labelled **Nats** (the standard, non-JetStream connector, not "Nats JetStream" or "Nats JetStream Listener").
 
 ## Configuring the NATS connection
 

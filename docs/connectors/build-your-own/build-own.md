@@ -1,16 +1,16 @@
 ---
-title: Build Your Own
+title: Build Your Own Connector
 ---
 
-# Build Your Own
+# Build Your Own Connector
 
-Build your own connector when a pre-built one isn't available for your target system.
+When no pre-built connector exists for your target service, you can build one yourself. WSO2 Integrator supports two approaches: generating a connector automatically from an OpenAPI specification, or writing one from scratch in Ballerina for full control over authentication, error handling, and data transformation.
 
 ## When to build a custom connector
 
 Consider building a custom connector when:
 
-- No pre-built connector exists for your target service or API in the [Connector Catalog](../catalog/)
+- No pre-built connector exists for your target service or API in the [Connector Catalog](../catalog/index.mdx)
 - You need custom logic beyond what a standard connector provides, such as specialized authentication flows, data transformations, or retry strategies
 - You're integrating with an internal API that is private to your organization
 - You want to publish and share a reusable connector with your team or the broader community via [Ballerina Central](https://central.ballerina.io/)
@@ -21,8 +21,8 @@ WSO2 Integrator offers two ways to build custom connectors:
 
 | Approach | Best For | Effort |
 |---|---|---|
-| [**Create from OpenAPI Spec**](create-from-openapi-spec.md) | Quick integration with any REST API that has an OpenAPI definition | Low — no coding required |
-| [**Custom Development**](custom-development.md) | Full control over connector implementation, advanced logic, or publishing to Ballerina Central | Medium — requires Ballerina knowledge |
+| [**Create from OpenAPI Spec**](create-from-openapi-spec.md) | Quick integration with any REST API that has an OpenAPI definition | Low (no coding required) |
+| [**Custom Development**](custom-development.md) | Full control over connector implementation, advanced logic, or publishing to Ballerina Central | Medium (requires Ballerina knowledge) |
 
 ### Create from OpenAPI spec
 
@@ -30,7 +30,7 @@ The fastest way to connect to a new API. Simply import an OpenAPI specification 
 
 **Best for:** Rapid prototyping, standard REST APIs, internal APIs with OpenAPI specs.
 
-[Get started with OpenAPI Spec &rarr;](create-from-openapi-spec.md)
+[Create a connector from an OpenAPI spec](create-from-openapi-spec.md)
 
 ### Custom development
 
@@ -38,4 +38,10 @@ Build a connector from scratch using Ballerina. This approach gives you full con
 
 **Best for:** Complex integrations, reusable organizational connectors, community contributions.
 
-[Get started with Custom Development &rarr;](custom-development.md)
+[Build a connector with custom development](custom-development.md)
+
+## What's next
+
+- [Create from OpenAPI spec](create-from-openapi-spec.md): Generate a connector automatically from an OpenAPI definition
+- [Custom development](custom-development.md): Write a connector from scratch and optionally publish it to Ballerina Central
+- [Connector catalog](../catalog/index.mdx): Browse all available pre-built connectors

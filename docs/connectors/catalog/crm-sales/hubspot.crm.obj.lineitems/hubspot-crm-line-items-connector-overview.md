@@ -1,4 +1,8 @@
-# HubSpot CRM Line Items Connector Overview
+---
+title: Overview
+---
+
+# Overview
 
 HubSpot CRM Line Items represent individual products or services attached to deals in HubSpot, enabling detailed tracking of what is being sold and at what price. The Ballerina `ballerinax/hubspot.crm.obj.lineitems` connector (v2.0.0) provides programmatic access to the HubSpot CRM Line Items API v3, supporting full CRUD operations, batch processing, and advanced search capabilities for line item records within your HubSpot CRM.
 
@@ -14,7 +18,7 @@ HubSpot CRM Line Items represent individual products or services attached to dea
 
 ## Actions
 
-Actions are operations you invoke on HubSpot CRM Line Items from your integration — creating line items for deals, reading product details, running batch jobs, and searching across your inventory. The connector exposes all actions through a single client:
+Actions are operations you invoke on HubSpot CRM Line Items from your integration, including creating line items for deals, reading product details, running batch jobs, and searching across your inventory. The connector exposes all actions through a single client:
 
 | Client | Actions |
 |--------|---------|
@@ -26,7 +30,7 @@ See the **[Action Reference](actions.md)** for the full list of operations, para
 
 * **[Setup Guide](setup-guide.md)**: This guide walks you through creating a HubSpot Private App and obtaining the access token required to authenticate the HubSpot CRM Line Items connector.
 
-* **[Action Reference](actions.md)**: Full reference for all clients — operations, parameters, return types, and sample code.
+* **[Action Reference](actions.md)**: Full reference for all clients: operations, parameters, return types, and sample code.
 
 * **[Example](example.md)**: Learn how to build and configure an integration using the **HubSpot CRM Line Items** connector, including connection setup, operation configuration, and execution flow.
 

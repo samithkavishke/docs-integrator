@@ -25,9 +25,9 @@ In this tutorial, you will learn how to:
 
 Before getting started, ensure that the following requirements are met:
 
-- Install the [WSO2 Integrator VS Code extension](/docs/get-started/install)
+- Install the [WSO2 Integrator VS Code extension](../../get-started/setup/local-setup.md)
 - Set up an MSSQL database for agent memory persistence
-- Have a basic understanding of memory configuration concepts. For more information, refer to [Memory Configuration](/docs/genai/agents/memory-configuration)
+- Have a basic understanding of memory configuration concepts. For more information, refer to [Memory](../develop/agents/memory.md)
 
 ## Architecture
 
@@ -64,11 +64,11 @@ In this section, you will create the integration project and configure the AI ag
 
 ### Step 1: Create the integration project
 
-Create a new integration project by following the instructions in [Create a project](develop/create-integrations/create-a-project.md).
+Create a new integration project by following the instructions in [Create a project](../../develop/create-integrations/create-a-project.md).
 
-### Step 2: Define the data types
+### Step 2: Define the data type
 
-Define the following data types.
+Define the following data type.
 
 ```ballerina
 # types.bal
@@ -82,13 +82,28 @@ type KbArticle record {|
 |};
 ```
 
+Initialize the `kbArticles`.
+
+```ballerina
+final KbArticle[] & readonly kbArticles = [
+    {
+        articleId: "KB-101",
+        title: "VPN Troubleshooting",
+        content: "Restart the VPN client and reconnect.",
+        category: "network",
+        tags: ["vpn"],
+        relevanceScore: 0.95
+    }
+];
+```
+
 ### Step 3: Create the AI agent
 
-Create the AI agent named `itHelpDeskAgent` by following the instructions in [Create an Agent](genai/develop/agents/creating-an-agent.md).
+Create the AI agent named `itHelpDeskAgent` by following the instructions in [Creating an Agent](../develop/agents/creating-an-agent.md).
 
 ### Step 4: Update the system prompt
 
-- Click the created agent and add the following instructions.
+- Click the created agent and add the instructions.
 
 ![Add instruction](/img/genai/tutorials/hr-knowledge-base-rag/28-add-instruction.png)
 
@@ -114,7 +129,7 @@ final ai:Agent itHelpDeskAgent = check new (
 
 ### Step 5: Add a tool to the agent
 
-Add the following tool to the agent by following the instructions in [Create custom tool — hand-crafted definitions](genai/develop/agents/tools.md#4-create-custom-tool--hand-crafted-definitions).
+Add the following tool to the agent by following the instructions in [Create custom tool](../develop/agents/tools.md#4-create-custom-tool).
 
 ```ballerina
 # agents.bal
@@ -137,7 +152,9 @@ isolated function searchKnowledgeBase(string query) returns string {
 
 ### Step 6: Add persistent memory to the agent
 
-Add persistent memory by following the instructions in [Memory](genai/develop/agents/memory).
+Add persistent memory by following the instructions in [Memory](../develop/agents/memory.md).
+
+    ![Agent with inmemory](/img/genai/develop/agents/29-agent-with-inmemory.png)
 
 ```ballerina
 # agents.bal
@@ -190,12 +207,10 @@ final ai:Agent itHelpDeskAgent = check new (
 curl -X POST http://localhost:9090/hthr/chat \
   -H "Content-Type: application/json" \
   -d '{
-        "sessionId":"EMP-1001",
-        "message":"My VPN is not working"
+        "sessionId": "EMP-1001",
+        "message": "My VPN is not working"
       }'
 ```
-
-Example response:
 
 ```json
 {
@@ -213,8 +228,6 @@ curl -X POST http://localhost:9090/hthr/chat \
         "message":"I already restarted it"
       }'
 ```
-
-Example response:
 
 ```json
 {
@@ -240,8 +253,6 @@ curl -X POST http://localhost:9090/hthr/chat \
       }'
 ```
 
-Example response:
-
 ```json
 {
   "message":"I currently don't have any further suggestions from the knowledge base. However, you might try these:
@@ -266,19 +277,10 @@ curl -X POST http://localhost:9090/hthr/chat \
       }'
 ```
 
-Example response:
-
 ```json
 {
   "message":"Yes, your issue is that your VPN is not working, and you've already restarted the client. Would you like me to assist you with anything specific regarding that?"
 }
 ```
 
-The AI agent remembers previous conversations because the conversation history is stored in persistent MSSQL-backed memory and retrieved using the same `sessionId`.
-
-## What's next
-
-- [Memory Configuration](/docs/genai/agents/memory-configuration) — Explore memory options in depth
-- [Chat Agents](/docs/genai/agents/chat-agents) — Learn more about chat agent patterns
-- [Agent Tracing](/docs/genai/agent-observability/agent-tracing) — Add observability and debugging
-- [Troubleshooting](/docs/genai/reference/troubleshooting) — Common issues and solutions
+The AI agent remembers previous conversations because the conversation history is stored in persistent MSSQL backed memory and retrieved using the same `sessionId`.

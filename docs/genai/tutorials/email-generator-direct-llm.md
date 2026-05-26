@@ -4,23 +4,23 @@ title: Email Generator with Direct LLM
 
 # Email Generator with Direct LLM
 
-This tutorial walks through building an **HTTP service that generates professional emails using an LLM**. It's a complete, end-to-end scenario that exercises the [Direct LLM Calls](/docs/genai/develop/direct-llm/overview) feature surface.
+This tutorial walks through building an **HTTP service that generates professional emails using an LLM**. It's a complete, end-to-end scenario that exercises the [Direct LLM Calls](../develop/direct-llm/overview.md) feature surface.
 
-By the end you will have a `POST /emails/generate` endpoint that takes recipient details and a meeting intent, and returns a fully written, structured email — subject and body — produced by an LLM.
+By the end you will have a `POST /emails/generate` endpoint that takes recipient details and a meeting intent, and returns a fully written, structured email, subject and body, produced by an LLM.
 
-## What You'll Build
+## What you'll build
 
 1. **Create the HTTP service** with typed request and response payloads.
-2. **Add a model provider** — the connection to the LLM.
+2. **Add a [model provider](../develop/components/model-providers.md)** as the connection to the LLM.
 3. **Add a `generate` node** with a prompt that writes the email.
 4. **Bind the response** to the structured response type.
 5. **Run and test** the service end to end.
 
 ---
 
-## 1. Create the Service
+## 1. Create the service
 
-### Step 1.1 — Create an HTTP Service
+### Step 1.1: Create an HTTP service
 
 1. From the left sidebar, open the **Artifacts** page.
 2. Under **Integration as API**, click **HTTP Service**.
@@ -31,7 +31,7 @@ By the end you will have a `POST /emails/generate` endpoint that takes recipient
 
 ![Create HTTP Service form with Service Base Path set to /api/v1.](/img/genai/develop/direct-llm/02-create-http-service.png)
 
-### Step 1.2 — Define the Request Payload
+### Step 1.2: Define the request payload
 
 The **New Resource Configuration** panel opens. Set the **HTTP Method** to `POST` and the **Resource Path** to `/emails/generate`.
 
@@ -54,9 +54,9 @@ Click **Define Payload** and:
 
 ![Define Payload dialog with sample JSON and type name EmailGeneratePayload.](/img/genai/develop/direct-llm/03-define-payload.png)
 
-The dialog produces a record with the right fields. From the BI side you don't need to write the type by hand — the JSON sample drives it.
+The dialog produces a record with the right fields. There is no need to write the type by hand — the JSON sample drives it.
 
-### Step 1.3 — Define the Response Type
+### Step 1.3: Define the response type
 
 Still on the resource configuration, click the response type for status `201` (Ballerina returns `201 Created` for `POST` resources by default) and choose **Create New Type**:
 
@@ -81,9 +81,9 @@ Click **Save** on the resource. The configuration should now show `EmailGenerate
 
 ---
 
-## 2. Add a Model Provider
+## 2. Add a model provider
 
-After saving, the flow editor opens. Click **+** between **Start** and **Error Handler**. In the **Add Node** panel, scroll to the **AI** section and click **Model Provider**. The right side shows the provider list.
+After saving, the flow editor opens. Click **+** between **Start** and **Error Handler**. In the **Add Node** panel, scroll to the **AI** section and click **Model Provider**. Then click `Add Model Provider`. The provider list appears on the right side.
 
 ![Model Provider list showing all supported providers.](/img/genai/develop/direct-llm/06-model-provider-list.png)
 
@@ -95,17 +95,17 @@ Click **Default Model Provider (WSO2)**. In the configuration form:
 
 ![Model Provider configuration with name emailGenerator.](/img/genai/develop/direct-llm/07-model-provider-config.png)
 
-> **Tip:** The Default WSO2 Model Provider does not require an API key. For a different provider see [AI Connections and Stores → Model Providers](/docs/genai/develop/components/model-providers).
+> **Tip:** The Default WSO2 Model Provider does not require an API key. For a different provider see [AI Connections and Stores → Model Providers](../develop/components/model-providers.md).
 
 ---
 
-## 3. Add the `generate` Node
+## 3. Add the `generate` node
 
 In the **Model Providers** panel on the right, expand the **emailGenerator** section and click **Generate**.
 
 ![emailGenerator expanded with Chat and Generate actions.](/img/genai/develop/direct-llm/08-generate-action.png)
 
-### Step 3.1 — Write the Prompt
+### Step 3.1: Write the prompt
 
 Click the **Prompt** field to open the rich-text editor and enter:
 
@@ -123,9 +123,9 @@ The prompt has three natural parts:
 | **Inputs** | `${senderName}`, `${recipientName}`, `${intent}`, `${timeSlots}` — pulled in from `EmailGeneratePayload`. |
 | **Task** | *"Write a short email… ask them to pick one… polite, professional tone."* |
 
-> **Why no "return JSON" instruction?** The **Expected Type** field on the next step handles that for you — see [Typed Responses → Don't Put the Schema in the Prompt](/docs/genai/key-concepts/typed-responses#dont-put-the-schema-in-the-prompt).
+> **Why no "return JSON" instruction?** The **Expected Type** field on the next step handles that for you — you don't have to put the schema in the prompt.
 
-### Step 3.2 — Bind the Result and Save
+### Step 3.2: Bind the result and save
 
 In the same form fill in:
 
@@ -138,9 +138,9 @@ Click **Save**.
 
 ![emailGenerator > generate form with prompt, Result generatedEmail, and Expected Type EmailGenerateResponse.](/img/genai/develop/direct-llm/10-generate-config.png)
 
-The Expected Type is what makes the response come back structured. Without it you'd get a string and have to parse JSON yourself; with it, you get a typed `EmailGenerateResponse` directly. (See [Typed Responses](/docs/genai/key-concepts/typed-responses) for more.)
+The Expected Type is what makes the response come back structured. Without it you'd get a string and have to parse JSON yourself; with it, you get a typed `EmailGenerateResponse` directly.
 
-### Step 3.3 — Add a Return Step
+### Step 3.3: Add a return step
 
 1. Click **+** below the `ai:generate` node.
 2. In **Add Node** under **Control**, pick **Return**.
@@ -155,9 +155,9 @@ The completed flow has three nodes between **Start** and **Error Handler**: the 
 
 ---
 
-## 4. Run and Test
+## 4. Run and test
 
-### Step 4.1 — Try It
+### Step 4.1: Try it
 
 1. Click **Try It** at the top right.
 2. When prompted, click **Run Integration** to start the service.
@@ -166,7 +166,7 @@ The **Try Service** panel opens with the `POST /emails/generate` endpoint and th
 
 ![Try Service panel showing POST /emails/generate with request body schema.](/img/genai/develop/direct-llm/13-try-service.png)
 
-### Step 4.2 — Send a Request
+### Step 4.2: Send a request
 
 Paste the following body and click **Run**:
 
@@ -179,7 +179,7 @@ Paste the following body and click **Run**:
 }
 ```
 
-### Step 4.3 — Read the Response
+### Step 4.3: Read the response
 
 The service responds with `201 Created` (Ballerina's default for `POST` resources — see Step 1.3) and a JSON body matching `EmailGenerateResponse`:
 
@@ -196,10 +196,7 @@ The LLM produced a complete, professionally written email — subject and body �
 
 ---
 
-## What's Next
+## What's next
 
-- **[Direct LLM Calls reference](/docs/genai/develop/direct-llm/overview)** — the single-page feature reference covering the `generate` node, prompt editor, and typed responses.
-- **[AI Connections and Stores → Model Providers](/docs/genai/develop/components/model-providers)** — switch the LLM provider for production (init params, supported models, advanced HTTP configs for OpenAI, Azure, Anthropic, Vertex, Mistral, DeepSeek, Ollama, OpenRouter).
-- **[Writing Effective Prompts](/docs/genai/key-concepts/writing-effective-prompts)** — go deeper on structuring long prompts and avoiding common pitfalls.
-- **[Natural Functions](/docs/genai/develop/natural-functions/overview)** — package this same prompt as a reusable typed function.
-- **[Review Summarizer with Natural Function](review-summarizer-natural-function.md)** — a similar tutorial built around natural functions.
+- **[Direct LLM Calls reference](../develop/direct-llm/overview.md)** -- the single-page feature reference covering the `generate` node, prompt editor, and typed responses.
+- **[Model Providers](../develop/components/model-providers.md)** -- switch the LLM provider for production (init params, supported models, advanced HTTP configs for OpenAI, Azure, Anthropic, Vertex, Mistral, DeepSeek, Ollama, OpenRouter).

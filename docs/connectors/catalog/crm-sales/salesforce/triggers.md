@@ -4,7 +4,7 @@ title: Triggers
 
 # Triggers
 
-The `ballerinax/salesforce` connector supports event-driven integration through Salesforce Change Data Capture (CDC) and Platform Events. When records are created, updated, deleted, or restored in Salesforce, the listener receives change events in real time, triggering your service callbacks automatically — no polling required. Platform Events enable custom event-driven messaging between Salesforce and external systems.
+The `ballerinax/salesforce` connector supports event-driven integration through Salesforce Change Data Capture (CDC) and Platform Events. When records are created, updated, deleted, or restored in Salesforce, the listener receives change events in real time, triggering your service callbacks automatically, with no polling required. Platform Events enable custom event-driven messaging between Salesforce and external systems.
 
 Three components work together:
 
@@ -289,11 +289,11 @@ An isolated object interface for managing refresh token rotation. Implement this
 
 | Method | Signature | Description |
 |--------|-----------|-------------|
-| `acquireLock` | `acquireLock() returns error?` | Acquires a lock for thread-safe token operations. |
-| `releaseLock` | `releaseLock() returns error?` | Releases the lock. |
-| `getTokenData` | `getTokenData() returns TokenData?` | Retrieves the stored token data. |
-| `setTokenData` | `setTokenData(TokenData tokenData) returns error?` | Stores updated token data. |
-| `clearTokenData` | `clearTokenData() returns error?` | Clears stored token data. |
+| `acquireLock` | `acquireLock(string lockKey, int ttlSeconds) returns boolean&#124;error` | Attempts to acquire an advisory lock. Returns `true` if acquired, `false` if held by another replica, or an `error` if the store is unreachable. |
+| `releaseLock` | `releaseLock(string lockKey) returns error?` | Releases the advisory lock after a refresh cycle completes. |
+| `getTokenData` | `getTokenData(string key) returns TokenData?&#124;error` | Reads the current token data from the shared store. |
+| `setTokenData` | `setTokenData(string key, TokenData data) returns error?` | Writes updated token data after a successful refresh. |
+| `clearTokenData` | `clearTokenData(string key) returns error?` | Removes token data and its lock when the token family is permanently invalidated. |
 
 ### `TokenData`
 
@@ -311,7 +311,7 @@ An isolated object interface for managing refresh token rotation. Implement this
 
 ### Single replica
 
-For a single-replica deployment (local dev, a single server, or a single Kubernetes pod), omit `tokenStore` — the connector defaults to `InMemoryTokenStore`. Refresh Token Rotation (RTR) is handled automatically: when Salesforce issues a new refresh token on each exchange, the connector captures it in memory and uses it for subsequent refreshes.
+For a single-replica deployment (local dev, a single server, or a single Kubernetes pod), omit `tokenStore`: the connector defaults to `InMemoryTokenStore`. Refresh Token Rotation (RTR) is handled automatically: when Salesforce issues a new refresh token on each exchange, the connector captures it in memory and uses it for subsequent refreshes.
 
 Set `defaultTokenExpTime` to match your org's Session Timeout value (Setup → Security → Session Settings → Timeout Value). Salesforce does not return `expires_in` in its token response, so the connector uses this value to calculate when to proactively refresh.
 
@@ -363,7 +363,7 @@ To subscribe to a specific object's change events instead of all CDC events, cha
 
 ### Multiple replicas
 
-In a horizontally-scaled deployment (e.g., multiple Kubernetes pods sharing one Salesforce Connected App), replicas must coordinate token refresh. Without coordination, two pods responding to a 401 simultaneously will each send the same stale refresh token. Salesforce rotates and immediately revokes the old token — causing `invalid_grant` errors that crash all replicas and require manual re-authentication.
+In a horizontally-scaled deployment (e.g., multiple Kubernetes pods sharing one Salesforce Connected App), replicas must coordinate token refresh. Without coordination, two pods responding to a 401 simultaneously will each send the same stale refresh token. Salesforce rotates and immediately revokes the old token, causing `invalid_grant` errors that crash all replicas and require manual re-authentication.
 
 The solution is to provide a shared `TokenStore` implementation backed by a distributed store such as Redis or a database. All replicas point to the same store. The connector's token manager uses double-checked locking: the first replica to acquire the distributed lock performs the token refresh and writes the result; all other replicas adopt the new tokens without making an additional HTTP call.
 
@@ -392,24 +392,29 @@ configurable int sessionTimeoutSeconds = 3600;
 public isolated class RedisTokenStore {
     *salesforce:TokenStore;
 
-    public isolated function acquireLock() returns boolean|error {
-        // Redis: return redisClient->setNx("lock:sf_token", "1");
+    public isolated function acquireLock(string lockKey, int ttlSeconds) returns boolean|error {
+        // Redis: SET lock:<lockKey> 1 NX EX <ttlSeconds>
+        // Example: redisClient->set(string `lock:${lockKey}`, "1", ttlSeconds, (), true)
     }
 
-    public isolated function releaseLock() returns error? {
-        // Redis: _ = check redisClient->del(["lock:sf_token"]);
+    public isolated function releaseLock(string lockKey) returns error? {
+        // Redis: DEL lock:<lockKey>
+        // Example: _ = check redisClient->del([string `lock:${lockKey}`]);
     }
 
-    public isolated function getTokenData() returns salesforce:TokenData? {
-        // Redis: deserialise GET "data:sf_token" → TokenData
+    public isolated function getTokenData(string key) returns salesforce:TokenData?|error {
+        // Redis: GET data:<key>  (deserialize JSON → TokenData)
+        // Example: string? json = check redisClient->get(string `data:${key}`);
     }
 
-    public isolated function setTokenData(salesforce:TokenData tokenData) returns error? {
-        // Redis: SET "data:sf_token" tokenData.toJsonString()
+    public isolated function setTokenData(string key, salesforce:TokenData data) returns error? {
+        // Redis: SET data:<key> <json>
+        // Example: _ = check redisClient->set(string `data:${key}`, data.toJsonString());
     }
 
-    public isolated function clearTokenData() returns error? {
-        // Redis: DEL "data:sf_token" "lock:sf_token"
+    public isolated function clearTokenData(string key) returns error? {
+        // Redis: DEL data:<key> lock:<key>
+        // Example: _ = check redisClient->del([string `data:${key}`, string `lock:${key}`]);
     }
 }
 

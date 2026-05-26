@@ -2,17 +2,9 @@
 title: OpenAPI Tool
 ---
 
-# OpenAPI tool
+# OpenAPI Tool
 
 The `bal openapi` tool bridges OpenAPI specifications and Ballerina code. It generates type-safe Ballerina service stubs and client connectors from OpenAPI (Swagger) YAML or JSON files, and can also export an OpenAPI specification from an existing Ballerina service. This ensures your integrations conform to API contracts and eliminates boilerplate.
-
-## Prerequisites
-
-The OpenAPI tool is included with the Ballerina distribution. Verify it is available:
-
-```bash
-bal openapi --help
-```
 
 ## Generating a Ballerina service from OpenAPI
 
@@ -37,9 +29,6 @@ bal openapi -i openapi.yaml --mode service
 
 # Specify output directory
 bal openapi -i openapi.yaml --mode service -o generated/
-
-# Generate from a remote URL
-bal openapi -i https://petstore3.swagger.io/api/v3/openapi.json --mode service
 ```
 
 ### Generated service structure
@@ -118,8 +107,8 @@ Create a type-safe HTTP client that wraps all API operations defined in the spec
 
 4. In the **Create Connection** step, configure the connection details. Expand **Advanced Configurations** to set the following optional fields:
 
-   - **Config** — The configurations to use when initializing the connector.
-   - **Service Url** — URL of the target service.
+   - **Config**: The configurations to use when initializing the connector.
+   - **Service Url**: URL of the target service.
 
    ![Connection details configuration](/img/develop/tools/openapi-tool/step-connection-details.png)
 
@@ -133,8 +122,8 @@ Create a type-safe HTTP client that wraps all API operations defined in the spec
 # Generate a client connector
 bal openapi -i openapi.yaml --mode client
 
-# Generate with a specific client class name
-bal openapi -i openapi.yaml --mode client --client-methods resource
+# Generate client with remote methods
+bal openapi -i openapi.yaml --mode client --client-methods remote
 ```
 
 ### Using the generated client
@@ -152,11 +141,11 @@ final api:Client orderClient = check new (apiUrl, {
 
 function getOrders(string? status) returns api:Order[]|error {
     // The client method name matches the operationId from the spec
-    return check orderClient->getOrders(status = status);
+    return orderClient->getOrders(status = status);
 }
 
 function createOrder(api:OrderRequest req) returns api:Order|error {
-    return check orderClient->createOrder(req);
+    return orderClient->createOrder(req);
 }
 ```
 
@@ -168,7 +157,7 @@ bal openapi -i openapi.yaml
 
 # This creates both:
 #   openapi_service.bal  -- Service stub
-#   openapi_client.bal   -- Client connector
+#   client.bal           -- Client connector
 #   types.bal            -- Shared types
 ```
 
@@ -187,10 +176,13 @@ Generate an OpenAPI specification from an existing Ballerina HTTP service:
 
 ```bash
 # Export OpenAPI spec from a Ballerina project
-bal openapi -i service.bal --mode export
+bal openapi -i service.bal
+
+# Export as a JSON file
+bal openapi -i service.bal --json
 
 # Export to a specific file
-bal openapi -i service.bal --mode export -o api-spec/openapi.yaml
+bal openapi -i service.bal -o api-spec/
 ```
 
 Given this service:
@@ -207,18 +199,38 @@ The tool produces an OpenAPI YAML describing the paths, request/response schemas
 
 ## Command reference
 
-| Command | Description |
-|---|---|
-| `bal openapi -i <spec>` | Generate service and client from spec |
-| `bal openapi -i <spec> --mode service` | Generate service only |
-| `bal openapi -i <spec> --mode client` | Generate client only |
-| `bal openapi -i <service.bal> --mode export` | Export OpenAPI from service |
-| `-o <dir>` | Output directory |
-| `--nullable` | Make fields nullable by default |
-| `--client-methods resource` | Use resource methods in client |
-| `--client-methods remote` | Use remote methods in client |
-| `--tags <tag1,tag2>` | Generate only operations with specified tags |
-| `--operations <op1,op2>` | Generate only specified operation IDs |
+### Generate flags
+
+```bash
+bal openapi -i <openapi-spec-path> [options]
+```
+
+| Flag | Alias | Required | Default | Description |
+|------|-------|----------|---------|-------------|
+| `-i`, `--input` | — | Yes | — | Path to the OpenAPI specification file (YAML or JSON) |
+| `--mode` | — | No | Both | Generation mode: `client`, `service`, or omit for both |
+| `-o`, `--output` | — | No | Current directory | Output directory for generated files |
+| `--tags` | — | No | All tags | Comma-separated list of tags to include |
+| `--operations` | — | No | All operations | Comma-separated list of operation IDs to include |
+| `--nullable` | — | No | `false` | Generate nullable types for optional fields |
+| `--client-methods` | — | No | `resource` | Client method type: `resource` or `remote` |
+| `--with-tests` | — | No | `false` | Generate test skeletons for the client or service |
+| `--with-service-contract` | — | No | `false` | Generate a service contract type for compile-time service validation |
+| `--license` | — | No | — | Path to a license header file to include in generated files |
+| `--status-code-binding` | — | No | `false` | Generate status-code-specific return types |
+| `--single-file` | — | No | `false` | Generate all types and client/service in a single file |
+
+### Export flags
+
+```bash
+bal openapi -i <ballerina-service-file> [options]
+```
+
+| Flag | Required | Default | Description |
+|------|----------|---------|-------------|
+| `-s`, `--service` | No | All services | Base path of the service to export |
+| `-o`, `--output` | No | Current directory | Output directory for the specification file |
+| `--json` | No | `false` | Export in JSON format (default is YAML) |
 
 ## Customizing generated code
 
@@ -239,19 +251,52 @@ bal openapi -i openapi.yaml --mode client --operations getOrders,createOrder
 bal openapi -i openapi.yaml --nullable
 ```
 
-## Workflow example
+## Workflow examples
 
-A typical workflow for building an API integration:
+**Connecting to an external API**
 
-1. **Obtain the OpenAPI spec** from the API provider.
-2. **Generate the client**: `bal openapi -i partner-api.yaml --mode client`
-3. **Write integration logic** using the generated client types.
-4. **Generate your own service**: `bal openapi -i my-api.yaml --mode service`
-5. **Implement the service** resource functions with your integration logic.
-6. **Export your spec**: `bal openapi -i service.bal --mode export` to share with consumers.
+If the API provider supplies an OpenAPI spec, generate a type-safe client from it. You don't need to manually configure endpoints, methods, or request/response types. Everything is inferred from the spec. Without this, you would fall back to a generic HTTP connector and handle all of that yourself.
+
+1. Obtain the OpenAPI spec from the API provider.
+2. Generate the client: `bal openapi -i partner-api.yaml --mode client`
+3. Use the generated client and types in your integration logic.
+
+**Contract-first service design**
+
+Design your API as an OpenAPI spec first, then generate service stubs from it. Fill in the implementation knowing you cannot drift from the agreed contract.
+
+1. Author your OpenAPI spec.
+2. Generate service stubs: `bal openapi -i my-api.yaml --mode service`
+3. Implement the generated resource functions.
+
+**Publishing your API**
+
+Once your service is built, export its OpenAPI specification and share it with consumers. They can then use it to generate their own type-safe clients, just as you would when connecting to an external API.
+
+1. Export the spec from your service: `bal openapi -i service.bal`
+2. Share the generated spec with your API consumers.
+
+## OpenAPI to Ballerina type mapping
+
+| OpenAPI type | OpenAPI format | Ballerina type |
+|---|---|---|
+| `string` | — | `string` |
+| `string` | `date` | `string` |
+| `string` | `date-time` | `string` |
+| `string` | `byte` | `byte[]` |
+| `string` | `binary` | `byte[]` |
+| `integer` | `int32` | `int` |
+| `integer` | `int64` | `int` |
+| `number` | `float` | `float` |
+| `number` | `double` | `decimal` |
+| `boolean` | — | `boolean` |
+| `array` | — | `T[]` |
+| `object` | — | `record {}` |
+| `oneOf` | — | Union type |
+| `allOf` | — | Intersection type |
 
 ## What's next
 
-- [GraphQL Tool](graphql-tool.md) -- Generate GraphQL services from SDL schemas
-- [gRPC Tool](grpc-tool.md) -- Generate gRPC services from Protocol Buffer definitions
-- [Visual Flow Designer](/docs/develop/design-logic/flow-designer) -- Build logic visually on top of generated stubs
+- [GraphQL Tool](graphql-tool.md) — Generate GraphQL services from SDL schemas
+- [gRPC Tool](grpc-tool.md) — Generate gRPC services from Protocol Buffer definitions
+- [Flow Diagram editor](../../understand-ide/editors/flow-diagram-editor/flow-diagram-editor.md) — Build logic visually on top of generated stubs

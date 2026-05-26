@@ -1,6 +1,10 @@
+---
+title: Triggers
+---
+
 # Triggers
 
-The `ballerina/http` module supports inbound HTTP request handling through its listener and service model. When HTTP requests arrive, the `http:Listener` dispatches them to matching service resource methods automatically — your service reacts to each request by HTTP method and path.
+The `ballerina/http` module supports inbound HTTP request handling through its listener and service model. When HTTP requests arrive, the `http:Listener` dispatches them to matching service resource methods automatically: your service reacts to each request by HTTP method and path.
 
 Three components work together:
 
@@ -26,12 +30,12 @@ The `http:Listener` binds to a port and dispatches incoming HTTP requests to att
 | `httpVersion` | `HttpVersion` | `HTTP_2_0` | HTTP protocol version (`HTTP_1_0`, `HTTP_1_1`, `HTTP_2_0`). |
 | `http1Settings` | `ListenerHttp1Settings` | `{}` | HTTP/1.x specific settings. |
 | `secureSocket` | `ListenerSecureSocket` | `()` | TLS/SSL configuration (certificate, key, protocol). |
-| `timeout` | `decimal` | `120` | Idle connection timeout in seconds. |
+| `timeout` | `decimal` | `60` | Period of time in seconds that a connection waits for a read/write operation. Use `0` to disable timeout. |
 | `server` | `string` | `()` | Server header value. |
 | `requestLimits` | `RequestLimitConfigs` | `{}` | Request size limits (max URI length, header size, body size). |
 | `http2InitialWindowSize` | `int` | `65535` | HTTP/2 flow control window size. |
-| `minIdleTimeInStaleState` | `decimal` | `300` | Minimum idle time before a connection is considered stale. |
-| `timeBetweenStaleEviction` | `decimal` | `30` | Interval between stale connection eviction runs. |
+| `minIdleTimeInStaleState` | `decimal` | `300` | **HTTP/2 only.** Time in seconds a connection that has received a GOAWAY is kept open. Set to `-1` to close the connection only after all in-flight streams complete. |
+| `timeBetweenStaleEviction` | `decimal` | `30` | **HTTP/2 only.** Interval in seconds between runs that evict GOAWAY-marked stale connections. |
 
 ### Initializing the listener
 
@@ -73,6 +77,21 @@ listener http:Listener secureListener = new (9443, {
 });
 ```
 
+**Attaching a service to multiple listeners:**
+
+```ballerina
+import ballerina/http;
+
+listener http:Listener httpListener = new (9090);
+listener http:Listener httpsListener = new (9443, {
+    secureSocket: {key: {certFile: "server.crt", keyFile: "server.key"}}
+});
+
+service /api on httpListener, httpsListener {
+    // service handles both HTTP and HTTPS traffic
+}
+```
+
 ---
 
 ## Service
@@ -100,13 +119,14 @@ Resource methods can accept the following parameter types:
 
 | Annotation | Type | Description |
 |------------|------|-------------|
-| (path segment) | `string`, `int`, `float`, `boolean`, `decimal` | Path parameters extracted from the URL. |
-| `@http:Payload` | `json`, `xml`, `string`, `byte[]`, `record` | Request body payload. |
-| `@http:Header` | `string`, `string[]` | Specific request header values. |
-| `@http:Query` | `string`, `int`, `float`, `boolean` | Query parameter values. |
-| — | `http:Caller` | Client connection for sending responses manually. |
-| — | `http:Request` | Full request object for advanced access. |
-| — | `http:Headers` | Request header accessor. |
+| (path segment) | `string`, `int`, `float`, `decimal`, `boolean` (and their array forms) | Path parameters extracted from the URL. Use `[string... path]` to capture remaining segments as a rest parameter. |
+| `@http:Payload` | `json`, `xml`, `string`, `byte[]`, `map<json>`, `table<map<json>>`, `record`, plus arrays and `readonly` variants of the above | Request body payload. If the parameter type is a structural type, the annotation is optional. |
+| `@http:Header` | `string`, `int`, `float`, `decimal`, `boolean`, their array forms, and the nilable variants of all of these. Also a `record` type whose fields follow the same rules. | Specific request header values. |
+| `@http:Query` | `string`, `int`, `float`, `decimal`, `boolean`, their array forms, and the nilable variants of all of these. | Query parameter values. |
+| N/A | `http:Caller` | Client connection for sending responses manually. |
+| N/A | `http:Request` | Full request object for advanced access. |
+| N/A | `http:Headers` | Request header accessor. |
+| N/A | `http:RequestContext` | Per-request context used to pass values between interceptors and resources. |
 
 ### Return types
 
@@ -114,8 +134,8 @@ Resource methods can return any of the following types to send a response:
 
 | Return Type | Description |
 |-------------|-------------|
-| `string`, `json`, `xml`, `byte[]` | Payload sent with `200 OK` and appropriate content type. |
-| `record` | Serialized as JSON with `200 OK`. |
+| `string`, `json`, `xml`, `byte[]` | Payload sent with the default status code (`201 CREATED` for POST resources and `200 OK` for others) and appropriate content type. |
+| `record` | Serialized as JSON with the default status code (`201 CREATED` for POST resources and `200 OK` for others). |
 | `http:Ok`, `http:Created`, `http:Accepted`, ... | Status-code-specific response records with optional body and headers. |
 | `http:Response` | Full control over status code, headers, and body. |
 | `error` | Returns `500 Internal Server Error`. |
@@ -150,9 +170,9 @@ service /api on httpListener {
     }
 
     // POST /api/users
-    resource function post users(@http:Payload User user) returns http:Created|error {
+    resource function post users(User user) returns http:Created|error {
         // Create the user
-        return <http:Created>{body: {message: "User created", name: user.name}};
+        return {body: {message: "User created", name: user.name}};
     }
 
     // DELETE /api/users/123
@@ -176,6 +196,8 @@ Interceptors process requests and responses before and after resource execution,
 | `RequestErrorInterceptor` | Handles errors during request processing. |
 | `ResponseErrorInterceptor` | Handles errors during response processing. |
 
+Define an interceptor as a `service class` that includes one of the four interceptor types:
+
 ```ballerina
 import ballerina/http;
 import ballerina/log;
@@ -190,6 +212,23 @@ service class LoggingInterceptor {
     }
 }
 ```
+
+Engage the interceptor by declaring the target service as `http:InterceptableService` and returning interceptor instances from `createInterceptors()`:
+
+```ballerina
+service http:InterceptableService /api on httpListener {
+
+    public function createInterceptors() returns LoggingInterceptor {
+        return new LoggingInterceptor();
+    }
+
+    resource function get greeting() returns string {
+        return "Hello!";
+    }
+}
+```
+
+`createInterceptors()` may return a single interceptor or an array; the elements run in order on the request side and in reverse order on the response side.
 
 ---
 

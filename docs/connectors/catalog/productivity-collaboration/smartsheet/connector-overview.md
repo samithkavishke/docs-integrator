@@ -1,4 +1,8 @@
-# Smartsheet Connector Overview
+---
+title: Overview
+---
+
+# Overview
 
 Smartsheet is a cloud-based work management platform for project tracking, task automation, and collaborative spreadsheets. The Ballerina `ballerinax/smartsheet` connector (v1.0.1) provides programmatic access to the Smartsheet API v2.0, enabling you to manage sheets, rows, columns, folders, workspaces, users, reports, and more from your Ballerina integration flows.
 
@@ -15,7 +19,7 @@ Smartsheet is a cloud-based work management platform for project tracking, task 
 
 ## Actions
 
-Actions are operations you invoke on Smartsheet from your integration — managing sheets, adding rows, sharing workspaces, and more. The Smartsheet connector exposes all actions through a single client:
+Actions are operations you invoke on Smartsheet from your integration. Use these actions for managing sheets, adding rows, sharing workspaces, and more. The Smartsheet connector exposes all actions through a single client:
 
 | Client | Actions |
 |--------|---------|
@@ -27,7 +31,7 @@ See the **[Action Reference](actions.md)** for the full list of operations, para
 
 * **[Setup Guide](setup-guide.md)**: This guide walks you through obtaining the API access token or OAuth 2.0 credentials required to use the Smartsheet connector.
 
-* **[Action Reference](actions.md)**: Full reference for all clients — operations, parameters, return types, and sample code.
+* **[Action Reference](actions.md)**: Full reference for all clients: operations, parameters, return types, and sample code.
 
 * **[Example](example.md)**: Learn how to build and configure an integration using the **Smartsheet** connector, including connection setup, operation configuration, and execution flow.
 

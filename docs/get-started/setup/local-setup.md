@@ -4,27 +4,7 @@ title: Local Setup
 
 # Install WSO2 Integrator
 
-Get your development environment ready to build integrations in under 5 minutes.
-
-WSO2 Integrator is a 100% open-source IDE that enables you to connect AI agents, APIs, data, and events across cloud, on-premises, and hybrid environments with a unique low-code experience and pro-code parity.
-
-## Download options
-
-WSO2 Integrator is available in multiple profiles to suit different use cases:
-
-- **WSO2 Integrator**: Full-featured IDE with low-code and pro-code capabilities
-- **WSO2 Integrator: MI**: Low-code graphical interface for integration development
-- **WSO2 Integrator: SI**: Visual stream flow designer for streaming integrations
-
-## System requirements
-
-Before installation, ensure your system meets the requirements listed on the [System requirements and prerequisites](system-requirements.md) page. Here is a quick overview:
-
-- **Operating system**: Windows 10+, macOS 14.6+, or Ubuntu 24.04 LTS and later
-- **Memory**: 512 MB minimum (1 GB+ recommended)
-- **Disk space**: 2 GB free space for installation and projects
-
-For detailed information, see [System requirements and prerequisites](system-requirements.md).
+Install WSO2 Integrator IDE on your machine to develop, test, and debug integrations locally. The IDE is available for Windows, macOS, and Linux.
 
 ## Installation steps
 
@@ -37,18 +17,15 @@ For detailed information, see [System requirements and prerequisites](system-req
 ### Step 2: Install WSO2 Integrator
 
 **Windows**
-- Run the `.exe` installer and follow the installation wizard.
+- Run the `.msi` installer and follow the installation wizard.
 
 **macOS**
 - Run the `.dmg` installer and drag the application to the **Applications** folder.
 
 **Linux**
-- Extract the `.tar.gz` file and run the startup script:
-  ```bash
-  tar -xzf wso2-integrator-*.tar.gz
-  cd wso2-integrator-*/bin
-  ./integrator.sh
-  ```
+- Ubuntu or Debian: install the `.deb` package.
+- RHEL or Fedora: install the `.rpm` package.
+- Other distributions: extract the `.tar.gz` archive.
 
 ### Step 3: Launch WSO2 Integrator
 
@@ -56,18 +33,33 @@ After installation, launch the IDE:
 
 - **Windows**: Double-click the **WSO2 Integrator** icon on your desktop or start menu.
 - **macOS**: Open the **Applications** folder and double-click **WSO2 Integrator**.
-- **Linux**: Run the startup script from the `bin` directory.
+- **Linux**: Launch **WSO2 Integrator** from your applications menu (after a `.deb` or `.rpm` install), or run the binary from the extracted directory if you used the `.tar.gz` archive.
 
-## Verify installation
+![WSO2 Integrator IDE](/img/get-started/setup/wso2-integrator-ide.png)
 
-After launching WSO2 Integrator:
+### Step 4: Sign in to WSO2 Integrator
 
-1. The main IDE interface displays the project explorer.
-2. Create a new project or open an existing one to verify that everything is working.
-3. The IDE displays the visual designer and available tools.
+Sign in with your WSO2 Cloud account to deploy to WSO2 Cloud, manage environments, access observability features, and use [WSO2 Integrator Copilot](../../develop/copilot/overview.md).
+
+1. On the **Get Started** page, click **Sign In** in the top-right corner.
+
+   ![WSO2 Integrator Get Started page with the Sign In button in the top-right corner](/img/get-started/setup/sign-in/integrator-get-started.png)
+
+2. The WSO2 Integration Platform sign-in page opens up in your default browser. Sign in using your preferred method.
+
+   ![WSO2 Integration Platform sign-in page](/img/get-started/setup/sign-in/sign-in-providers.png)
+
+3. When the browser prompts you, click **Open WSO2 Integrator** to return to the IDE.
+4. The IDE shows a **Successfully signed into WSO2 Integration Platform** notification, and your account avatar appears in the top-right corner.
+
+   ![WSO2 Integrator Get Started page after sign-in showing the account avatar and a success notification](/img/get-started/setup/sign-in/signed-in.png)
+
+:::info Don't have a WSO2 Cloud account?
+[Sign up for WSO2 Cloud](sign-up-sign-in.md) to create one before signing in.
 
 ## Next steps
 
-- [Create your first project](create-project.md): Generate a project structure.
-- [Understand the IDE](understand-ide.md): Learn the visual designer.
-- [Build an API integration](build-api-integration.md): Build your first API integration.
+- [Sign up with WSO2 Cloud](sign-up-sign-in.md) — Sign up with WSO2 Cloud to get the most out of WSO2 Integrator.
+- [Develop a new integration](../../develop/create-integrations/create-a-new-integration.md) — Create a new integration project and start building.
+- [Open an existing integration](../../develop/create-integrations/open-existing-integration.md) — Continue working on a project you already have.
+- [Explore sample integrations](../../develop/create-integrations/explore-sample-integrations.md) — Learn from ready-made examples.

@@ -4,86 +4,81 @@ title: Build an Event-Driven Integration
 
 # Build an Event-Driven Integration
 
-**Time:** Under 10 minutes | **What you'll build:** An event-driven integration that consumes messages from RabbitMQ and processes them.
+**Time:** Under 10 minutes | **What you'll build:** An event-driven integration that consumes messages from `Orders` queue in RabbitMQ broker and processes them.
 
-Event integrations are ideal for reactive workflows triggered by messages from Kafka, RabbitMQ, MQTT, or other message brokers.
+Event integrations are designed for reactive workflows triggered by messages from a broker. This quick start demonstrates the complete flow: creating a RabbitMQ message listener, adding an event handler to process messages, and implementing the integration logic executed when a message is received.
 
-<ThemedImage
-    alt="Event-driven integration diagram"
-    sources={{
-        light: useBaseUrl('/img/get-started/build-event-driven-integration/event-diagram-light.svg'),
-        dark: useBaseUrl('/img/get-started/build-event-driven-integration/event-diagram-dark.svg'),
-    }}
-/>
+:::info Prerequisites
 
-## Prerequisites
+- A working WSO2 Integrator environment. Choose the path that fits how you want to work:
+    - [Cloud setup](setup/cloud-setup.md) — launch WSO2 Integrator in a browser-based cloud editor.
+    - [Local setup](setup/local-setup.md) — install and launch the WSO2 Integrator IDE on your machine.
+- A running RabbitMQ instance (or use Docker: `docker run -d -p 5672:5672 -p 15672:15672 rabbitmq:4.2-management`)
 
-- [WSO2 Integrator extension installed](install.md)
-- A running RabbitMQ instance (or use Docker: `docker run -d -p 5672:5672 -p 15672:15672 rabbitmq:management`)
+## Step 1: Create the integration
 
-## Step 1: Create a new integration project
+:::info Note
+
+In the cloud editor, you're already inside a project. Skip to Step 2.
 
 1. Open WSO2 Integrator.
-2. Select **Create**.
+2. Select the **Create New Integration** card.
 3. Set **Integration Name** to `OrderProcessor`.
-4. Set **Project Name** to `QuickStart`.
-5. Select **Browse**.
-6. Select the project location and select **Open**.
-7. Select **Create Integration**.
+4. Set **Project Name** to `event-integration`.
+5. Select **Create Integration**.
 
 <ThemedImage
     alt="Create a New Integration Project"
     sources={{
-        light: useBaseUrl('/img/get-started/build-event-driven-integration/create-a-new-integration-project-light.gif'),
-        dark: useBaseUrl('/img/get-started/build-event-driven-integration/create-a-new-integration-project-dark.gif'),
+        light: useBaseUrl('/img/get-started/build-event-driven-integration/create-project.png'),
+        dark: useBaseUrl('/img/get-started/build-event-driven-integration/create-project.png'),
     }}
 />
 
-## Step 2: Add a RabbitMQ event integration artifact
+## Step 2: Add a RabbitMQ event listener
 
-1. Select **OrderProcessor**.
-2. In the design view, select **Add Artifact**.
-3. Select **RabbitMQ** under Event Integration.
+1. Select your integration from the project overview canvas.
+2. Select **+ Add Artifact** in the design canvas.
+3. Select **RabbitMQ** under **Event Integration**.
+4. Set **Host** to `localhost` and **Port** to `5672` (update these if your RabbitMQ instance runs elsewhere).
+5. Set **Queue Name** to `Orders`.
+6. Select **Create**.
 
 <ThemedImage
     alt="Add a RabbitMQ Event Integration Artifact"
     sources={{
-        light: useBaseUrl('/img/get-started/build-event-driven-integration/add-a-rabbitmq-event-integration-artifact-light.gif'),
-        dark: useBaseUrl('/img/get-started/build-event-driven-integration/add-a-rabbitmq-event-integration-artifact-dark.gif'),
+        light: useBaseUrl('/img/get-started/build-event-driven-integration/add-a-rabbitmq-listener.png'),
+        dark: useBaseUrl('/img/get-started/build-event-driven-integration/add-a-rabbitmq-listener.png'),
     }}
 />
 
-## Step 3: Configure the RabbitMQ connection
+## Step 3: Add `onMessage` event handler
 
-1. Set **Queue Name** to `Orders`.
-2. Set **Host** to `localhost`.
-3. Set **Port** to `5672`.
-4. Select **Create**.
+1. In the RabbitMQ service design view, select **+ Add Handler**.
+2. Select **onMessage**.
+3. Select **Save**.
 
 <ThemedImage
-    alt="Configure the RabbitMQ Connection"
+    alt="Add onMessage Event Handler"
     sources={{
-        light: useBaseUrl('/img/get-started/build-event-driven-integration/configure-the-rabbitmq-connection-light.gif'),
-        dark: useBaseUrl('/img/get-started/build-event-driven-integration/configure-the-rabbitmq-connection-dark.gif'),
+        light: useBaseUrl('/img/get-started/build-event-driven-integration/add-event-handler.png'),
+        dark: useBaseUrl('/img/get-started/build-event-driven-integration/add-event-handler.png'),
     }}
 />
 
 ## Step 4: Add message processing logic
 
-1. Select **+ Add Handler**.
-2. Select **onMessage**.
-3. Select **Save**.
-4. Select **+** inside the resource flow.
-5. Select **Call Function**.
-6. Select **printInfo**.
-7. Set **Msg** to `Received order`.
-8. Select **Save**.
+1. Select **+** inside the resource flow.
+2. Select **Call Function**.
+3. Select **printInfo** under **log**.
+4. Set **Msg** to `Received order`.
+5. Select **Save**.
 
 <ThemedImage
     alt="Add Message Processing Logic"
     sources={{
-        light: useBaseUrl('/img/get-started/build-event-driven-integration/add-message-processing-logic-light.gif'),
-        dark: useBaseUrl('/img/get-started/build-event-driven-integration/add-message-processing-logic-dark.gif'),
+        light: useBaseUrl('/img/get-started/build-event-driven-integration/add-message-processing-logic.png'),
+        dark: useBaseUrl('/img/get-started/build-event-driven-integration/add-message-processing-logic.png'),
     }}
 />
 
@@ -91,15 +86,51 @@ Event integrations are ideal for reactive workflows triggered by messages from K
 
 1. Select **Run**.
 2. The integration starts and listens for messages on the `Orders` queue.
-3. Publish a test message to the RabbitMQ `Orders` queue to see the log output.
+3. Open the RabbitMQ Management UI at `http://localhost:15672` (default credentials: guest/guest).
+   - Go to **Queues → Orders → Publish message**, enter any text as the payload, and select **Publish message**.
+   - Confirm the integration log displays `Received order`.
 
 <ThemedImage
     alt="Run and Test the Integration"
     sources={{
-        light: useBaseUrl('/img/get-started/build-event-driven-integration/run-and-test-the-integration-light.gif'),
-        dark: useBaseUrl('/img/get-started/build-event-driven-integration/run-and-test-the-integration-dark.gif'),
+        light: useBaseUrl('/img/get-started/build-event-driven-integration/run-and-test-the-integration.gif'),
+        dark: useBaseUrl('/img/get-started/build-event-driven-integration/run-and-test-the-integration.gif'),
     }}
 />
+
+The following complete, runnable Ballerina program produces the same integration shown in the visual designer steps.
+
+```ballerina
+import ballerina/log;
+import ballerinax/rabbitmq;
+
+listener rabbitmq:Listener rabbitmqListener = new ("localhost", 5672);
+
+service "Orders" on rabbitmqListener {
+    remote function onMessage(rabbitmq:AnydataMessage message, rabbitmq:Caller caller) returns error? {
+        do {
+            log:printInfo("Received order");
+        } on fail error err {
+            // handle error
+            return error("unhandled error", err);
+        }
+    }
+}
+```
+
+Save this as `main.bal`, then click the **Run** button in the top toolbar. Once running, open `http://localhost:15672` (default credentials: guest/guest), navigate to **Queues → Orders → Publish message**, and publish any message. The terminal log should display `Received order`.
+
+## Step 6: Deploy to WSO2 Cloud
+
+Deploy your integration to WSO2 Cloud - Integration Platform in any of the following ways:
+
+- If you're using the cloud editor, see [Save and deploy](/deploy/cloud/deploy-from-cloud-editor/#save-and-deploy).
+- If you're using the WSO2 Integrator IDE, see [Deploy from the IDE](/deploy/cloud/push-from-ide).
+- If you'd rather skip the build and try a ready-made sample, one-click deploy it:
+
+    <a href="https://console.devant.dev/new?gh=wso2/integration-samples/tree/main/integrator-default-profile/quickstart/orderprocessor" target="_blank">
+        <img src="https://openindevant.choreoapps.dev/images/DeployDevant.svg" alt="Deploy to WSO2 Cloud" />
+    </a>
 
 ## Supported event sources
 
@@ -114,7 +145,8 @@ Event integrations are ideal for reactive workflows triggered by messages from K
 
 ## What's next
 
-- [Automation](build-automation.md) -- Build a scheduled job
-- [AI agent](build-ai-agent.md) -- Build an intelligent agent
-- [Integration as API](build-api-integration.md) -- Build an HTTP service
-- [File-driven integration](build-file-driven-integration.md) -- Process files from FTP or local directories
+- [Kafka](../develop/integration-artifacts/event/kafka.md) — Consume and produce Kafka messages
+- [Azure Service Bus](../develop/integration-artifacts/event/azure-service-bus.md) — Integrate with Azure Service Bus queues and topics
+- [RabbitMQ](../develop/integration-artifacts/event/rabbitmq.md) — Full RabbitMQ listener and publisher reference
+- [MQTT](../develop/integration-artifacts/event/mqtt.md) — Handle MQTT messages from IoT and messaging devices
+- [CDC for PostgreSQL](../develop/integration-artifacts/event/cdc-postgresql.md) — React to database changes with change data capture

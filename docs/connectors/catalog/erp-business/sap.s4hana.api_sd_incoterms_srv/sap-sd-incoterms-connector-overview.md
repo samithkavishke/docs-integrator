@@ -1,4 +1,8 @@
-# SAP SD Incoterms Connector Overview
+---
+title: Overview
+---
+
+# Overview
 
 SAP SD Incoterms is part of the SAP S/4HANA Sales and Distribution module and manages master data for Incoterms classifications and versions used in trade, logistics, and procurement documents. The Ballerina `ballerinax/sap.s4hana.api_sd_incoterms_srv` connector (v1.0.0) provides read access to Incoterms data via the SAP OData API `API_SD_INCOTERMS_SRV`, enabling integration workflows to look up standardized trade terms and retrieve their multilingual descriptions from an SAP S/4HANA Cloud system.
 
@@ -15,7 +19,7 @@ SAP SD Incoterms is part of the SAP S/4HANA Sales and Distribution module and ma
 
 ## Actions
 
-Actions are operations you invoke on the SAP S/4HANA system from your integration — listing Incoterms classifications, fetching multilingual descriptions, querying version data, and more. The SAP SD Incoterms connector exposes all actions through a single client:
+Actions are operations you invoke on the SAP S/4HANA system from your integration. Use these actions for listing Incoterms classifications, fetching multilingual descriptions, querying version data, and more. The SAP SD Incoterms connector exposes all actions through a single client:
 
 | Client | Actions |
 |--------|---------|
@@ -27,7 +31,7 @@ See the **[Action Reference](actions.md)** for the full list of operations, para
 
 * **[Setup Guide](setup-guide.md)**: This guide walks you through creating the required Communication User, Communication System, and Communication Arrangement in SAP S/4HANA Cloud to obtain the credentials needed for the SAP SD Incoterms connector.
 
-* **[Action Reference](actions.md)**: Full reference for all clients — operations, parameters, return types, and sample code.
+* **[Action Reference](actions.md)**: Full reference for all clients: operations, parameters, return types, and sample code.
 
 * **[Example](example.md)**: Learn how to build and configure an integration using the **SAP SD Incoterms** connector, including connection setup, operation configuration, and execution flow.
 

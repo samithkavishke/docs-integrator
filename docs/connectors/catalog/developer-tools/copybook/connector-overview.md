@@ -1,4 +1,8 @@
-# Copybook Connector Overview
+---
+title: Overview
+---
+
+# Overview
 
 The Ballerina `ballerinax/copybook` connector (v1.1.0) is a serialization/deserialization library for working with COBOL copybook data formats commonly used in mainframe integration. It enables Ballerina programs to convert between typed Ballerina records and COBOL copybook byte streams using either ASCII or EBCDIC encoding, bridging modern integration flows with legacy mainframe systems.
 
@@ -26,7 +30,7 @@ See the **[Action Reference](actions.md)** for the full list of operations, para
 
 * **[Setup Guide](setup-guide.md)**: This guide describes how to obtain and prepare a COBOL copybook schema file required by the Copybook connector.
 
-* **[Action Reference](actions.md)**: Full reference for all clients — operations, parameters, return types, and sample code.
+* **[Action Reference](actions.md)**: Full reference for the `Converter` client: operations, parameters, return types, and sample code.
 
 ## How to contribute
 

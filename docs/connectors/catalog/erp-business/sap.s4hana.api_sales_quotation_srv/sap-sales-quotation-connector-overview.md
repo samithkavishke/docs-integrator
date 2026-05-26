@@ -1,4 +1,8 @@
-# SAP Sales Quotation Connector Overview
+---
+title: Overview
+---
+
+# Overview
 
 SAP Sales Quotation is an SAP S/4HANA OData v2 service (API_SALES_QUOTATION_SRV) for managing the full lifecycle of sales quotations in the Sales & Distribution module. The Ballerina `ballerinax/sap.s4hana.api_sales_quotation_srv` connector provides programmatic access to create, read, update, and delete sales quotation headers, line items, partners, pricing elements, texts, and related objects, as well as navigate process flow documents and trigger approval workflow actions.
 
@@ -15,7 +19,7 @@ SAP Sales Quotation is an SAP S/4HANA OData v2 service (API_SALES_QUOTATION_SRV)
 
 ## Actions
 
-Actions are operations you invoke on the SAP S/4HANA system from your integration — reading quotation headers, creating items, updating pricing conditions, and triggering approval workflows. All operations are exposed through a single client:
+Actions are operations you invoke on the SAP S/4HANA system from your integration. Use these actions for reading quotation headers, creating items, updating pricing conditions, and triggering approval workflows. All operations are exposed through a single client:
 
 | Client | Actions |
 |--------|---------|
@@ -27,7 +31,7 @@ See the **[Action Reference](actions.md)** for the full list of operations, para
 
 * **[Setup Guide](setup-guide.md)**: This guide walks you through enabling the SAP Sales Quotation OData service in your SAP S/4HANA system and obtaining the credentials required to connect the Ballerina connector.
 
-* **[Action Reference](actions.md)**: Full reference for all clients — operations, parameters, return types, and sample code.
+* **[Action Reference](actions.md)**: Full reference for all clients: operations, parameters, return types, and sample code.
 
 * **[Example](example.md)**: Learn how to build and configure an integration using the **SAP Sales Quotation** connector, including connection setup, operation configuration, and execution flow.
 

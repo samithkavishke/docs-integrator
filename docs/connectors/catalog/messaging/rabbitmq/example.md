@@ -30,7 +30,7 @@ flowchart LR
 
 ### Setting up the RabbitMQ integration
 
-> **New to WSO2 Integrator?** Follow the [Create a New Integration](../../../../develop/create-integrations/create-new-integration.md) guide to set up your integration first, then return here to add the connector.
+> **New to WSO2 Integrator?** Follow the [Create a New Integration](../../../../develop/create-integrations/create-a-new-integration.md) guide to set up your integration first, then return here to add the connector.
 
 ### Adding the RabbitMQ connector
 
@@ -89,8 +89,8 @@ On the flow canvas, select the **+** button between **Start** and **Error Handle
 
 Select **Publish Message** and configure the **Message** field by switching to **Expression** mode and entering the record literal with the fields below.
 
-- **content** : The message payload to publish — set to `"Hello, RabbitMQ!"`
-- **routingKey** : The target queue name — set to `"myQueue"`
+- **content** : The message payload to publish; set to `"Hello, RabbitMQ!"`
+- **routingKey** : The target queue name; set to `"myQueue"`
 
 ![RabbitMQ publishMessage operation configuration filled with all values](/img/connectors/catalog/messaging/rabbitmq/rabbitmq_screenshot_05_operation_form.png)
 
@@ -128,7 +128,7 @@ flowchart LR
 
 ### Setting up the RabbitMQ integration
 
-> **New to WSO2 Integrator?** Follow the [Create a New Integration](../../../../develop/create-integrations/create-new-integration.md) guide to set up your integration first, then return here to add the trigger.
+> **New to WSO2 Integrator?** Follow the [Create a New Integration](../../../../develop/create-integrations/create-a-new-integration.md) guide to set up your integration first, then return here to add the trigger.
 
 ### Adding the RabbitMQ trigger
 
@@ -191,7 +191,7 @@ Select the **+** icon in the flow chart, and in the side panel that opens, choos
 
 #### Step 8: Confirm the registered handler in the service view
 
-Navigate back to the **RabbitMQ Event Integration** service view. Confirm that the `Event — onMessage` handler row appears under **Event Handlers**, with the listener and queue name badges visible.
+Navigate back to the **RabbitMQ Event Integration** service view. Confirm that the `Event: onMessage` handler row appears under **Event Handlers**, with the listener and queue name badges visible.
 
 ![Trigger Service view showing the registered Event onMessage handler row](/img/connectors/catalog/messaging/rabbitmq/rabbitmq_trigger_screenshots_07_service_view_final.png)
 
@@ -201,9 +201,9 @@ Run the integration from WSO2 Integrator by selecting **Run** in the project pan
 
 To fire a test event, use one of the following approaches:
 
-1. **WSO2 Integrator RabbitMQ publisher template** — create a new integration using the RabbitMQ publisher template, configure it to point to the same broker and queue, and publish a sample message.
-2. **RabbitMQ CLI (`rabbitmqadmin`)** — use the `rabbitmqadmin` command-line tool to publish a message directly to the queue.
-3. **RabbitMQ Management Console** — open the RabbitMQ Management UI in your browser, navigate to the **Queues** tab, select your queue, and use the **Publish message** form to send a test payload.
+1. **WSO2 Integrator RabbitMQ publisher template**; create a new integration using the RabbitMQ publisher template, configure it to point to the same broker and queue, and publish a sample message.
+2. **RabbitMQ CLI (`rabbitmqadmin`)**; use the `rabbitmqadmin` command-line tool to publish a message directly to the queue.
+3. **RabbitMQ Management Console**: open the RabbitMQ Management UI in your browser, navigate to the **Queues** tab, select your queue, and use the **Publish message** form to send a test payload.
 
 Watch the WSO2 Integrator log output to see the incoming message printed as a JSON string by `log:printInfo`.
 
