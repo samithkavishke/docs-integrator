@@ -286,10 +286,10 @@ listener solace:Listener solaceListener = check new (
 
 In the **Service Designer**, click **+ Add Handler**. The **Select Handler to Add** panel lists `onMessage` and `onError`.
 
-   ![Service Designer showing the Solace Event Integration canvas](/img/develop/integration-artifacts/event/solace/adding-event-handler.png)
-
 **onMessage** - opens a configuration panel before saving:
 
+   ![Service Designer showing the Solace Event Integration canvas](/img/develop/integration-artifacts/event/solace/adding-event-handler.png)
+   
 | Option | Description |
 |---|---|
 | **+ Define Payload** | Define the expected content type of the incoming message (e.g., a typed record). |
